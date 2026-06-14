@@ -1,0 +1,1644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- ============================ SEO / METADATA ============================ -->
+<title>Jiaming Feng — Medical Image Analysis &amp; Surgical Computer Vision</title>
+<meta name="description" content="Jiaming Feng is a researcher in medical image analysis and surgical computer vision at the University of Leeds, working on geometry-aware 3D-2D registration, anatomical landmark segmentation, and AR-guided liver intervention." />
+<meta name="author" content="Jiaming Feng" />
+<link rel="canonical" href="https://jarm1ng.github.io/" />
+<meta name="color-scheme" content="light dark" />
+<!-- Dual theme-color metas (also kept in sync by JS when the user toggles) -->
+<meta name="theme-color" content="#faf6ef" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#16130f" media="(prefers-color-scheme: dark)" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="profile" />
+<meta property="og:title" content="Jiaming Feng — Medical Image Analysis &amp; Surgical Computer Vision" />
+<meta property="og:description" content="Researcher in medical image analysis and surgical computer vision at the University of Leeds — bridging preoperative 3D anatomy and the intraoperative surgical view." />
+<meta property="og:url" content="https://jarm1ng.github.io/" />
+<meta property="og:site_name" content="Jiaming Feng" />
+<meta property="og:locale" content="en_GB" />
+<meta property="og:image" content="https://jarm1ng.github.io/og-image.png" />
+<meta property="profile:first_name" content="Jiaming" />
+<meta property="profile:last_name" content="Feng" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Jiaming Feng — Medical Image Analysis &amp; Surgical Computer Vision" />
+<meta name="twitter:description" content="Researcher in medical image analysis and surgical computer vision at the University of Leeds — bridging preoperative 3D anatomy and the intraoperative surgical view." />
+<meta name="twitter:image" content="https://jarm1ng.github.io/og-image.png" />
+
+<!-- ============================ FAVICON (inline SVG monogram) ============================ -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='12'%20fill='%23faf6ef'/%3E%3Cpath%20d='M22%2016h22v6H30v9h11v6H30v11h-8z'%20fill='%237a2230'/%3E%3Cpath%20d='M44%2042c0%204-2.5%206-7%206'%20fill='none'%20stroke='%237a2230'%20stroke-width='6'/%3E%3C/svg%3E" />
+
+<!-- ============================ FOUC GUARD ============================
+     Tiny render-blocking init: resolve the theme BEFORE the stylesheet
+     paints, so there is no flash of the wrong palette. The rest of the JS
+     (toggle handler, scrollspy, reveal, timeline progress, menu) lives at
+     the end of <body>.
+     ================================================================= -->
+<script>
+  (function () {
+    try {
+      var root = document.documentElement;
+      var stored = null;
+      try { stored = localStorage.getItem("jf-theme"); } catch (e) {}
+      var theme = (stored === "light" || stored === "dark")
+        ? stored
+        : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      root.setAttribute("data-theme", theme);
+      root.style.colorScheme = theme;
+    } catch (e) { /* fail open — CSS @media query still handles the default */ }
+  })();
+</script>
+
+<!-- ============================ FONTS ============================ -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<!-- ============================ JSON-LD : Person schema ============================ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Jiaming Feng",
+  "givenName": "Jiaming",
+  "familyName": "Feng",
+  "jobTitle": "MSc Researcher in Medical Image Analysis & Surgical Computer Vision",
+  "url": "https://jarm1ng.github.io/",
+  "email": "mailto:vqkc0507@leeds.ac.uk",
+  "affiliation": {
+    "@type": "CollegeOrUniversity",
+    "name": "University of Leeds",
+    "department": "School of Computer Science"
+  },
+  "alumniOf": [
+    { "@type": "CollegeOrUniversity", "name": "University of Leeds" },
+    { "@type": "CollegeOrUniversity", "name": "Henan Agricultural University" }
+  ],
+  "sameAs": [
+    "https://scholar.google.com/citations?user=zpwn-UkAAAAJ&hl=en",
+    "https://github.com/Jarm1ng"
+  ],
+  "knowsAbout": [
+    "Medical image analysis",
+    "Surgical computer vision",
+    "Computer vision for image-guided intervention",
+    "Preoperative-to-intraoperative registration",
+    "3D anatomical landmark segmentation",
+    "3D-2D registration",
+    "Augmented and mixed reality for surgery",
+    "Surgical scene understanding",
+    "Geometric deep learning",
+    "Self-supervised learning"
+  ]
+}
+</script>
+
+<style>
+/* ============================================================
+   THEME TOKENS — Editorial Serif
+   Warm "paper" canvas, deep ink text, one oxblood accent
+   ============================================================ */
+:root {
+  --paper:        #faf6ef;   /* warm off-white canvas */
+  --paper-2:      #f3ece0;   /* slightly deeper panel */
+  --paper-3:      #ece2d2;   /* hairline-adjacent fills */
+  --ink:          #211c16;   /* deep ink for body text */
+  --ink-soft:     #4b4339;   /* secondary text */
+  --ink-faint:    #6e655a;   /* tertiary / captions */
+  --rule:         #d9cfbe;   /* hairline rules */
+  --rule-soft:    #e6ddcf;
+  --accent:       #7a2230;   /* deep oxblood */
+  --accent-deep:  #5e1722;
+  --accent-tint:  #f1e2df;   /* faint accent wash */
+  --new:          #1f6048;   /* forest for the "New" pip */
+  --new-tint:     #e2efe8;
+  --card:         #fffdf9;
+  --shadow:       0 1px 2px rgba(53, 40, 24, 0.05), 0 8px 24px -12px rgba(53, 40, 24, 0.12);
+
+  --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-sans:  "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  --measure: 66ch;
+  --maxw: 1180px;
+  --gutter: clamp(1.25rem, 5vw, 4rem);
+}
+
+:root[data-theme="dark"] {
+  --paper:        #16130f;   /* warm near-black */
+  --paper-2:      #1d1916;
+  --paper-3:      #241f1a;
+  --ink:          #ece4d6;
+  --ink-soft:     #c1b6a4;
+  --ink-faint:    #978c7c;
+  --rule:         #382f26;
+  --rule-soft:    #2c2620;
+  --accent:       #d98a8f;   /* lifted oxblood for dark contrast */
+  --accent-deep:  #e9a6a9;
+  --accent-tint:  #2a1d1c;
+  --new:          #74c6a3;
+  --new-tint:     #1c2a24;
+  --card:         #1b1713;
+  --shadow:       0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 28px -14px rgba(0, 0, 0, 0.6);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper:        #16130f;
+    --paper-2:      #1d1916;
+    --paper-3:      #241f1a;
+    --ink:          #ece4d6;
+    --ink-soft:     #c1b6a4;
+    --ink-faint:    #978c7c;
+    --rule:         #382f26;
+    --rule-soft:    #2c2620;
+    --accent:       #d98a8f;
+    --accent-deep:  #e9a6a9;
+    --accent-tint:  #2a1d1c;
+    --new:          #74c6a3;
+    --new-tint:     #1c2a24;
+    --card:         #1b1713;
+    --shadow:       0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 28px -14px rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* ============================================================
+   BASE / RESET
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background-color: var(--paper);
+  /* faint registration-grid / contour flavour, very restrained */
+  background-image:
+    linear-gradient(var(--rule-soft) 1px, transparent 1px),
+    linear-gradient(90deg, var(--rule-soft) 1px, transparent 1px);
+  background-size: 88px 88px, 88px 88px;
+  background-position: -1px -1px;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.0625rem);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+::selection { background: var(--accent); color: #fff; }
+:root[data-theme="dark"] ::selection { color: #16130f; }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  line-height: 1.12;
+  color: var(--ink);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+/* ============================================================
+   ACCESSIBILITY — skip link & focus
+   ============================================================ */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100px;
+  z-index: 200;
+  background: var(--accent);
+  color: #fff;
+  padding: 0.65rem 1.1rem;
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: top 0.2s ease;
+}
+.skip-link:focus { top: 1rem; text-decoration: none; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ============================================================
+   LAYOUT HELPERS
+   ============================================================ */
+.shell { max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter); }
+
+.section { padding-block: clamp(3.5rem, 8vw, 6.5rem); }
+.section--tight { padding-block: clamp(2.75rem, 6vw, 4.5rem); }
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: clamp(1.75rem, 4vw, 2.75rem);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 1rem;
+}
+.section-head .num {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  flex: none;
+}
+.section-head h2 {
+  font-size: clamp(1.6rem, 1.1rem + 2vw, 2.4rem);
+}
+.section-head .head-note {
+  margin-left: auto;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--ink-faint);
+  align-self: center;
+  white-space: nowrap;
+}
+@media (max-width: 640px) { .section-head .head-note { display: none; } }
+
+/* ============================================================
+   TOP NAV — sticky, with responsive hamburger menu
+   (hamburger mechanic grafted from candidate-2, re-skinned)
+   ============================================================ */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: color-mix(in srgb, var(--paper) 86%, transparent);
+  backdrop-filter: saturate(1.2) blur(10px);
+  -webkit-backdrop-filter: saturate(1.2) blur(10px);
+  border-bottom: 1px solid var(--rule);
+}
+.topbar__inner {
+  position: relative;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding: 0.7rem var(--gutter);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.brand:hover { text-decoration: none; }
+.brand .mono {
+  width: 30px; height: 30px; flex: none;
+}
+
+.nav-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navlinks {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+.navlinks a {
+  font-family: var(--font-sans);
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+  padding: 0.4rem 0.7rem;
+  border-radius: 6px;
+  position: relative;
+  transition: color 0.18s ease, background 0.18s ease;
+}
+.navlinks a:hover { color: var(--ink); background: var(--paper-2); text-decoration: none; }
+.navlinks a.active { color: var(--accent); }
+.navlinks a.active::after {
+  content: "";
+  position: absolute;
+  left: 0.7rem; right: 0.7rem; bottom: -0.74rem;
+  height: 2px;
+  background: var(--accent);
+}
+
+/* Theme toggle + menu button share the same square control style */
+.theme-toggle, .menu-btn {
+  flex: none;
+  width: 38px; height: 38px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid var(--rule);
+  background: var(--card);
+  color: var(--ink);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.18s ease, transform 0.18s ease;
+}
+.theme-toggle:hover, .menu-btn:hover { border-color: var(--accent); }
+.theme-toggle:active, .menu-btn:active { transform: scale(0.94); }
+.theme-toggle svg, .menu-btn svg { width: 18px; height: 18px; }
+.theme-toggle .icon-sun { display: none; }
+:root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+:root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
+  :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
+}
+
+/* Hamburger is hidden on wide screens; the inline icons swap when open */
+.menu-btn { display: none; }
+.menu-btn .icon-close { display: none; }
+
+/* ---- Mobile breakpoint: collapse links into a toggleable panel ---- */
+@media (max-width: 820px) {
+  .menu-btn { display: inline-grid; }
+  .navlinks {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.1rem;
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+    box-shadow: var(--shadow);
+    padding: 0.6rem var(--gutter) 1rem;
+  }
+  .topbar.menu-open .navlinks { display: flex; }
+  .topbar.menu-open .menu-btn .icon-menu  { display: none; }
+  .topbar.menu-open .menu-btn .icon-close { display: block; }
+  .navlinks a { padding: 0.7rem 0.6rem; font-size: 0.95rem; border-radius: 6px; }
+  .navlinks a.active { background: var(--accent-tint); }
+  .navlinks a.active::after { display: none; }
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero { position: relative; padding-block: clamp(3.5rem, 9vw, 7rem) clamp(2.5rem, 6vw, 4.5rem); }
+.hero__grid {
+  display: grid;
+  grid-template-columns: 1fr minmax(220px, 320px);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: center;
+}
+@media (max-width: 880px) {
+  .hero__grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .hero__motif { order: -1; max-width: 260px; }
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  margin-bottom: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.eyebrow::before {
+  content: "";
+  width: 26px; height: 1px;
+  background: var(--accent);
+  display: inline-block;
+}
+.hero h1 {
+  font-size: clamp(2.5rem, 1.4rem + 5.4vw, 4.6rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.1rem;
+}
+.hero h1 .surname { font-style: italic; color: var(--accent); }
+.hero__role {
+  font-family: var(--font-serif);
+  font-size: clamp(1.05rem, 0.9rem + 0.8vw, 1.3rem);
+  color: var(--ink-soft);
+  margin-bottom: 0.4rem;
+}
+.hero__tagline {
+  font-size: clamp(1.02rem, 0.95rem + 0.4vw, 1.18rem);
+  color: var(--ink-soft);
+  max-width: 54ch;
+  margin: 1.2rem 0 0;
+  line-height: 1.6;
+}
+
+/* Status pill — confirmed by the site owner (GRAFT 5) */
+.hero__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 1.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 0.42rem 0.95rem;
+}
+.hero__status .dot {
+  width: 7px; height: 7px; flex: none;
+  border-radius: 50%;
+  background: var(--new);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--new) 55%, transparent);
+  animation: status-pulse 2.6s ease-out infinite;
+}
+@keyframes status-pulse {
+  0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--new) 55%, transparent); }
+  70%  { box-shadow: 0 0 0 7px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+@media (prefers-reduced-motion: reduce) { .hero__status .dot { animation: none; } }
+
+.hero__loc {
+  margin-top: 1.4rem;
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* primary links row */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 1.9rem;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.62rem 1.05rem;
+  border-radius: 8px;
+  border: 1px solid var(--rule);
+  background: var(--card);
+  color: var(--ink);
+  transition: border-color 0.18s ease, transform 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+.btn:hover { text-decoration: none; border-color: var(--accent); transform: translateY(-1px); }
+.btn svg { width: 16px; height: 16px; flex: none; }
+.btn--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+:root[data-theme="dark"] .btn--primary { color: #1a1410; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .btn--primary { color: #1a1410; }
+}
+.btn--primary:hover { background: var(--accent-deep); border-color: var(--accent-deep); }
+
+/* Hero monogram / mesh motif */
+.hero__motif { justify-self: center; width: 100%; max-width: 320px; }
+.hero__motif svg { width: 100%; height: auto; display: block; }
+
+/* ============================================================
+   ABOUT
+   ============================================================ */
+.about__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
+}
+@media (max-width: 820px) { .about__body { grid-template-columns: 1fr; gap: 2.25rem; } }
+
+.lede {
+  font-family: var(--font-serif);
+  font-size: clamp(1.15rem, 1rem + 0.7vw, 1.42rem);
+  line-height: 1.6;
+  color: var(--ink);
+  max-width: var(--measure);
+}
+.lede p { margin: 0 0 1.1rem; }
+.lede p:last-child { margin-bottom: 0; }
+.lede .dropcap::first-letter {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 3.4em;
+  float: left;
+  line-height: 0.78;
+  padding: 0.06em 0.12em 0 0;
+  color: var(--accent);
+}
+.lede em { color: var(--accent); font-style: italic; }
+
+.about__aside {
+  border-left: 1px solid var(--rule);
+  padding-left: clamp(1.25rem, 3vw, 2rem);
+}
+@media (max-width: 820px) { .about__aside { border-left: none; border-top: 1px solid var(--rule); padding-left: 0; padding-top: 1.75rem; } }
+.about__aside h3 {
+  font-family: var(--font-sans);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--ink-faint);
+  font-weight: 600;
+  margin-bottom: 0.9rem;
+}
+.fact-list { list-style: none; margin: 0 0 1.6rem; padding: 0; }
+.fact-list li {
+  display: flex;
+  gap: 0.7rem;
+  align-items: baseline;
+  padding: 0.45rem 0;
+  border-bottom: 1px dotted var(--rule);
+  font-size: 0.92rem;
+}
+.fact-list li:last-child { border-bottom: none; }
+.fact-list .k { color: var(--ink-faint); flex: none; width: 5.6rem; font-size: 0.82rem; }
+.fact-list .v { color: var(--ink); }
+.about__aside:last-child h3:not(:first-child) { margin-top: 0; }
+
+/* ============================================================
+   RESEARCH INTERESTS — chips
+   ============================================================ */
+.chips { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.chip {
+  font-family: var(--font-sans);
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 0.42rem 0.95rem;
+  transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+.chip:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-tint); }
+.chip .dot {
+  display: inline-block;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-right: 0.5rem;
+  vertical-align: middle;
+  opacity: 0.7;
+}
+
+/* ============================================================
+   PUBLICATIONS
+   ============================================================ */
+.pub-list { display: grid; gap: 1.1rem; }
+.pub {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.25rem;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  box-shadow: var(--shadow);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.pub:hover { border-color: var(--accent); transform: translateY(-2px); }
+.pub.is-new { border-color: color-mix(in srgb, var(--new) 55%, var(--rule)); }
+.pub__index {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.6rem, 1.2rem + 1.5vw, 2.3rem);
+  line-height: 1;
+  color: var(--accent);
+  opacity: 0.85;
+  padding-top: 0.1rem;
+}
+@media (max-width: 560px) {
+  .pub { grid-template-columns: 1fr; gap: 0.5rem; }
+  .pub__index { font-size: 1.4rem; }
+}
+.pub__badges { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 0.6rem; }
+.badge {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.24rem 0.6rem;
+  border-radius: 5px;
+  border: 1px solid transparent;
+}
+.badge--accent { background: var(--accent-tint); color: var(--accent-deep); border-color: color-mix(in srgb, var(--accent) 28%, transparent); }
+.badge--muted  { background: var(--paper-2); color: var(--ink-soft); border-color: var(--rule); }
+.badge--new {
+  background: var(--new-tint);
+  color: var(--new);
+  border-color: color-mix(in srgb, var(--new) 35%, transparent);
+  display: inline-flex; align-items: center; gap: 0.35rem;
+}
+.badge--new .pip {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--new);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--new) 60%, transparent);
+  animation: pulse 2.4s ease-out infinite;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--new) 55%, transparent); }
+  70% { box-shadow: 0 0 0 7px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+@media (prefers-reduced-motion: reduce) { .badge--new .pip { animation: none; } }
+
+.pub__title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.12rem, 1rem + 0.6vw, 1.32rem);
+  line-height: 1.25;
+  margin: 0 0 0.5rem;
+}
+.pub__title a { color: var(--ink); }
+.pub__title a:hover { color: var(--accent); }
+.pub__authors { font-size: 0.92rem; color: var(--ink-soft); margin: 0 0 0.35rem; }
+.pub__authors .me { color: var(--ink); font-weight: 600; }
+.pub__venue { font-size: 0.9rem; color: var(--ink-faint); font-style: italic; font-family: var(--font-serif); margin: 0 0 0.7rem; }
+.pub__summary { font-size: 0.94rem; color: var(--ink-soft); margin: 0 0 0.85rem; line-height: 1.6; }
+.pub__links { display: flex; flex-wrap: wrap; gap: 1.1rem; font-size: 0.85rem; }
+.pub__links a { display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 500; }
+.pub__links a svg { width: 13px; height: 13px; }
+
+.inprep {
+  margin-top: 1.6rem;
+  border: 1px dashed var(--rule);
+  border-radius: 12px;
+  padding: clamp(1.1rem, 3vw, 1.6rem);
+  background: var(--paper-2);
+}
+.inprep__label {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--ink-faint);
+  font-weight: 600;
+  margin-bottom: 0.7rem;
+  display: flex; align-items: center; gap: 0.55rem;
+}
+.inprep__label::before { content: ""; width: 18px; height: 1px; background: var(--ink-faint); }
+.inprep__title { font-family: var(--font-serif); font-size: 1.1rem; margin: 0 0 0.35rem; color: var(--ink); }
+.inprep__meta { font-size: 0.9rem; color: var(--ink-soft); margin: 0; }
+.inprep__meta .me { color: var(--ink); font-weight: 600; }
+.inprep__meta .status { display: block; margin-top: 0.35rem; font-style: italic; font-family: var(--font-serif); color: var(--ink-faint); }
+
+/* ============================================================
+   TIMELINE — centerpiece
+   (alternating layout + scroll-driven progress spine grafted from
+   candidate-4, fully re-skinned into the editorial oxblood palette)
+   ============================================================ */
+.timeline { position: relative; margin-top: 0.5rem; }
+
+/* Vertical spine + scroll-driven progress fill */
+.timeline__spine {
+  position: absolute;
+  left: 10px;
+  top: 4px;
+  bottom: 4px;
+  width: 2px;
+  background: var(--rule);
+  overflow: visible;
+}
+.timeline__progress {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 0;
+  background: linear-gradient(var(--accent), var(--accent-deep));
+  transition: height 0.12s linear;
+}
+@media (min-width: 860px) {
+  .timeline__spine { left: 50%; transform: translateX(-1px); }
+}
+
+.tl-item {
+  position: relative;
+  padding-left: 2.6rem;
+  padding-bottom: 2.6rem;
+}
+.tl-item:last-child { padding-bottom: 0; }
+
+/* Dot — base = role/experience (round, outlined) */
+.tl-dot {
+  position: absolute;
+  left: 4px;
+  top: 0.35rem;
+  width: 15px; height: 15px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 2px solid var(--rule);
+  z-index: 2;
+  transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+}
+/* Reveal dot when its milestone scrolls into view */
+.tl-item.is-visible .tl-dot { border-color: var(--accent); background: var(--accent-tint); transform: scale(1.08); }
+/* Education milestones = square, outlined */
+.tl-item--edu .tl-dot { border-radius: 4px; }
+.tl-item--edu.is-visible .tl-dot { border-color: var(--accent); background: var(--accent-tint); }
+/* Current role = filled / emphasized */
+.tl-item--now .tl-dot { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-tint); }
+.tl-item--now.is-visible .tl-dot { transform: scale(1.08); }
+
+.tl-card {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  padding: clamp(1.15rem, 3vw, 1.5rem);
+  box-shadow: var(--shadow);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.tl-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+.tl-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.45rem 0.8rem; margin-bottom: 0.6rem; }
+.tl-date {
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.tl-item--edu .tl-date { color: var(--ink-faint); }
+.tl-kind {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  border: 1px solid var(--rule);
+  background: var(--paper-2);
+  padding: 0.16rem 0.5rem;
+  border-radius: 5px;
+}
+.tl-role { font-family: var(--font-serif); font-size: clamp(1.08rem, 1rem + 0.4vw, 1.24rem); margin: 0 0 0.15rem; color: var(--ink); line-height: 1.25; }
+.tl-org { font-size: 0.9rem; color: var(--ink-soft); margin: 0 0 0.8rem; }
+.tl-org .place { color: var(--ink-faint); }
+.tl-points { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.45rem; }
+.tl-points li {
+  position: relative;
+  padding-left: 1.1rem;
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+.tl-points li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0.62em;
+  width: 5px; height: 1px;
+  background: var(--accent);
+}
+
+/* Alternating left / right layout on wide screens */
+@media (min-width: 860px) {
+  .tl-item {
+    width: 50%;
+    padding-left: 0;
+    padding-right: 3rem;
+    box-sizing: border-box;
+  }
+  .tl-item:nth-child(even) {
+    margin-left: 50%;
+    padding-right: 0;
+    padding-left: 3rem;
+  }
+  .tl-dot { left: auto; right: -8.5px; }
+  .tl-item:nth-child(even) .tl-dot { left: -8.5px; right: auto; }
+}
+
+/* ============================================================
+   HONOURS — list
+   ============================================================ */
+.subhead {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  margin-bottom: 1.4rem;
+  display: flex; align-items: baseline; gap: 0.7rem;
+}
+.subhead .num { font-style: italic; font-size: 0.9rem; color: var(--accent); }
+
+.awards { list-style: none; margin: 0; padding: 0; }
+.awards li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.75rem 1rem;
+  align-items: baseline;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.awards li:first-child { padding-top: 0; }
+.awards .a-name { font-family: var(--font-serif); font-size: 1.04rem; color: var(--ink); line-height: 1.35; }
+.awards .a-org { display: block; font-family: var(--font-sans); font-size: 0.85rem; color: var(--ink-faint); margin-top: 0.15rem; }
+.awards .a-year {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   SKILLS — grouped tag sets
+   ============================================================ */
+.skill-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.5rem, 4vw, 2.5rem);
+  align-items: start;
+}
+@media (max-width: 720px) { .skill-grid { grid-template-columns: 1fr; gap: 1.6rem; } }
+
+.skill-group { margin: 0; }
+.skill-group h3 {
+  font-family: var(--font-sans);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 0.7rem;
+}
+.skill-tags { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.skill-tags span {
+  font-family: var(--font-sans);
+  font-size: 0.83rem;
+  color: var(--ink-soft);
+  background: var(--paper-2);
+  border: 1px solid var(--rule-soft);
+  border-radius: 6px;
+  padding: 0.3rem 0.7rem;
+}
+
+/* ============================================================
+   CONTACT
+   ============================================================ */
+.contact {
+  background: var(--paper-2);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.contact__grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: clamp(1.75rem, 5vw, 4rem);
+  align-items: center;
+}
+@media (max-width: 760px) { .contact__grid { grid-template-columns: 1fr; gap: 2rem; } }
+.contact h2 {
+  font-size: clamp(1.8rem, 1.2rem + 2.6vw, 2.8rem);
+  margin-bottom: 0.85rem;
+}
+.contact h2 em { font-style: italic; color: var(--accent); }
+.contact p { color: var(--ink-soft); max-width: 46ch; margin: 0; }
+.contact__links { display: flex; flex-direction: column; gap: 0.7rem; }
+.contact__links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--ink);
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 0.7rem 1.1rem;
+  min-width: 230px;
+  transition: border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+.contact__links a:hover { text-decoration: none; border-color: var(--accent); color: var(--accent); transform: translateX(2px); }
+.contact__links a svg { width: 17px; height: 17px; flex: none; color: var(--accent); }
+.contact__links a .ext { margin-left: auto; opacity: 0.5; }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer {
+  padding-block: clamp(2.5rem, 5vw, 3.5rem);
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+}
+.footer__inner { display: flex; flex-wrap: wrap; gap: 1rem 2rem; align-items: center; justify-content: space-between; }
+.footer__brand { display: flex; align-items: center; gap: 0.6rem; font-family: var(--font-serif); color: var(--ink); font-size: 1rem; font-weight: 600; }
+.footer__brand .mono { width: 26px; height: 26px; }
+.footer__meta { display: flex; flex-direction: column; gap: 0.15rem; text-align: right; }
+@media (max-width: 560px) { .footer__meta { text-align: left; } }
+.footer__care { font-style: italic; font-family: var(--font-serif); }
+
+/* ============================================================
+   SCROLL-REVEAL
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+}
+</style>
+</head>
+
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ============================ TOP NAV ============================ -->
+<header class="topbar" id="topbar">
+  <div class="topbar__inner">
+    <a href="#top" class="brand" aria-label="Jiaming Feng — home">
+      <!-- inline monogram -->
+      <svg class="mono" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+        <rect x="1" y="1" width="62" height="62" rx="14" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+        <path d="M22 17h22v6H30v9h11v6H30v15h-8z" fill="var(--accent)"/>
+        <path d="M44 43c0 5-2.7 7-8 7" fill="none" stroke="var(--accent)" stroke-width="6" stroke-linecap="round"/>
+      </svg>
+      Jiaming&nbsp;Feng
+    </a>
+
+    <div class="nav-actions">
+      <nav class="navlinks" id="navLinks" aria-label="Primary">
+        <a href="#about">About</a>
+        <a href="#interests">Interests</a>
+        <a href="#publications">Publications</a>
+        <a href="#timeline">Experience</a>
+        <a href="#honours">Honours</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle colour theme">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+
+      <!-- Hamburger toggle for small screens -->
+      <button class="menu-btn" id="menuBtn" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="navLinks">
+        <svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<a id="top"></a>
+
+<!-- ============================ HERO ============================ -->
+<section class="hero shell" aria-label="Introduction">
+  <div class="hero__grid">
+    <div class="hero__intro">
+      <p class="eyebrow reveal">Medical Imaging &middot; Surgical Vision</p>
+      <h1 class="reveal">Jiaming <span class="surname">Feng</span></h1>
+      <p class="hero__role reveal">MSc Advanced Computer Science, University of Leeds<br/>Research Collaborator, AI in Medicine &amp; Surgery Group</p>
+      <p class="hero__tagline reveal">Medical image analysis and surgical computer vision — bridging preoperative 3D anatomy and the intraoperative surgical view.</p>
+
+      <!-- Status pill (GRAFT 5) -->
+      <p class="hero__status reveal">
+        <span class="dot" aria-hidden="true"></span>
+        Open to PhD positions &amp; research collaboration
+      </p>
+
+      <p class="hero__loc reveal">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Leeds, United Kingdom
+      </p>
+
+      <div class="actions reveal">
+        <a class="btn btn--primary" href="mailto:vqkc0507@leeds.ac.uk">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+          Email
+        </a>
+        <a class="btn" href="https://scholar.google.com/citations?user=zpwn-UkAAAAJ&hl=en" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 9l10 6 8.5-5.1V15"/><path d="M6 12.5V17a6 3.5 0 0 0 12 0v-4.5"/></svg>
+          Google Scholar
+        </a>
+        <a class="btn" href="https://github.com/Jarm1ng" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.5 2 2 6.6 2 12.3c0 4.5 2.9 8.4 6.8 9.7.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.4-3.4-1.4-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.6 2.4 1.1 3 .9.1-.7.3-1.1.6-1.4-2.2-.3-4.5-1.1-4.5-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.6 0 0 .8-.3 2.7 1a9.3 9.3 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.3.2 2.3.1 2.6.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.5 5 .3.3.7.9.7 1.9v2.8c0 .3.2.6.7.5 3.9-1.3 6.8-5.2 6.8-9.7C22 6.6 17.5 2 12 2z"/></svg>
+          GitHub
+        </a>
+        <a class="btn" href="Jiaming_Feng_CV.pdf" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M12 18v-6M9 15l3 3 3-3"/></svg>
+          Download CV
+        </a>
+      </div>
+    </div>
+
+    <!-- Mesh / registration motif — domain flavour, fully inline -->
+    <div class="hero__motif reveal" aria-hidden="true">
+      <svg viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg" role="img">
+        <title>Abstract liver-mesh and registration-grid motif</title>
+        <defs>
+          <clipPath id="liverClip">
+            <path d="M70 150 C70 110 120 92 165 96 C205 99 250 96 272 120 C292 142 286 188 256 214 C228 238 196 250 158 246 C120 242 88 226 76 196 C70 180 70 164 70 150 Z"/>
+          </clipPath>
+        </defs>
+        <!-- faint registration grid -->
+        <g stroke="var(--rule)" stroke-width="1">
+          <path d="M30 60 H310 M30 110 H310 M30 160 H310 M30 210 H310 M30 260 H310"/>
+          <path d="M70 30 V300 M120 30 V300 M170 30 V300 M220 30 V300 M270 30 V300"/>
+        </g>
+        <!-- liver silhouette -->
+        <path d="M70 150 C70 110 120 92 165 96 C205 99 250 96 272 120 C292 142 286 188 256 214 C228 238 196 250 158 246 C120 242 88 226 76 196 C70 180 70 164 70 150 Z"
+              fill="var(--accent-tint)" stroke="var(--accent)" stroke-width="1.6"/>
+        <!-- wireframe contours clipped to organ -->
+        <g clip-path="url(#liverClip)" stroke="var(--accent)" stroke-width="0.8" opacity="0.5" fill="none">
+          <path d="M70 130 C120 118 200 118 272 132"/>
+          <path d="M70 160 C120 150 210 150 282 164"/>
+          <path d="M72 190 C120 182 210 184 270 196"/>
+          <path d="M90 220 C140 214 210 216 256 226"/>
+          <path d="M110 100 C120 150 116 210 128 248"/>
+          <path d="M160 96 C168 150 162 212 168 248"/>
+          <path d="M210 100 C216 150 214 206 212 244"/>
+          <path d="M256 116 C262 160 258 200 250 224"/>
+        </g>
+        <!-- anatomical landmark nodes -->
+        <g fill="var(--accent)">
+          <circle cx="128" cy="150" r="3.4"/>
+          <circle cx="190" cy="138" r="3.4"/>
+          <circle cx="232" cy="170" r="3.4"/>
+          <circle cx="160" cy="205" r="3.4"/>
+          <circle cx="108" cy="190" r="3.4"/>
+        </g>
+        <g stroke="var(--accent)" stroke-width="1" opacity="0.65" fill="none">
+          <path d="M128 150 L190 138 L232 170 L160 205 L108 190 Z"/>
+        </g>
+        <!-- 2D projection ray hint -->
+        <g stroke="var(--ink-faint)" stroke-width="1" stroke-dasharray="3 4" opacity="0.55">
+          <path d="M300 40 L232 170"/>
+          <path d="M300 40 L190 138"/>
+        </g>
+        <circle cx="300" cy="40" r="4" fill="var(--ink-faint)"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ABOUT ============================ -->
+<section class="section shell" id="about" aria-labelledby="about-h">
+  <div class="section-head reveal">
+    <span class="num">01</span>
+    <h2 id="about-h">About</h2>
+    <span class="head-note">Researcher profile</span>
+  </div>
+
+  <div class="about__body">
+    <div class="lede reveal">
+      <p class="dropcap">I am a researcher in medical image analysis and surgical computer vision, currently pursuing an MSc in Advanced Computer Science at the University of Leeds, where I collaborate with the AI in Medicine and Surgery Group under Dr&nbsp;Sharib&nbsp;Ali.</p>
+      <p>My research centres on computer vision for <em>image-guided liver intervention</em> — connecting preoperative 3D anatomy to the intraoperative laparoscopic view through geometry-aware 3D-2D registration, anatomical landmark segmentation, and augmented-reality guidance for surgery.</p>
+      <p>I am broadly interested in building clinically grounded systems that bring reliable 3D understanding into the operating room.</p>
+    </div>
+
+    <aside class="about__aside reveal">
+      <h3>At a glance</h3>
+      <ul class="fact-list">
+        <li><span class="k">Role</span><span class="v">MSc student &amp; Research Collaborator</span></li>
+        <li><span class="k">Group</span><span class="v">AI in Medicine &amp; Surgery</span></li>
+        <li><span class="k">Advisor</span><span class="v">Dr Sharib Ali</span></li>
+        <li><span class="k">Field</span><span class="v">Medical imaging &amp; surgical CV</span></li>
+        <li><span class="k">Based in</span><span class="v">Leeds, United Kingdom</span></li>
+      </ul>
+      <h3>Affiliation</h3>
+      <p style="margin:0; font-size:0.92rem; color:var(--ink-soft);">School of Computer Science,<br/>University of Leeds</p>
+    </aside>
+  </div>
+</section>
+
+<!-- ============================ RESEARCH INTERESTS ============================ -->
+<section class="section section--tight shell" id="interests" aria-labelledby="interests-h">
+  <div class="section-head reveal">
+    <span class="num">02</span>
+    <h2 id="interests-h">Research Interests</h2>
+    <span class="head-note">Themes &amp; methods</span>
+  </div>
+
+  <div class="chips reveal">
+    <span class="chip"><span class="dot"></span>Medical image analysis</span>
+    <span class="chip"><span class="dot"></span>Computer vision for image-guided intervention</span>
+    <span class="chip"><span class="dot"></span>Preoperative-to-intraoperative registration</span>
+    <span class="chip"><span class="dot"></span>3D anatomical landmark segmentation</span>
+    <span class="chip"><span class="dot"></span>3D-2D registration</span>
+    <span class="chip"><span class="dot"></span>Augmented &amp; mixed reality for surgery</span>
+    <span class="chip"><span class="dot"></span>Surgical scene understanding</span>
+    <span class="chip"><span class="dot"></span>Geometric deep learning</span>
+    <span class="chip"><span class="dot"></span>Self-supervised learning</span>
+  </div>
+</section>
+
+<!-- ============================ PUBLICATIONS ============================ -->
+<section class="section shell" id="publications" aria-labelledby="pub-h">
+  <div class="section-head reveal">
+    <span class="num">03</span>
+    <h2 id="pub-h">Publications</h2>
+    <span class="head-note">Peer-reviewed &amp; in preparation</span>
+  </div>
+
+  <div class="pub-list">
+
+    <!-- 1. Vis2Reg — NEW / MICCAI 2026 -->
+    <article class="pub is-new reveal">
+      <div class="pub__index">i.</div>
+      <div>
+        <div class="pub__badges">
+          <span class="badge badge--new"><span class="pip"></span>New</span>
+          <span class="badge badge--accent">Accepted · MICCAI 2026</span>
+        </div>
+        <h3 class="pub__title">Vis2Reg: Visibility-Aware Landmark-Free Geometric 3D-2D Registration for Liver Laparoscopy</h3>
+        <p class="pub__authors"><span class="me">Jiaming Feng</span>, X. Zhang, S. Farid, S. Ali</p>
+        <p class="pub__venue">Medical Image Computing and Computer Assisted Intervention (MICCAI), 2026</p>
+        <p class="pub__summary">A visibility-aware, landmark-free geometric 3D-2D registration framework for laparoscopic liver surgery, using differentiable rasterization and mask-guided self-supervision for robust alignment under severe partial visibility.</p>
+      </div>
+    </article>
+
+    <!-- 2. GeoTranMesh — IPCAI 2026 / IJCARS -->
+    <article class="pub reveal">
+      <div class="pub__index">ii.</div>
+      <div>
+        <div class="pub__badges">
+          <span class="badge badge--accent">Accepted · IPCAI 2026</span>
+        </div>
+        <h3 class="pub__title"><a href="https://doi.org/10.1007/s11548-026-03600-8" target="_blank" rel="noopener">GeoTranMesh: A Geometry-Guided Multi-Branch Mesh Transformer for 3D Liver Segmentation</a></h3>
+        <p class="pub__authors"><span class="me">Jiaming Feng</span>, X. Zhang, S. Farid, S. Ali</p>
+        <p class="pub__venue">IJCARS, 2026 · International Journal of Computer Assisted Radiology and Surgery</p>
+        <p class="pub__summary">A geometry-guided multi-branch mesh Transformer for 3D liver surface landmark segmentation — hierarchical mesh encoding, directional feature fusion, and multi-task supervision; 59.5% overall Dice and 4.4&nbsp;mm Chamfer Distance on a liver mesh benchmark.</p>
+        <div class="pub__links">
+          <a href="https://doi.org/10.1007/s11548-026-03600-8" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
+            doi.org/10.1007/s11548-026-03600-8
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- 3. Emotion recognition — AIP -->
+    <article class="pub reveal">
+      <div class="pub__index">iii.</div>
+      <div>
+        <div class="pub__badges">
+          <span class="badge badge--muted">Conference Proceedings</span>
+        </div>
+        <h3 class="pub__title"><a href="https://doi.org/10.1063/5.0223242" target="_blank" rel="noopener">The Application of Emotion Recognition from Two Types of Physiological Signals in Human-Machine Interaction within Autonomous Driving</a></h3>
+        <p class="pub__authors"><span class="me">Jiaming Feng</span></p>
+        <p class="pub__venue">AIP Conference Proceedings, 3194(1):030003, 2024</p>
+        <div class="pub__links">
+          <a href="https://doi.org/10.1063/5.0223242" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
+            doi.org/10.1063/5.0223242
+          </a>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <!-- In preparation (clearly separated) -->
+  <div class="inprep reveal">
+    <p class="inprep__label">In preparation</p>
+    <h3 class="inprep__title">Preoperative-to-Intraoperative Robust Liver Registration in Dynamic Surgical Scenes</h3>
+    <p class="inprep__meta">
+      <span class="me">Jiaming Feng</span>, S. Ali, et al.
+      <span class="status">Manuscript in preparation · IEEE Transactions on Medical Imaging</span>
+    </p>
+  </div>
+</section>
+
+<!-- ============================ TIMELINE / EXPERIENCE ============================ -->
+<section class="section shell" id="timeline" aria-labelledby="tl-h">
+  <div class="section-head reveal">
+    <span class="num">04</span>
+    <h2 id="tl-h">Research &amp; Experience</h2>
+    <span class="head-note">2021 &rarr; present</span>
+  </div>
+
+  <div class="timeline">
+    <!-- scroll-driven progress spine -->
+    <div class="timeline__spine" aria-hidden="true"><div class="timeline__progress" id="tlProgress"></div></div>
+
+    <!-- 1 · Current role -->
+    <article class="tl-item tl-item--now reveal">
+      <span class="tl-dot" aria-hidden="true"></span>
+      <div class="tl-card">
+        <div class="tl-meta">
+          <span class="tl-date">Sep 2025 — Present</span>
+          <span class="tl-kind">Current role</span>
+        </div>
+        <h3 class="tl-role">Research Collaborator — AI in Medicine &amp; Surgery Group</h3>
+        <p class="tl-org">University of Leeds · under Dr Sharib Ali <span class="place">— Leeds, UK</span></p>
+        <ul class="tl-points">
+          <li>Computer vision for image-guided liver intervention: preoperative-to-intraoperative fusion, 3D anatomical landmark segmentation, and geometry-aware registration for AR-guided surgery.</li>
+          <li>Developed GeoTranMesh and Vis2Reg; currently developing robust video-based preoperative-to-intraoperative liver registration for dynamic surgical scenes.</li>
+          <li>Collaborates with computer scientists and hepatobiliary surgeons on clinically grounded image-guided intervention research.</li>
+        </ul>
+      </div>
+    </article>
+
+    <!-- 2 · MSc (education) -->
+    <article class="tl-item tl-item--edu reveal">
+      <span class="tl-dot" aria-hidden="true"></span>
+      <div class="tl-card">
+        <div class="tl-meta">
+          <span class="tl-date">Sep 2025 — Sep 2026</span>
+          <span class="tl-kind">Education</span>
+        </div>
+        <h3 class="tl-role">MSc, Advanced Computer Science</h3>
+        <p class="tl-org">University of Leeds <span class="place">— Leeds, UK · expected Sep 2026</span></p>
+        <ul class="tl-points">
+          <li>Awarded the International Excellence Scholarship.</li>
+        </ul>
+      </div>
+    </article>
+
+    <!-- 3 · RainbowWireless intern -->
+    <article class="tl-item reveal">
+      <span class="tl-dot" aria-hidden="true"></span>
+      <div class="tl-card">
+        <div class="tl-meta">
+          <span class="tl-date">Sep 2024 — Dec 2024</span>
+          <span class="tl-kind">Industry</span>
+        </div>
+        <h3 class="tl-role">AI Algorithm Intern</h3>
+        <p class="tl-org">RainbowWireless (Beijing) New Technology Co., Ltd. <span class="place">— Beijing, China</span></p>
+        <ul class="tl-points">
+          <li>Built a retrieval-augmented diagnostic assistant for intelligent vehicle maintenance with a major Chinese automotive enterprise — turning large-scale maintenance manuals (tens of thousands of pages) into a queryable fault-diagnosis knowledge system.</li>
+          <li>Designed a symptom-driven diagnostic workflow mapping sparse user-reported symptoms to fault localisation and repair procedures.</li>
+        </ul>
+      </div>
+    </article>
+
+    <!-- 4 · Wheat Seedling research -->
+    <article class="tl-item reveal">
+      <span class="tl-dot" aria-hidden="true"></span>
+      <div class="tl-card">
+        <div class="tl-meta">
+          <span class="tl-date">Mar 2024 — Jul 2024</span>
+          <span class="tl-kind">Research</span>
+        </div>
+        <h3 class="tl-role">Wheat Seedling Detection System</h3>
+        <p class="tl-org">Henan Agricultural University · supervised by Prof. Xi Lei <span class="place">— Henan, China</span></p>
+        <ul class="tl-points">
+          <li>Built an end-to-end wheat seedling detection system for real-world field monitoring, automating seedling-distribution analysis from drone-captured video.</li>
+          <li>Deployable computer-vision system for sparse and dense seedling regions, deployed to a mobile platform for on-site assessment.</li>
+        </ul>
+      </div>
+    </article>
+
+    <!-- 5 · B.Eng (education) -->
+    <article class="tl-item tl-item--edu reveal">
+      <span class="tl-dot" aria-hidden="true"></span>
+      <div class="tl-card">
+        <div class="tl-meta">
+          <span class="tl-date">Sep 2021 — Jun 2025</span>
+          <span class="tl-kind">Education</span>
+        </div>
+        <h3 class="tl-role">B.Eng., Computer Science &amp; Technology</h3>
+        <p class="tl-org">Henan Agricultural University <span class="place">— Henan, China</span></p>
+        <ul class="tl-points">
+          <li>Average grade 81%; awarded Excellent Undergraduate Thesis.</li>
+        </ul>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ============================ HONOURS & AWARDS ============================ -->
+<section class="section shell" id="honours" aria-labelledby="hon-h">
+  <div class="section-head reveal">
+    <span class="num">05</span>
+    <h2 id="hon-h">Honours &amp; Awards</h2>
+    <span class="head-note">Recognition</span>
+  </div>
+
+  <div class="reveal">
+    <ul class="awards">
+      <li>
+        <span class="a-name">International Excellence Scholarship<span class="a-org">University of Leeds</span></span>
+        <span class="a-year">2025</span>
+      </li>
+      <li>
+        <span class="a-name">Excellent Undergraduate Thesis<span class="a-org">Henan Agricultural University</span></span>
+        <span class="a-year">2025</span>
+      </li>
+      <li>
+        <span class="a-name">Second Prize, AI Innovation Competition<span class="a-org">China Robotics &amp; AI Competition — National Finals</span></span>
+        <span class="a-year">2024</span>
+      </li>
+      <li>
+        <span class="a-name">Third Prize, Asia &amp; Pacific Mathematical Contest in Modeling<span class="a-org">APMCM</span></span>
+        <span class="a-year">2024</span>
+      </li>
+      <li>
+        <span class="a-name">Third Prize, ShuWei Cup International Mathematical Contest in Modeling<span class="a-org">IMCM</span></span>
+        <span class="a-year">2024</span>
+      </li>
+      <li>
+        <span class="a-name">Second Prize, CSEE Cup Electrical &amp; Mathematical Modeling Competition<span class="a-org">CSEE Cup</span></span>
+        <span class="a-year">2023</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================ SKILLS ============================ -->
+<section class="section section--tight shell" id="skills" aria-labelledby="skills-h">
+  <div class="section-head reveal">
+    <span class="num">06</span>
+    <h2 id="skills-h">Technical Skills</h2>
+    <span class="head-note">Toolkit</span>
+  </div>
+
+  <div class="skill-grid reveal">
+    <div class="skill-group">
+      <h3>Research</h3>
+      <div class="skill-tags">
+        <span>Medical image analysis</span>
+        <span>Surgical computer vision</span>
+        <span>Anatomical segmentation</span>
+        <span>3D-2D registration</span>
+        <span>Preop-to-intraop fusion</span>
+        <span>Self-supervised learning</span>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <h3>3D &amp; Graphics</h3>
+      <div class="skill-tags">
+        <span>Mesh &amp; point-cloud processing</span>
+        <span>Geometric deep learning</span>
+        <span>Camera geometry</span>
+        <span>3D visualisation</span>
+        <span>Blender</span>
+        <span>Unity</span>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <h3>Frameworks &amp; Tools</h3>
+      <div class="skill-tags">
+        <span>PyTorch</span>
+        <span>Python</span>
+        <span>Linux / Unix</span>
+        <span>Git</span>
+        <span>LaTeX</span>
+        <span>AI system deployment</span>
+        <span>Mobile deployment</span>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <h3>Languages</h3>
+      <div class="skill-tags">
+        <span>English (IELTS 6.5)</span>
+        <span>Chinese (native)</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================ CONTACT ============================ -->
+<section class="section contact" id="contact" aria-labelledby="contact-h">
+  <div class="shell contact__grid">
+    <div class="reveal">
+      <h2 id="contact-h">Let's <em>connect</em></h2>
+      <p>Open to PhD positions and research collaboration on medical image analysis, surgical computer vision, and image-guided intervention. The best way to reach me is by email.</p>
+    </div>
+    <div class="contact__links reveal">
+      <a href="mailto:vqkc0507@leeds.ac.uk">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+        vqkc0507@leeds.ac.uk
+      </a>
+      <a href="https://scholar.google.com/citations?user=zpwn-UkAAAAJ&hl=en" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 9l10 6 8.5-5.1V15"/><path d="M6 12.5V17a6 3.5 0 0 0 12 0v-4.5"/></svg>
+        Google Scholar
+        <svg class="ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+      </a>
+      <a href="https://github.com/Jarm1ng" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.5 2 2 6.6 2 12.3c0 4.5 2.9 8.4 6.8 9.7.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.4-3.4-1.4-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.6 2.4 1.1 3 .9.1-.7.3-1.1.6-1.4-2.2-.3-4.5-1.1-4.5-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.6 0 0 .8-.3 2.7 1a9.3 9.3 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.3.2 2.3.1 2.6.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.5 5 .3.3.7.9.7 1.9v2.8c0 .3.2.6.7.5 3.9-1.3 6.8-5.2 6.8-9.7C22 6.6 17.5 2 12 2z"/></svg>
+        github.com/Jarm1ng
+        <svg class="ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+      </a>
+      <a href="Jiaming_Feng_CV.pdf" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+        Download CV (PDF)
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FOOTER ============================ -->
+<footer>
+  <div class="shell footer__inner">
+    <a href="#top" class="footer__brand" aria-label="Back to top">
+      <svg class="mono" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+        <rect x="1" y="1" width="62" height="62" rx="14" fill="none" stroke="var(--accent)" stroke-width="2"/>
+        <path d="M22 17h22v6H30v9h11v6H30v15h-8z" fill="var(--accent)"/>
+        <path d="M44 43c0 5-2.7 7-8 7" fill="none" stroke="var(--accent)" stroke-width="6" stroke-linecap="round"/>
+      </svg>
+      Jiaming Feng
+    </a>
+    <div class="footer__meta">
+      <span>School of Computer Science, University of Leeds</span>
+      <span class="footer__care">&copy; <span id="year">2026</span> Jiaming Feng — bridging the scan and the surgical view.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================ SCRIPT ============================ -->
+<script>
+(function () {
+  "use strict";
+
+  var root = document.documentElement;
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- Theme toggle (init already ran in <head> to prevent FOUC) ---------- */
+  var toggle = document.getElementById("themeToggle");
+
+  // Light/dark <meta name="theme-color"> kept in sync as the user toggles.
+  var metaLight = document.querySelector('meta[name="theme-color"][media*="light"]');
+  var metaDark  = document.querySelector('meta[name="theme-color"][media*="dark"]');
+
+  function currentlyDark() {
+    var attr = root.getAttribute("data-theme");
+    if (attr === "dark") return true;
+    if (attr === "light") return false;
+    return window.matchMedia("(prefers-color-scheme: dark)").matches;
+  }
+
+  function syncControl() {
+    var dark = currentlyDark();
+    var label = dark ? "Switch to light theme" : "Switch to dark theme";
+    if (toggle) { toggle.setAttribute("aria-label", label); toggle.setAttribute("title", label); }
+    // Drop the media constraint on the active theme-color so it applies
+    // immediately regardless of the OS preference, after a manual toggle.
+    if (root.hasAttribute("data-theme")) {
+      if (metaLight) metaLight.media = dark ? "not all" : "all";
+      if (metaDark)  metaDark.media  = dark ? "all" : "not all";
+    }
+    root.style.colorScheme = dark ? "dark" : "light";
+  }
+  syncControl();
+
+  if (toggle) {
+    toggle.addEventListener("click", function () {
+      var next = currentlyDark() ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("jf-theme", next); } catch (e) {}
+      syncControl();
+    });
+  }
+
+  /* ---------- Current year (fallback already in markup) ---------- */
+  var y = document.getElementById("year");
+  if (y) {
+    var yr = new Date().getFullYear();
+    y.textContent = String(yr || 2026);
+  }
+
+  /* ---------- Mobile menu (hamburger) ---------- */
+  var topbar = document.getElementById("topbar");
+  var menuBtn = document.getElementById("menuBtn");
+  var navWrap = document.getElementById("navLinks");
+
+  function closeMenu() {
+    if (!topbar) return;
+    topbar.classList.remove("menu-open");
+    if (menuBtn) {
+      menuBtn.setAttribute("aria-expanded", "false");
+      menuBtn.setAttribute("aria-label", "Open navigation menu");
+    }
+  }
+
+  if (menuBtn && topbar) {
+    menuBtn.addEventListener("click", function () {
+      var open = topbar.classList.toggle("menu-open");
+      menuBtn.setAttribute("aria-expanded", open ? "true" : "false");
+      menuBtn.setAttribute("aria-label", open ? "Close navigation menu" : "Open navigation menu");
+    });
+    // Close after choosing a destination.
+    if (navWrap) {
+      navWrap.addEventListener("click", function (e) {
+        if (e.target.closest("a")) closeMenu();
+      });
+    }
+    // Close on Escape.
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") closeMenu();
+    });
+  }
+
+  /* ---------- Scroll-reveal ---------- */
+  var revealEls = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
+  if (reduceMotion || !("IntersectionObserver" in window)) {
+    revealEls.forEach(function (el) { el.classList.add("in"); });
+  } else {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in");
+          io.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+    revealEls.forEach(function (el) { io.observe(el); });
+  }
+
+  /* ---------- Timeline: dot reveal + scroll-driven progress fill ---------- */
+  var tlItems = Array.prototype.slice.call(document.querySelectorAll(".tl-item"));
+  var spine = document.querySelector(".timeline__spine");
+  var progress = document.getElementById("tlProgress");
+
+  if (reduceMotion || !("IntersectionObserver" in window)) {
+    // Reduced motion: everything is statically "on", spine filled to 100%.
+    tlItems.forEach(function (el) { el.classList.add("is-visible"); });
+    if (progress) progress.style.height = "100%";
+  } else {
+    var tlIo = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          tlIo.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    tlItems.forEach(function (el) { tlIo.observe(el); });
+
+    // Scroll-driven progress fill: maps the spine through the viewport
+    // anchor (55% down) to a 0–100% height on the oxblood fill.
+    var ticking = false;
+    function updateProgress() {
+      ticking = false;
+      if (!spine || !progress) return;
+      var rect = spine.getBoundingClientRect();
+      var anchor = window.innerHeight * 0.55;
+      var filled = anchor - rect.top;
+      var pct = Math.max(0, Math.min(1, filled / rect.height));
+      progress.style.height = (pct * 100) + "%";
+    }
+    function requestProgress() {
+      if (!ticking) {
+        ticking = true;
+        window.requestAnimationFrame(updateProgress);
+      }
+    }
+    window.addEventListener("scroll", requestProgress, { passive: true });
+    window.addEventListener("resize", requestProgress, { passive: true });
+    updateProgress();
+  }
+
+  /* ---------- Active section highlighting in nav (scrollspy) ---------- */
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll(".navlinks a"));
+  var sectionMap = {};
+  navLinks.forEach(function (link) {
+    var id = link.getAttribute("href").slice(1);
+    var sec = document.getElementById(id);
+    if (sec) sectionMap[id] = link;
+  });
+  var sections = Object.keys(sectionMap).map(function (id) { return document.getElementById(id); });
+
+  if ("IntersectionObserver" in window && sections.length) {
+    var current = null;
+    var navIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) current = entry.target.id;
+      });
+      navLinks.forEach(function (l) { l.classList.remove("active"); l.removeAttribute("aria-current"); });
+      if (current && sectionMap[current]) {
+        sectionMap[current].classList.add("active");
+        sectionMap[current].setAttribute("aria-current", "page");
+      }
+    }, { rootMargin: "-45% 0px -50% 0px", threshold: 0 });
+    sections.forEach(function (s) { navIO.observe(s); });
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+# Local tooling / scratch — not part of the published site
+.claude/
+candidate-*.html
+og-card.svg
+*.log
+.DS_Store
+.vscode/
