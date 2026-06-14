@@ -5,3 +5,4 @@ og-card.svg
 *.log
 .DS_Store
 .vscode/
+variant-*.html
