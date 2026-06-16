@@ -566,11 +566,14 @@ section[id],
      baseline rather than floating high against the tall intro column */
   align-items: start;
 }
-/* nudge the framed scan panel down a touch to register with the eyebrow line */
-.hero__motif { margin-top: clamp(0.25rem, 1.5vw, 1.4rem); }
+/* nudge the framed scan panel down a touch to register with the eyebrow line.
+   The .motif-frame wraps the (aria-hidden) .hero__motif so the interactive
+   overlay + caption can be its siblings; the grid-item layout therefore lives
+   on the frame, while .hero__motif fills it. */
+.motif-frame { margin-top: clamp(0.25rem, 1.5vw, 1.4rem); justify-self: center; width: 100%; max-width: 330px; }
 @media (max-width: 880px) {
   .hero__grid { grid-template-columns: 1fr; gap: 2.75rem; }
-  .hero__motif { order: -1; max-width: 270px; margin-top: 0; }
+  .motif-frame { order: -1; max-width: 270px; margin-top: 0; }
 }
 
 .eyebrow {
@@ -726,11 +729,10 @@ section[id],
 }
 .btn--primary:hover { background: var(--accent-deep); border-color: var(--accent-deep); }
 
-/* Hero monogram / mesh motif — framed as a "registered scan" panel */
+/* Hero monogram / mesh motif — framed as a "registered scan" panel.
+   Sizing/placement now lives on the wrapping .motif-frame; the motif fills it. */
 .hero__motif {
-  justify-self: center;
   width: 100%;
-  max-width: 330px;
   position: relative;
   padding: 0.9rem;
 }
@@ -1354,6 +1356,211 @@ footer {
   /* the current-role timeline dot stays distinguishable */
   .tl-item--now .tl-dot { background: Highlight; border-color: Highlight; }
 }
+
+/* ============================================================
+   INTERACTIVITY ADDITIONS (additive · disarmed under reduced motion)
+   1 · Flagship "Register the scan" drag-to-register toy
+   2 · Laparoscope ambient parallax (pointer:fine only)
+   3 · Scroll-velocity spine shimmer (folds --vel into 3 oxblood elems)
+   ============================================================ */
+
+/* Visually-hidden but screen-reader reachable (caption/status that AT reads
+   must NOT live inside the aria-hidden motif subtree). */
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- (1) Flagship: movable preoperative "ghost" + grab handle ---- */
+/* The ghost group is JS-positioned via transform; it reads faint and lerps
+   its stroke toward --accent as the fit score rises (driven by --ghost-mix
+   0..1 written per drag-frame). Never animated under reduced motion. */
+.mesh-ghost {
+  --ghost-mix: 0;
+  stroke: color-mix(in srgb, var(--accent) calc(var(--ghost-mix) * 100%), var(--ink-faint));
+  fill: none;
+  opacity: 0.32;
+  pointer-events: none;            /* only the handle is interactive */
+}
+.mesh-ghost .ghost-poly { stroke-width: 1; opacity: 0.85; }
+.mesh-ghost .ghost-silhouette { stroke-width: 1.2; }
+.mesh-ghost .ghost-node { fill: currentColor; stroke: none; opacity: 0.9; }
+/* the ghost confirm tick (oxblood check) — hidden until registered */
+.mesh-ghost.is-registered { opacity: 0.9; }
+
+/* the focusable grab handle (a real control; the SVG stays aria-hidden) */
+.reg-handle { cursor: grab; touch-action: none; outline: none; }
+.reg-handle.dragging { cursor: grabbing; }
+.reg-handle .reg-hit { fill: transparent; }   /* enlarged ~22px touch target */
+.reg-handle .reg-dot {
+  fill: var(--accent);
+  transition: r 0.2s ease;
+}
+.reg-handle .reg-ring {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1;
+  opacity: 0.4;
+}
+/* clear focus-visible affordance on the handle (rendered as an SVG ring) */
+.reg-handle:focus-visible .reg-focus {
+  opacity: 1;
+}
+.reg-handle .reg-focus {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  stroke-dasharray: 2 3;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+/* one-shot confirm pulse re-strokes the rays on snap (class toggled by JS) */
+.mesh-ray.reg-confirm path {
+  animation: reg-ray-pulse 0.62s cubic-bezier(0.4,0,0.2,1);
+}
+@keyframes reg-ray-pulse {
+  0%   { stroke-dashoffset: 18; opacity: 0.2; }
+  100% { stroke-dashoffset: 0;  opacity: 0.55; }
+}
+/* brief node-opacity lift on confirm */
+.hero__motif.reg-lift .mesh-node { opacity: 1; filter: none; }
+
+/* caption row — SIBLING of the motif, outside the aria-hidden subtree */
+.motif-frame { position: relative; }
+
+/* JS-built interactive overlay SVG: NOT aria-hidden, holds the ghost +
+   focusable handle, registered exactly over the decorative motif so SVG
+   user-space coords match. Pointer events pass through except on the handle. */
+.reg-overlay {
+  position: absolute;
+  /* match .hero__motif padding (0.9rem) so the 340x340 user space aligns;
+     anchor top/left/right and let aspect-ratio set height → a square that
+     tracks the decorative SVG exactly (the caption below is ignored). */
+  top: 0.9rem;
+  left: 0.9rem;
+  right: 0.9rem;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  overflow: visible;
+  pointer-events: none;
+}
+.reg-overlay .reg-handle { pointer-events: auto; }
+.reg-caption {
+  margin: 0.55rem 0 0;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 1.1em;
+  font-weight: 500;
+}
+.reg-caption .reg-check {
+  width: 12px; height: 12px; flex: none;
+  color: var(--accent);
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.2,1.5,0.4,1);
+}
+.reg-caption.is-registered .reg-check { opacity: 1; transform: scale(1); }
+/* re-arm glyph — appears in the caption row after first solve */
+.reg-rearm {
+  appearance: none;
+  border: 0;
+  background: none;
+  color: var(--ink-faint);
+  font-size: 0.9rem;
+  line-height: 1;
+  padding: 0.1rem 0.25rem;
+  margin-left: 0.1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, color 0.2s ease, transform 0.4s cubic-bezier(0.2,0.7,0.2,1);
+}
+.reg-rearm.is-shown { opacity: 0.7; pointer-events: auto; }
+.reg-rearm:hover { color: var(--accent); opacity: 1; }
+.reg-rearm:active { transform: rotate(-120deg); }
+.reg-foot {
+  margin: 0.3rem 0 0;
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  opacity: 0.55;
+}
+@media (max-width: 880px) { .reg-foot { display: none; } }
+
+/* ---- (3) Scroll-velocity spine shimmer ----
+   --vel (0..1, capped low) is written on :root by the existing scroll
+   handler. In light mode --accent-glow is transparent → effectively no-op;
+   in dark mode it blooms faintly. Capped low so it never pulls the eye. */
+.timeline__progress {
+  box-shadow:
+    0 0 calc(var(--vel, 0) * 9px) color-mix(in srgb, var(--accent-glow) calc(var(--vel, 0) * 100%), transparent);
+}
+:root[data-theme="dark"] .timeline__progress {
+  box-shadow: 0 0 calc(6px + var(--vel, 0) * 10px) var(--accent-glow);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .timeline__progress {
+    box-shadow: 0 0 calc(6px + var(--vel, 0) * 10px) var(--accent-glow);
+  }
+}
+.scrollbar {
+  box-shadow: 0 0 calc(var(--vel, 0) * 8px) color-mix(in srgb, var(--accent-glow) calc(var(--vel, 0) * 100%), transparent);
+}
+:root[data-theme="dark"] .scrollbar {
+  box-shadow: 0 0 calc(8px + var(--vel, 0) * 8px) var(--accent-glow);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .scrollbar {
+    box-shadow: 0 0 calc(8px + var(--vel, 0) * 8px) var(--accent-glow);
+  }
+}
+.tl-item--now .tl-dot {
+  box-shadow:
+    0 0 0 4px var(--accent-tint),
+    0 0 calc(var(--vel, 0) * 10px) color-mix(in srgb, var(--accent-glow) calc(var(--vel, 0) * 100%), transparent);
+}
+:root[data-theme="dark"] .tl-item--now .tl-dot {
+  box-shadow: 0 0 0 4px var(--accent-tint), 0 0 calc(12px + var(--vel, 0) * 10px) var(--accent-glow);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .tl-item--now .tl-dot {
+    box-shadow: 0 0 0 4px var(--accent-tint), 0 0 calc(12px + var(--vel, 0) * 10px) var(--accent-glow);
+  }
+}
+
+/* ---- Reduced motion: every addition fully disarmed ---- */
+@media (prefers-reduced-motion: reduce) {
+  /* ghost/handle are never created in JS under reduced motion; belt+braces */
+  .mesh-ghost, .reg-handle { display: none; }
+  .reg-caption .reg-check { transition: none; }
+  .reg-rearm { transition: none; }
+  .mesh-ray.reg-confirm path { animation: none; }
+  /* skip all --vel modulation: static spine fill, no bloom math */
+  .timeline__progress,
+  :root[data-theme="dark"] .timeline__progress,
+  .scrollbar,
+  :root[data-theme="dark"] .scrollbar,
+  .tl-item--now .tl-dot,
+  :root[data-theme="dark"] .tl-item--now .tl-dot { box-shadow: none; }
+  /* keep the dark-mode current dot ring (non-animated) for legibility */
+  :root[data-theme="dark"] .tl-item--now .tl-dot { box-shadow: 0 0 0 4px var(--accent-tint); }
+}
 </style>
 </head>
 
@@ -1453,8 +1660,12 @@ footer {
       </div>
     </div>
 
-    <!-- Mesh / registration motif — domain flavour, fully inline -->
-    <div class="hero__motif reveal" aria-hidden="true">
+    <!-- Mesh / registration motif — domain flavour, fully inline.
+         The .hero__motif SVG stays aria-hidden; the interactive flagship's
+         accessible surface (focusable handle + aria-live status + caption)
+         lives OUTSIDE that subtree, as siblings within .motif-frame. -->
+    <div class="motif-frame reveal">
+    <div class="hero__motif" aria-hidden="true">
       <svg viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg" role="img">
         <title>Abstract liver-mesh and registration-grid motif</title>
         <defs>
@@ -1500,6 +1711,18 @@ footer {
         </g>
         <circle class="mesh-source" cx="300" cy="40" r="4" fill="var(--ink-faint)"/>
       </svg>
+    </div>
+    <!-- Flagship accessible surface — SIBLINGS of the aria-hidden motif.
+         The caption + aria-live status are read by AT; the focusable
+         role="slider" handle is injected by JS (so it is absent entirely
+         under prefers-reduced-motion). All overlaid on .motif-frame. -->
+    <p class="reg-caption" id="regCaption">
+      <span id="regCaptionText">Drag to register the scan</span>
+      <svg class="reg-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+      <button class="reg-rearm" id="regRearm" type="button" aria-label="Re-misalign the model and try again" title="Try again">&#8635;</button>
+    </p>
+    <p class="reg-foot">Vis2Reg &middot; landmark-free 3D&rarr;2D registration</p>
+    <span class="sr-only" id="regStatus" role="status" aria-live="polite"></span>
     </div>
   </div>
 </section>
@@ -1995,22 +2218,69 @@ footer {
     }
   }
 
-  /* ---------- Scroll-progress hairline ---------- */
+  /* ---------- Scroll-progress hairline (+ folded-in spine-shimmer velocity) ----------
+     (3) The scroll-velocity shimmer reuses THIS existing passive scroll rAF
+     handler — no new scroll listener. We track per-frame scroll delta, decay
+     it toward zero, normalise to a LOW-capped 0..1 and write a single CSS
+     custom property --vel on :root. CSS reads --vel to bloom the three
+     existing oxblood elements (spine fill, current dot, top hairline). */
   var bar = document.getElementById("scrollbar");
   if (bar && !reduceMotion) {
     var barTick = false;
+    var lastScrollY = window.pageYOffset || document.documentElement.scrollTop;
+    var lastVelTs = 0;
+    var vel = 0;           // smoothed, normalised 0..1
+    var velRaf = 0;        // self-suspending decay rAF id (0 = idle)
+    var VEL_CAP = 95;      // px/frame that maps to vel = 1 (low cap)
+    var VEL_DECAY = 0.82;  // ~fast decay (~300ms to imperceptible)
+
+    function writeVel() {
+      // round to 3dp to avoid churning the property with insignificant deltas
+      root.style.setProperty("--vel", (Math.round(vel * 1000) / 1000));
+    }
+    // Self-suspending decay loop: runs ONLY while vel is audible, then stops.
+    function velDecayStep() {
+      vel *= VEL_DECAY;
+      if (vel < 0.01) {
+        vel = 0;
+        writeVel();
+        velRaf = 0;            // return to idle — no permanent rAF
+        return;
+      }
+      writeVel();
+      velRaf = window.requestAnimationFrame(velDecayStep);
+    }
+    function kickVelDecay() {
+      if (!velRaf && !document.hidden) velRaf = window.requestAnimationFrame(velDecayStep);
+    }
+
     function updateBar() {
       barTick = false;
       var st = window.pageYOffset || document.documentElement.scrollTop;
       var h = document.documentElement.scrollHeight - window.innerHeight;
       var p = h > 0 ? Math.max(0, Math.min(1, st / h)) : 0;
       bar.style.transform = "scaleX(" + p + ")";
+
+      // velocity: instantaneous |delta| normalised + capped, then eased up
+      var delta = Math.abs(st - lastScrollY);
+      lastScrollY = st;
+      var inst = Math.min(1, delta / VEL_CAP);
+      if (inst > vel) vel = inst;        // attack fast
+      writeVel();
+      kickVelDecay();                    // release handled by the decay loop
     }
     function requestBar() {
       if (!barTick) { barTick = true; window.requestAnimationFrame(updateBar); }
     }
     window.addEventListener("scroll", requestBar, { passive: true });
     window.addEventListener("resize", requestBar, { passive: true });
+    // pause the shimmer decay when the tab is hidden; reset idle CPU to zero
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) {
+        if (velRaf) { window.cancelAnimationFrame(velRaf); velRaf = 0; }
+        vel = 0; writeVel();
+      }
+    });
     updateBar();
   }
 
@@ -2081,6 +2351,417 @@ footer {
     }, { rootMargin: "-45% 0px -50% 0px", threshold: 0 });
     sections.forEach(function (s) { navIO.observe(s); });
   }
+
+  /* ============================================================
+     (1) FLAGSHIP — "Register the scan" drag-to-register toy
+     (2) AMBIENT — laparoscope parallax
+     ONE shared self-suspending rAF loop drives both. It STOPS when there
+     is nothing to animate (no drag, no pending spring, source at rest) and
+     restarts on input. Disarmed entirely under reduced motion.
+     ============================================================ */
+  (function flagship() {
+    if (reduceMotion) return;                  // no ghost, no handle, no loop
+    var motifEl = document.querySelector(".hero__motif");
+    var frame = document.querySelector(".motif-frame");
+    var svg = motifEl && motifEl.querySelector("svg");
+    if (!motifEl || !frame || !svg) return;
+
+    var SVGNS = "http://www.w3.org/2000/svg";
+
+    /* ---- cache the FIXED target nodes once ---- */
+    var sourceEl = svg.querySelector(".mesh-source");          // <circle cx=300 cy=40>
+    var rayGroup = svg.querySelector(".mesh-ray");
+    var rayPaths = rayGroup ? Array.prototype.slice.call(rayGroup.querySelectorAll("path")) : [];
+    var nodeEls  = Array.prototype.slice.call(svg.querySelectorAll(".mesh-node"));
+
+    // fixed ray endpoints (pinned — viewpoint changes, registration holds)
+    var SRC_BASE = { x: 300, y: 40 };
+    var RAY_ENDS = [ { x: 232, y: 170 }, { x: 190, y: 138 } ];  // order matches markup
+
+    /* ---- caption / status / re-arm (siblings, outside aria-hidden) ---- */
+    var caption   = document.getElementById("regCaption");
+    var capText   = document.getElementById("regCaptionText");
+    var statusEl  = document.getElementById("regStatus");
+    var rearmBtn  = document.getElementById("regRearm");
+
+    /* ---- ghost pose + spring state ---- */
+    var MAXT = 34, MAXR = 14;
+    var START = { tx: -26, ty: 18, r: -9 };
+    var pose = { tx: START.tx, ty: START.ty, r: START.r };
+    // ghost centroid in its own (pre-transform) space = polygon centroid
+    var GC = { x: (128 + 190 + 232 + 160 + 108) / 5, y: (150 + 138 + 170 + 205 + 190) / 5 };
+
+    var dragging = false;
+    var registered = false;
+    var springTarget = null;     // {tx,ty,r} when a spring is active, else null
+    var springStiff = 0.16;      // active per-spring lerp factor (set on arm)
+    var SNAP_STIFF = 0.18;       // short, critically-damped-ish snap (~0.6s, no overshoot)
+    var REST_STIFF = 0.085;      // gentle auto-rest settle (~1.1s)
+    var solvedOnce = false;
+    var touched = false;                          // becomes true on first interaction
+    function markTouched() { if (!touched) { touched = true; lastBand = null; } }
+
+    /* ---- parallax state ---- */
+    var finePointer = window.matchMedia("(pointer:fine)").matches;
+    var armedParallax = false;   // armed only after draw-in (~1.5s)
+    var srcTarget = { x: SRC_BASE.x, y: SRC_BASE.y };
+    var srcCur    = { x: SRC_BASE.x, y: SRC_BASE.y };
+    var gridEl = svg.querySelector(".mesh-grid");
+    var gridCur = 0, gridTarget = 0;
+    var PARA_AMP = 10, GRID_AMP = 3, PARA_LERP = 0.06;
+    var parallaxQuietUntil = 0;  // ms timestamp; keep parallax still after a snap
+
+    /* ---- cached CTM inverse (refreshed on pointerdown / resize / scroll-end) ---- */
+    var ctmInv = null;
+    function refreshCTM() {
+      var m = overlay.getScreenCTM();
+      ctmInv = m ? m.inverse() : null;
+    }
+
+    /* ============ build the interactive overlay (NOT aria-hidden) ============ */
+    var overlay = document.createElementNS(SVGNS, "svg");
+    overlay.setAttribute("class", "reg-overlay");
+    overlay.setAttribute("viewBox", "0 0 340 340");
+    overlay.setAttribute("aria-hidden", "false");
+
+    // ghost group (faint copy of silhouette + poly + nodes)
+    var ghost = document.createElementNS(SVGNS, "g");
+    ghost.setAttribute("class", "mesh-ghost");
+
+    var ghostSil = document.createElementNS(SVGNS, "path");
+    ghostSil.setAttribute("class", "ghost-silhouette");
+    ghostSil.setAttribute("d", "M70 150 C70 110 120 92 165 96 C205 99 250 96 272 120 C292 142 286 188 256 214 C228 238 196 250 158 246 C120 242 88 226 76 196 C70 180 70 164 70 150 Z");
+    ghost.appendChild(ghostSil);
+
+    var ghostPoly = document.createElementNS(SVGNS, "path");
+    ghostPoly.setAttribute("class", "ghost-poly");
+    ghostPoly.setAttribute("d", "M128 150 L190 138 L232 170 L160 205 L108 190 Z");
+    ghost.appendChild(ghostPoly);
+
+    var GNODES = [[128,150],[190,138],[232,170],[160,205],[108,190]];
+    GNODES.forEach(function (p) {
+      var c = document.createElementNS(SVGNS, "circle");
+      c.setAttribute("class", "ghost-node");
+      c.setAttribute("cx", p[0]); c.setAttribute("cy", p[1]); c.setAttribute("r", "3.4");
+      ghost.appendChild(c);
+    });
+    overlay.appendChild(ghost);
+
+    // focusable grab handle (role="slider") at the ghost centroid
+    var handle = document.createElementNS(SVGNS, "g");
+    handle.setAttribute("class", "reg-handle");
+    handle.setAttribute("role", "slider");
+    handle.setAttribute("tabindex", "0");
+    handle.setAttribute("aria-label", "Register the preoperative liver model to the surgical view");
+    handle.setAttribute("aria-valuemin", "0");
+    handle.setAttribute("aria-valuemax", "100");
+    handle.setAttribute("aria-valuenow", "0");
+
+    var hHit = document.createElementNS(SVGNS, "circle");
+    hHit.setAttribute("class", "reg-hit"); hHit.setAttribute("r", "15");  // generous finger target (scales down on mobile)
+    var hRing = document.createElementNS(SVGNS, "circle");
+    hRing.setAttribute("class", "reg-ring"); hRing.setAttribute("r", "10");
+    var hFocus = document.createElementNS(SVGNS, "circle");
+    hFocus.setAttribute("class", "reg-focus"); hFocus.setAttribute("r", "13");
+    var hDot = document.createElementNS(SVGNS, "circle");
+    hDot.setAttribute("class", "reg-dot"); hDot.setAttribute("r", "7");
+    handle.appendChild(hHit); handle.appendChild(hFocus); handle.appendChild(hRing); handle.appendChild(hDot);
+    overlay.appendChild(handle);
+
+    frame.insertBefore(overlay, motifEl.nextSibling);   // overlay sits over motif
+
+    /* ============ fit score + bands ============ */
+    function fitScore() {
+      var err = (Math.abs(pose.tx) / MAXT + Math.abs(pose.ty) / MAXT + Math.abs(pose.r) / MAXR) / 3;
+      err = Math.max(0, Math.min(1, err));
+      return 1 - err;
+    }
+    function bandFor(fit) {
+      if (fit >= 0.92) return "registered";
+      if (fit >= 0.70) return "aligning";
+      return "misaligned";
+    }
+    var lastBand = null;
+    var announceTimer = 0;
+    function announce(text) {
+      // debounce: announce only on BAND CHANGE
+      window.clearTimeout(announceTimer);
+      announceTimer = window.setTimeout(function () {
+        if (statusEl) statusEl.textContent = text;
+      }, 140);
+    }
+
+    /* ============ write phase (called inside the shared rAF) ============ */
+    function applyGhost() {
+      ghost.setAttribute("transform",
+        "translate(" + pose.tx.toFixed(2) + "," + pose.ty.toFixed(2) + ") " +
+        "rotate(" + pose.r.toFixed(2) + "," + GC.x + "," + GC.y + ")");
+      // handle rides the centroid; centroid IS the rotation pivot → translate only
+      handle.setAttribute("transform", "translate(" + (GC.x + pose.tx).toFixed(2) + "," + (GC.y + pose.ty).toFixed(2) + ")");
+
+      var fit = fitScore();
+      ghost.style.setProperty("--ghost-mix", fit.toFixed(3));
+      var pct = Math.round(fit * 100);
+      handle.setAttribute("aria-valuenow", String(pct));
+
+      var band = bandFor(fit);
+      var vt, cap;
+      if (band === "registered") { vt = "Registered"; cap = "Registered"; }
+      else if (band === "aligning") { vt = "Aligning — " + pct + "% registered"; cap = "Aligning… " + pct + "%"; }
+      else { vt = "Misaligned — " + pct + "% registered"; cap = "Misaligned"; }
+      handle.setAttribute("aria-valuetext", vt);
+      // idle shows the "Drag to register the scan" invite; band text appears once touched
+      if (touched && !registered && capText) capText.textContent = cap;
+
+      if (band !== lastBand) {
+        lastBand = band;
+        if (touched) announce(vt);
+      }
+    }
+
+    /* ============ confirm (restrained) on register ============ */
+    function doConfirm() {
+      registered = true;
+      pose.tx = 0; pose.ty = 0; pose.r = 0;
+      applyGhost();
+      ghost.classList.add("is-registered");
+      // one-shot dashoffset pulse re-stroking the rays + brief node lift
+      if (rayGroup) {
+        rayGroup.classList.remove("reg-confirm");
+        // force reflow so the animation restarts if re-armed
+        void rayGroup.getBoundingClientRect();
+        rayGroup.classList.add("reg-confirm");
+      }
+      motifEl.classList.add("reg-lift");
+      window.setTimeout(function () { motifEl.classList.remove("reg-lift"); }, 700);
+      if (caption) caption.classList.add("is-registered");
+      if (capText) capText.textContent = "Registered";
+      handle.setAttribute("aria-valuetext", "Registered");
+      handle.setAttribute("aria-valuenow", "100");
+      announce("Registered");
+      if (rearmBtn) rearmBtn.classList.add("is-shown");
+      solvedOnce = true;
+      parallaxQuietUntil = now() + 600;       // keep parallax quiet ~600ms
+    }
+
+    /* ============ the SHARED self-suspending rAF loop ============ */
+    var rafId = 0;
+    function now() { return (window.performance && performance.now) ? performance.now() : Date.now(); }
+
+    function needsAnimation() {
+      if (dragging) return true;
+      if (springTarget) return true;
+      // parallax: source not yet at its (possibly moving) target
+      if (armedParallax) {
+        if (Math.abs(srcCur.x - srcTarget.x) > 0.05 || Math.abs(srcCur.y - srcTarget.y) > 0.05) return true;
+        if (Math.abs(gridCur - gridTarget) > 0.05) return true;
+      }
+      return false;
+    }
+
+    function tick() {
+      rafId = 0;
+      if (document.hidden) return;             // paused; visibilitychange restarts
+
+      // --- spring the pose toward springTarget (snap or auto-rest) ---
+      if (springTarget) {
+        pose.tx += (springTarget.tx - pose.tx) * springStiff;
+        pose.ty += (springTarget.ty - pose.ty) * springStiff;
+        pose.r  += (springTarget.r  - pose.r ) * springStiff;
+        var done = Math.abs(springTarget.tx - pose.tx) < 0.04 &&
+                   Math.abs(springTarget.ty - pose.ty) < 0.04 &&
+                   Math.abs(springTarget.r  - pose.r ) < 0.04;
+        if (done) {
+          pose.tx = springTarget.tx; pose.ty = springTarget.ty; pose.r = springTarget.r;
+          var wasRegisterTarget = (springTarget.tx === 0 && springTarget.ty === 0 && springTarget.r === 0);
+          springTarget = null;
+          applyGhost();
+          if (wasRegisterTarget && !registered) doConfirm();
+        } else {
+          applyGhost();
+        }
+      } else if (dragging) {
+        applyGhost();
+      }
+
+      // --- parallax: ease source toward target, rebuild rays ---
+      if (armedParallax && !dragging && now() >= parallaxQuietUntil) {
+        srcCur.x += (srcTarget.x - srcCur.x) * PARA_LERP;
+        srcCur.y += (srcTarget.y - srcCur.y) * PARA_LERP;
+        gridCur  += (gridTarget - gridCur) * PARA_LERP;
+        if (sourceEl) { sourceEl.setAttribute("cx", srcCur.x.toFixed(2)); sourceEl.setAttribute("cy", srcCur.y.toFixed(2)); }
+        for (var i = 0; i < rayPaths.length; i++) {
+          var e = RAY_ENDS[i];
+          if (e) rayPaths[i].setAttribute("d", "M" + srcCur.x.toFixed(2) + " " + srcCur.y.toFixed(2) + " L" + e.x + " " + e.y);
+        }
+        if (gridEl) gridEl.setAttribute("transform", "translate(" + gridCur.toFixed(2) + ",0)");
+      }
+
+      if (needsAnimation()) {
+        rafId = window.requestAnimationFrame(tick);
+      }
+    }
+    function ensureLoop() {
+      if (!rafId && !document.hidden) rafId = window.requestAnimationFrame(tick);
+    }
+
+    /* ============ pointer drag ============ */
+    var pointerStart = null;   // {x,y} in SVG space at pointerdown
+    var poseStart = null;
+
+    handle.addEventListener("pointerdown", function (e) {
+      e.preventDefault();
+      if (registered) return;
+      markTouched();
+      springTarget = null;            // cancel any auto-rest spring
+      dragging = true;
+      handle.classList.add("dragging");
+      refreshCTM();                   // cache CTM inverse ON pointerdown
+      try { handle.setPointerCapture(e.pointerId); } catch (_) {}
+      var pt = toSvg(e.clientX, e.clientY);
+      pointerStart = pt;
+      poseStart = { tx: pose.tx, ty: pose.ty, r: pose.r };
+      ensureLoop();
+    });
+
+    handle.addEventListener("pointermove", function (e) {
+      if (!dragging || !pointerStart) return;
+      var pt = toSvg(e.clientX, e.clientY);
+      // write deferred to the rAF; here we only update target pose values
+      pose.tx = poseStart.tx + (pt.x - pointerStart.x);
+      pose.ty = poseStart.ty + (pt.y - pointerStart.y);
+      // clamp translation so the ghost can't be flung far off-panel
+      pose.tx = Math.max(-MAXT - 24, Math.min(MAXT + 24, pose.tx));
+      pose.ty = Math.max(-MAXT - 24, Math.min(MAXT + 24, pose.ty));
+      ensureLoop();
+    });
+
+    function endDrag(e) {
+      if (!dragging) return;
+      dragging = false;
+      handle.classList.remove("dragging");
+      try { if (e && e.pointerId != null) handle.releasePointerCapture(e.pointerId); } catch (_) {}
+      if (registered) return;
+      if (fitScore() >= 0.92) {
+        springStiff = SNAP_STIFF;                   // SNAP — short, no overshoot
+      } else {
+        springStiff = REST_STIFF;                   // AUTO-REST — gentle ~1.1s settle
+      }
+      springTarget = { tx: 0, ty: 0, r: 0 };
+      ensureLoop();
+    }
+    handle.addEventListener("pointerup", endDrag);
+    handle.addEventListener("pointercancel", endDrag);
+    handle.addEventListener("blur", function () { if (dragging) endDrag(null); });
+
+    function toSvg(clientX, clientY) {
+      if (!ctmInv) refreshCTM();
+      if (!ctmInv) return { x: 0, y: 0 };
+      var p = overlay.createSVGPoint();
+      p.x = clientX; p.y = clientY;
+      var sp = p.matrixTransform(ctmInv);
+      return { x: sp.x, y: sp.y };
+    }
+
+    /* ============ keyboard ============ */
+    handle.addEventListener("keydown", function (e) {
+      if (registered && e.key !== "Home") return;
+      var handled = true;
+      switch (e.key) {
+        case "ArrowLeft":  if (e.shiftKey) pose.r -= 2; else pose.tx -= 4; break;
+        case "ArrowRight": if (e.shiftKey) pose.r += 2; else pose.tx += 4; break;
+        case "ArrowUp":    if (e.shiftKey) pose.r -= 2; else pose.ty -= 4; break;
+        case "ArrowDown":  if (e.shiftKey) pose.r += 2; else pose.ty += 4; break;
+        case "Home":       reMisalign(); handled = true; break;
+        case "Enter":
+        case " ":
+        case "Spacebar":   springStiff = SNAP_STIFF; springTarget = { tx: 0, ty: 0, r: 0 }; ensureLoop(); break;
+        default: handled = false;
+      }
+      if (handled) {
+        e.preventDefault();
+        if (e.key !== "Home") markTouched();
+        if (e.key !== "Home" && e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") {
+          pose.tx = Math.max(-MAXT - 24, Math.min(MAXT + 24, pose.tx));
+          pose.ty = Math.max(-MAXT - 24, Math.min(MAXT + 24, pose.ty));
+          pose.r  = Math.max(-180, Math.min(180, pose.r));
+          springTarget = null;
+          applyGhost();
+          // keyboard nudge can itself complete the registration
+          if (fitScore() >= 0.92) { springStiff = SNAP_STIFF; springTarget = { tx: 0, ty: 0, r: 0 }; ensureLoop(); }
+        }
+      }
+    });
+
+    /* ============ re-arm / re-misalign ============ */
+    function reMisalign() {
+      registered = false;
+      touched = false;
+      springTarget = null;
+      dragging = false;
+      ghost.classList.remove("is-registered");
+      if (rayGroup) rayGroup.classList.remove("reg-confirm");
+      if (caption) caption.classList.remove("is-registered");
+      lastBand = null;
+      pose.tx = START.tx; pose.ty = START.ty; pose.r = START.r;
+      applyGhost();
+      if (capText) capText.textContent = "Drag to register the scan";
+      if (statusEl) statusEl.textContent = "";
+    }
+    if (rearmBtn) {
+      rearmBtn.addEventListener("click", function () { reMisalign(); handle.focus(); });
+    }
+
+    /* ============ (2) parallax pointermove — over the motif ONLY ============ */
+    function onMotifMove(e) {
+      if (!armedParallax || dragging) return;
+      var rect = motifEl.getBoundingClientRect();
+      var nx = (e.clientX - rect.left) / rect.width;   // 0..1
+      var ny = (e.clientY - rect.top) / rect.height;
+      nx = Math.max(0, Math.min(1, nx)); ny = Math.max(0, Math.min(1, ny));
+      // map to ±PARA_AMP around base; opposite small offset for the grid
+      var ox = (nx - 0.5) * 2 * PARA_AMP;
+      var oy = (ny - 0.5) * 2 * PARA_AMP;
+      srcTarget.x = SRC_BASE.x + ox;
+      srcTarget.y = SRC_BASE.y + oy;
+      gridTarget = -(nx - 0.5) * 2 * GRID_AMP;
+      ensureLoop();
+    }
+    function onMotifLeave() {
+      srcTarget.x = SRC_BASE.x; srcTarget.y = SRC_BASE.y; gridTarget = 0;
+      ensureLoop();
+    }
+    if (finePointer) {
+      motifEl.addEventListener("pointermove", onMotifMove, { passive: true });
+      motifEl.addEventListener("pointerleave", onMotifLeave, { passive: true });
+      // arm parallax only AFTER the draw-in completes (~1.5s)
+      window.setTimeout(function () { armedParallax = true; }, 1550);
+    }
+
+    /* ============ resize / scroll-end → refresh cached CTM inverse ============ */
+    var scrollEndTimer = 0;
+    window.addEventListener("scroll", function () {
+      window.clearTimeout(scrollEndTimer);
+      scrollEndTimer = window.setTimeout(refreshCTM, 120);
+    }, { passive: true });
+    window.addEventListener("resize", function () { ctmInv = null; }, { passive: true });
+
+    /* ============ visibilitychange → pause loop, settle on return ============ */
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) {
+        if (rafId) { window.cancelAnimationFrame(rafId); rafId = 0; }
+        // spring source back to base so it returns clean
+        srcTarget.x = SRC_BASE.x; srcTarget.y = SRC_BASE.y; gridTarget = 0;
+      } else {
+        ensureLoop();
+      }
+    });
+
+    /* ============ initial paint: ghost starts misaligned ============ */
+    applyGhost();
+    // a single deferred frame to ensure the overlay has measured layout
+    window.requestAnimationFrame(function () { refreshCTM(); applyGhost(); });
+  })();
 })();
 </script>
 </body>
