@@ -957,7 +957,7 @@ section[id], #main, #top { scroll-margin-top: clamp(4.25rem, 7vw, 5.75rem); }
 
 /* ============================================================
    THE REGISTRATION CONSOLE — wide cinematic band staging the
-   interactive piece. The game mounts flush into #regGameMount.
+   interactive piece. The game mounts flush into #gameMount.
    ============================================================ */
 .console-band {
   background: var(--band);
@@ -999,7 +999,7 @@ section[id], #main, #top { scroll-margin-top: clamp(4.25rem, 7vw, 5.75rem); }
 .crop--bl { bottom: -9px; left: -9px;  border-right: none; border-top: none; }
 .crop--br { bottom: -9px; right: -9px; border-left: none;  border-top: none; }
 
-#regGameMount {
+#gameMount {
   grid-area: 1 / 1;
   position: relative;
   z-index: 1;
@@ -1011,7 +1011,7 @@ section[id], #main, #top { scroll-margin-top: clamp(4.25rem, 7vw, 5.75rem); }
 /* Height contract: the mounted console supplies its own height; the
    min-height applies only while the mount is empty (no-JS / pre-mount),
    so the frame never strands whitespace below a shorter game. */
-#regGameMount:empty { min-height: clamp(440px, 60vh, 560px); }
+#gameMount:empty { min-height: clamp(440px, 60vh, 560px); }
 /* standby plate — rendered only when scripting is unavailable (<noscript>) */
 .console__empty {
   grid-area: 1 / 1;
@@ -1359,241 +1359,6 @@ footer {
 }
 
 /* ============================================================
-   REGISTRATION CONSOLE — game styles (prefix: rg-)
-   ============================================================ */
-
-/* ---- fallbacks — the page's own :root tokens override ----
-   :where() keeps specificity at zero, so the :root token
-   definitions above always take precedence; values mirror them. */
-:where(:root) {
-  --paper: #faf6ec; --paper-2: #f3edde; --card: #fffdf6;
-  --rule: #d9cfba; --rule-soft: #e8dfcc;
-  --ink: #1d1811; --ink-soft: #4e463a; --ink-faint: #6e6353;
-  --accent: #6f2531; --accent-tint: #f0e1de; --accent-line: rgba(111, 37, 49, 0.32);
-  --new: #1f6048;
-  --font-serif: "Fraunces", "Iowan Old Style", Georgia, "Times New Roman", serif;
-  --font-sans: "Archivo", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-:where(:root[data-theme="dark"]) {
-  --paper: #141110; --paper-2: #1c1814; --card: #1a1613;
-  --rule: #3a3128; --rule-soft: #2b241d;
-  --ink: #ede5d5; --ink-soft: #c5baa6; --ink-faint: #9b8f7d;
-  --accent: #d98d92; --accent-tint: #2c1e1e; --accent-line: rgba(217, 141, 146, 0.38);
-  --new: #74c6a3;
-}
-@media (prefers-color-scheme: dark) {
-  :where(:root:not([data-theme="light"])) {
-    --paper: #141110; --paper-2: #1c1814; --card: #1a1613;
-    --rule: #3a3128; --rule-soft: #2b241d;
-    --ink: #ede5d5; --ink-soft: #c5baa6; --ink-faint: #9b8f7d;
-    --accent: #d98d92; --accent-tint: #2c1e1e; --accent-line: rgba(217, 141, 146, 0.38);
-    --new: #74c6a3;
-  }
-}
-
-/* ---- console frame ---- */
-.rg-wrap {
-  /* Mounts flush inside the crop-marked console frame: the frame supplies
-     the border and shadow, so no inner border/radius double-framing; the
-     opaque card surface covers the frame's registration-grid backdrop. */
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
-  background: var(--card);
-  overflow: hidden;
-  font-family: var(--font-sans);
-  color: var(--ink);
-  max-width: none;
-  min-width: 0;
-}
-.rg-sronly {
-  position: absolute !important; width: 1px; height: 1px;
-  padding: 0; margin: -1px; overflow: hidden;
-  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0;
-}
-
-/* ---- header: level identity + readouts ---- */
-.rg-head {
-  display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.35rem 1.1rem;
-  padding: 0.95rem 1.25rem 0.75rem;
-  border-bottom: 1px solid var(--rule-soft, var(--rule));
-}
-.rg-numeral {
-  font-family: var(--font-serif); font-style: italic; font-weight: 400;
-  font-size: 1.3rem; line-height: 1; color: var(--accent);
-  padding-right: 0.8rem; border-right: 1px solid var(--accent-line);
-}
-.rg-name {
-  font-size: 0.74rem; font-weight: 600; letter-spacing: 0.22em;
-  text-transform: uppercase; color: var(--ink);
-}
-.rg-caption {
-  font-family: var(--font-serif); font-style: italic; font-size: 0.92rem;
-  color: var(--ink-faint); flex-basis: 100%; margin-top: 0.1rem;
-  min-height: 1.3em; text-wrap: pretty;
-}
-.rg-readouts { margin-left: auto; display: flex; gap: 1.4rem; }
-.rg-ro { text-align: right; }
-.rg-ro .rg-ro-k {
-  display: block; font-size: 0.58rem; font-weight: 600; letter-spacing: 0.18em;
-  text-transform: uppercase; color: var(--ink-faint);
-}
-.rg-ro .rg-ro-v {
-  display: block; font-variant-numeric: tabular-nums; font-size: 0.98rem;
-  font-weight: 500; color: var(--ink); white-space: nowrap;
-}
-.rg-ro-v.rg-err-good { color: var(--new); }
-@media (max-width: 560px) {
-  .rg-head { padding: 0.85rem 1rem 0.7rem; }
-  .rg-readouts { margin-left: 0; flex-basis: 100%; justify-content: space-between; }
-  .rg-ro { text-align: left; }
-}
-
-/* ---- stage ---- */
-.rg-stage { position: relative; background: var(--card); outline: none; }
-.rg-stage:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: -2px;
-  border-radius: 2px;
-}
-.rg-canvas {
-  display: block; width: 100%; max-width: 100%; height: auto; aspect-ratio: 720 / 460;
-  touch-action: none;                /* the ONLY element with touch-action:none */
-  cursor: grab;
-  -webkit-tap-highlight-color: transparent;
-}
-.rg-canvas.rg-dragging { cursor: grabbing; }
-
-/* ---- overlays (onboarding, summary) ---- */
-.rg-overlay {
-  position: absolute; inset: 0; z-index: 3;
-  display: flex; align-items: center; justify-content: center;
-  background: color-mix(in srgb, var(--card) 88%, transparent);
-  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-  padding: 1rem;
-}
-.rg-overlay[hidden] { display: none; }
-.rg-panel { max-width: 40ch; text-align: center; }
-.rg-panel h3 {
-  font-family: var(--font-serif); font-weight: 500; font-size: 1.35rem;
-  margin: 0 0 0.85rem; letter-spacing: -0.01em; color: var(--ink);
-}
-.rg-legend { list-style: none; margin: 0 0 1.3rem; padding: 0; display: grid; gap: 0.45rem; }
-.rg-legend li { font-size: 0.85rem; color: var(--ink-soft, var(--ink)); }
-.rg-legend .rg-kbd {
-  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em;
-  border: 1px solid var(--rule); border-bottom-width: 2px; border-radius: 5px;
-  padding: 0.1rem 0.42rem; background: var(--paper-2); color: var(--ink);
-  white-space: nowrap;
-}
-.rg-btn {
-  font: 500 0.88rem var(--font-sans); letter-spacing: 0.01em;
-  color: var(--accent); background: transparent;
-  border: 1px solid var(--accent); border-radius: 9px;
-  padding: 0.6rem 1.5rem; cursor: pointer;
-  transition: background 0.25s ease, color 0.25s ease;
-}
-.rg-btn:hover, .rg-btn:focus-visible { background: var(--accent); color: var(--card); }
-.rg-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-.rg-hintline { margin: 0.9rem 0 0; font-size: 0.72rem; color: var(--ink-faint); }
-
-/* ---- summary card ---- */
-.rg-summary .rg-panel { max-width: 46ch; }
-.rg-sumgrid {
-  display: flex; justify-content: center; gap: 2rem; margin: 0 0 1.1rem;
-}
-.rg-sumgrid .rg-ro { text-align: center; }
-.rg-sumgrid .rg-ro-v { font-size: 1.25rem; font-family: var(--font-serif); }
-.rg-sumlevels {
-  list-style: none; margin: 0 auto 1.3rem; padding: 0.75rem 0 0;
-  border-top: 1px solid var(--rule-soft, var(--rule));
-  display: grid; gap: 0.28rem; max-width: 24ch; text-align: left;
-}
-.rg-sumlevels li {
-  display: flex; justify-content: space-between; gap: 1rem;
-  font-size: 0.8rem; color: var(--ink-soft, var(--ink));
-  font-variant-numeric: tabular-nums;
-}
-.rg-sumlevels li .rg-sl-n { color: var(--ink-faint); font-style: italic; font-family: var(--font-serif); }
-.rg-pb {
-  margin: 0 0 1rem; font-size: 0.72rem; font-weight: 600;
-  letter-spacing: 0.2em; text-transform: uppercase; color: var(--new);
-}
-.rg-pb[hidden] { display: none; }
-
-/* ---- registered banner ---- */
-.rg-banner {
-  position: absolute; left: 50%; bottom: 0.9rem; z-index: 2;
-  transform: translate(-50%, 0.4rem);
-  display: flex; align-items: center; gap: 0.9rem;
-  background: color-mix(in srgb, var(--card) 94%, transparent);
-  border: 1px solid var(--rule); border-radius: 9px;
-  padding: 0.5rem 0.9rem 0.5rem 1rem;
-  font-size: 0.85rem; white-space: nowrap;
-  box-shadow: 0 8px 22px -14px rgba(0, 0, 0, 0.35);
-  opacity: 0; pointer-events: none;
-  /* visibility keeps the Next button out of the tab order while hidden;
-     the 0s / 0.35s delays preserve the fade in both directions */
-  visibility: hidden;
-  transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
-              visibility 0s linear 0.35s;
-}
-.rg-banner.rg-show {
-  opacity: 1; transform: translate(-50%, 0); pointer-events: auto;
-  visibility: visible;
-  transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
-              visibility 0s;
-}
-.rg-banner .rg-reg-word { color: var(--new); font-weight: 600; }
-.rg-banner .rg-reg-meta { color: var(--ink-faint); font-variant-numeric: tabular-nums; }
-.rg-banner .rg-btn { padding: 0.32rem 0.85rem; font-size: 0.8rem; }
-
-/* ---- alignment meter ---- */
-.rg-meterrow { position: relative; height: 14px; background: var(--card); }
-.rg-meter {
-  position: absolute; left: 1.25rem; right: 1.25rem; top: 6px; height: 2px;
-  background: var(--rule-soft, var(--rule));
-}
-.rg-meter-fill {
-  position: absolute; left: 0; top: 0; height: 100%; width: 0%;
-  background: var(--accent);
-  transition: width 0.12s linear, background 0.3s ease;
-}
-.rg-wrap.rg-registered .rg-meter-fill { background: var(--new); }
-.rg-meter-tick {
-  position: absolute; top: -4px; width: 1px; height: 10px;
-  background: var(--ink-faint);
-}
-@media (prefers-reduced-motion: reduce) {
-  .rg-meter-fill { transition: none; }
-  .rg-banner { transition: opacity 0.01s; }
-}
-
-/* ---- footer: hints + alignment figure ---- */
-.rg-foot {
-  display: flex; align-items: baseline; gap: 1rem;
-  padding: 0.55rem 1.25rem 0.8rem;
-  font-size: 0.68rem; letter-spacing: 0.05em; color: var(--ink-faint);
-}
-.rg-foot .rg-hint { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.rg-foot .rg-hint b { font-weight: 600; color: var(--ink-soft, var(--ink)); }
-.rg-align {
-  margin-left: auto; font-variant-numeric: tabular-nums;
-  font-size: 0.78rem; font-weight: 500; color: var(--ink); flex: none;
-}
-@media (max-width: 560px) { .rg-foot { padding-inline: 1rem; } .rg-meter { left: 1rem; right: 1rem; } }
-@media (min-width: 900px) {
-  .rg-head { padding: 1.1rem 1.6rem 0.85rem; }
-  .rg-foot { padding: 0.6rem 1.6rem 0.9rem; }
-  .rg-meter { left: 1.6rem; right: 1.6rem; }
-}
-
-@media (forced-colors: active) {
-  .rg-meter-fill, .rg-meter-tick { background: CanvasText; }
-  .rg-banner, .rg-btn { border-color: CanvasText; }
-}
-
-/* ============================================================
    FORCED-COLORS (Windows high-contrast) SAFEGUARD
    ============================================================ */
 @media (forced-colors: active) {
@@ -1690,7 +1455,7 @@ footer {
         <a href="#about">About</a>
         <a href="#interests">Interests</a>
         <a href="#publications">Publications</a>
-        <a href="#playground">Console</a>
+        <a href="#playground">Play</a>
         <a href="#experience">Experience</a>
         <a href="#honours">Honours</a>
         <a href="#skills">Skills</a>
@@ -1946,11 +1711,11 @@ footer {
   <div class="shell">
     <div class="section-head reveal">
       <span class="num" aria-hidden="true">04</span>
-      <h2 id="playground-h">The Registration Console</h2>
+      <h2 id="playground-h">The Composing Room</h2>
       <span class="head-note folio">Interactive</span>
     </div>
 
-    <p class="console__caption reveal">An interactive study in 3D&rarr;2D registration — align the preoperative model to the surgical view.</p>
+    <p class="console__caption reveal">A game in five impressions — every run you play bleeds through into the next.</p>
 
     <div class="reveal">
       <div class="console__frame">
@@ -1959,7 +1724,7 @@ footer {
         <span class="crop crop--bl" aria-hidden="true"></span>
         <span class="crop crop--br" aria-hidden="true"></span>
 
-        <div id="regGameMount"></div>
+        <div id="gameMount"></div>
 
         <!-- standby plate — rendered only when scripting is unavailable -->
         <noscript>
@@ -1974,14 +1739,14 @@ footer {
             <circle cx="60" cy="60" r="2.4" fill="var(--accent)" stroke="none"/>
           </svg>
           <p class="console__standby folio">Console standing by</p>
-          <p class="console__note">Enable JavaScript to run the interactive registration study.</p>
+          <p class="console__note">Enable JavaScript to play Palimpsest.</p>
         </div>
         </noscript>
       </div>
 
       <div class="console__plate" aria-hidden="true">
-        <span class="folio">Preoperative model &rarr; intraoperative view</span>
-        <span class="folio">3D&rarr;2D registration</span>
+        <span class="folio">Palimpsest &mdash; an edition in five runs</span>
+        <span class="folio">Set silent &middot; best kept on this device</span>
       </div>
     </div>
   </div>
@@ -2467,75 +2232,147 @@ footer {
 </script>
 
 <!-- ============================ REGISTRATION CONSOLE — GAME MODULE ============================ -->
-<script id="rg-script">
-/* ============================================================
-   REGISTRATION CONSOLE
-   A 3D-to-2D registration game: align a preoperative wireframe
-   liver model onto a hidden intraoperative pose. Canvas 2D only.
-   One IIFE; zero globals besides the guarded test hook.
-   ============================================================ */
+
+
+<!-- ============ PALIMPSEST — game module (style + script) ============ -->
+<style id="g2-style">
+/* PALIMPSEST — module styles (prefix pl-) */
+:where(:root) { /* fallbacks — host overrides (zero specificity: the page's tokens always win) */
+  --paper: #faf6ec; --paper-2: #f3edde; --card: #fffdf6; --console: #fcf9f1;
+  --ink: #1d1811; --ink-soft: #4e463a; --ink-faint: #6e6353;
+  --accent: #6f2531; --accent-deep: #571a26; --accent-tint: #f0e1de;
+  --rule: #d9cfba; --rule-soft: #e8dfcc; --new: #1f6048;
+}
+#gameMount { min-width: 0; max-width: 100%; }
+.pl-stage { position: relative; color: var(--ink); font-family: var(--font-sans, "Archivo", sans-serif); outline: none; background: var(--console); }
+.pl-stage:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.pl-hud {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
+  padding: 0.72rem 1rem 0.55rem;
+  font-size: 0.65rem; font-weight: 550; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ink-faint); font-variant-numeric: tabular-nums;
+  white-space: nowrap; overflow: hidden;
+}
+.pl-hud b { font-weight: 600; color: var(--ink-soft); display: inline-block; }
+.pl-hud-right { display: inline-flex; gap: 1.1em; position: relative; }
+.pl-narrow .pl-hud { letter-spacing: 0.1em; font-size: 0.6rem; gap: 0.6rem; }
+.pl-timerbar { height: 2px; background: transparent; }
+.pl-timerfill { height: 100%; background: var(--rule); transform-origin: left center; transform: scaleX(1); }
+.pl-timerfill.pl-low { background: var(--accent); }
+.pl-timerbar.pl-off { visibility: hidden; }
+.pl-frame { position: relative; border-top: 1px solid var(--rule-soft); }
+.pl-canvas { display: block; width: 100%; max-width: 100%; height: auto; touch-action: none; -webkit-tap-highlight-color: transparent; cursor: crosshair; }
+.pl-plate {
+  position: absolute; inset: 0; z-index: 2;
+  display: flex; text-align: center;
+  padding: clamp(0.8rem, 3vw, 1.6rem);
+  background: color-mix(in srgb, var(--paper) 65%, transparent);
+  overflow: auto;
+}
+.pl-plate[hidden] { display: none; }
+.pl-card {
+  max-width: 32rem; margin: auto; display: grid; gap: 0.75rem; justify-items: center;
+  background: color-mix(in srgb, var(--paper) 82%, transparent);
+  border: 1px solid var(--rule-soft); border-radius: 3px;
+  padding: clamp(0.9rem, 3vw, 1.5rem) clamp(1rem, 4vw, 2rem);
+  animation: pl-rise 250ms ease-out;
+}
+.pl-narrow .pl-card { gap: 0.45rem; }
+.pl-narrow .pl-kicker, .pl-narrow .pl-stand, .pl-narrow .pl-menu .pl-small { display: none; }
+.pl-narrow .pl-title { font-size: 1.45rem; }
+.pl-narrow .pl-rules { font-size: 0.68rem; }
+.pl-narrow .pl-rules li { padding: 0.28rem 0; }
+.pl-narrow .pl-btn { min-height: 44px; padding: 0.55rem 1.1rem; }
+.pl-kicker { font-size: 0.6rem; font-weight: 550; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ink-faint); }
+.pl-title { font-family: var(--font-serif, Georgia, serif); font-style: italic; font-weight: 480; font-size: clamp(1.9rem, 7vw, 2.8rem); line-height: 1.05; letter-spacing: -0.015em; margin: 0; }
+.pl-stand { font-family: var(--font-serif, Georgia, serif); font-size: clamp(0.9rem, 2.6vw, 1.02rem); line-height: 1.55; color: var(--ink-soft); margin: 0; max-width: 46ch; text-wrap: pretty; }
+.pl-rules { list-style: none; margin: 0.1rem 0; padding: 0; font-size: clamp(0.74rem, 2.2vw, 0.82rem); color: var(--ink-soft); max-width: 42ch; }
+.pl-rules li { padding: 0.42rem 0; border-top: 1px solid var(--rule-soft); }
+.pl-rules li:last-child { border-bottom: 1px solid var(--rule-soft); }
+.pl-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 44px; min-width: 44px; padding: 0.72rem 1.5rem; margin-top: 0.2rem;
+  font: 550 0.74rem/1 var(--font-sans, sans-serif); letter-spacing: 0.12em; text-transform: uppercase;
+  border-radius: 3px; border: 1px solid var(--accent); background: var(--accent); color: #fdf6ee; cursor: pointer;
+}
+:root[data-theme="dark"] .pl-btn { color: #1a1410; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .pl-btn { color: #1a1410; } }
+.pl-btn:hover, .pl-btn:focus-visible { background: var(--accent-deep); border-color: var(--accent-deep); }
+.pl-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.pl-small { font-size: 0.6rem; font-weight: 550; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-faint); }
+.pl-grade { font-family: var(--font-serif, Georgia, serif); font-style: italic; font-size: clamp(1.5rem, 5vw, 2.1rem); margin: 0; }
+.pl-scoreline { font-size: 0.86rem; color: var(--ink-soft); margin: 0; font-variant-numeric: tabular-nums; }
+.pl-honor { font-size: 0.78rem; color: var(--accent); margin: 0; }
+.pl-honor:empty { display: none; }
+.pl-foot {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
+  padding: 0.6rem 1rem 0.8rem; border-top: 1px solid var(--rule-soft);
+  font-size: 0.7rem; color: var(--ink-faint); min-height: 2.1em;
+}
+.pl-status { font-family: var(--font-serif, Georgia, serif); font-style: italic; text-align: right; flex: 1 1 auto; min-width: 0; }
+.pl-hint { flex: 0 1 auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pl-narrow .pl-hint-keys { display: none; }
+.pl-flash { animation: pl-tick 200ms ease-out; }
+.pl-float {
+  position: absolute; top: -0.2em; right: 0; pointer-events: none;
+  font-weight: 600; color: var(--accent); opacity: 0;
+}
+.pl-float.pl-go { animation: pl-floatup 400ms ease-out; }
+@keyframes pl-tick { 50% { transform: translateY(-2px) scale(1.2); color: var(--accent); } }
+@keyframes pl-floatup { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-10px); } }
+@keyframes pl-rise { from { transform: translateY(8px); } } /* transform-only: safe if throttled mid-animation */
+@media (prefers-reduced-motion: reduce) {
+  .pl-flash { animation: none; }
+  .pl-float.pl-go { animation: none; opacity: 0; }
+  .pl-card { animation: none; }
+}
+</style>
+<script id="g2-script">
+/* PALIMPSEST — an ink game in five runs. Vanilla JS, Canvas 2D, one IIFE, zero globals except window.__game2.
+   Silent by design. No wheel input anywhere (wheel unused, deltaMode moot).
+   Motion policy: nothing animates before Begin under any circumstance (no rAF exists pre-Begin; the menu is
+   static DOM over a single synchronous canvas paint). After an explicit Begin gesture, gameplay motion is
+   acceptable under prefers-reduced-motion; decorative flourishes (wet sheen, seal pop, blot bloom, stroke
+   crossfade, plate slide/fade, settle fade) are skipped or made instant. */
 (function () {
   "use strict";
+  var mount = document.getElementById("gameMount");
+  if (!mount || mount.dataset.plInit) return;
+  mount.dataset.plInit = "1";
 
-  var mount = document.getElementById("regGameMount");
-  if (!mount || mount.dataset.rgInit) return;
-  mount.dataset.rgInit = "1";
+  /* ---------------- constants ---------------- */
+  var W = 720, H = 460, INSET = 24, NIBR = 5;
+  var SPAWN_X = 52, SPAWN_Y = 408, SANCT = 64;    /* the well's court — ink never marks inside this radius */
+  var TUNING = { SPRING: 60, DAMP: 10.5, VMAX: 640, SKIMPOW: 6, SKIMFLOOR: 0.2 }; /* feel constants — tune here only */
+  /* Skim rule: the pressing pen catches, a flying nib skims. The lethal radius shrinks with
+     speed — r = HIT_R·(1−v/VMAX)^SKIMPOW + SKIMFLOOR — so a bold dash usually rides over a
+     thin dried line, while dawdling on old ink (drawn fat, like pooling) is always fatal. */
+  var DT = 1 / 120, TICK_MS = 1000 / 120;
+  var GRACE_T = 96, RUN_T = 7200, INTER_T = 132, BLOT_T = 34, FADE_T = 72, SETTLE_T = 60;
+  var SEALS_N = 8, PICK_R = 14, HIT_R = 6, CELL = 40;
+  var LETHAL_A = [0.55, 0.42, 0.30];
 
-  /* ---------------- config ---------------- */
-  var W = 720, H = 460, CX = W / 2, CY = H / 2;   // logical stage
-  var CAM = 4.0, FL = 340;                        // perspective camera
-  var LAT = 14, LON = 22;                         // mesh grid
-  var RMS0 = 90;                                  // px RMS → 0 % alignment
-  var PX_PER_MM = 2;                              // calibration: ~2 px = 1 mm
-  var THRESH = 93;                                // register at ≥ 93 %
-  var HOLD_MS = 400, HOLD_MS_DYNAMIC = 1500;
-  var ROT_K = 0.008;                              // rad per pixel of drag
-  var S_MIN = 0.5, S_MAX = 1.9;
+  /* ---------------- state ---------------- */
+  var mode = "menu", edition = 0, run = 0;
+  var grace = false, graceLeft = 0, runLeft = RUN_T, interLeft = 0, pausedFrom = "playing";
+  var nib = { x: SPAWN_X, y: SPAWN_Y, vx: 0, vy: 0 };
+  var ptr = { x: SPAWN_X, y: SPAWN_Y, seen: false };
+  var touch = { active: false, startTick: 0 };
+  var activePointer = null;
+  var held = {};
+  var trail = [], trailMin = 2.5, penDown = false; /* trail may contain null break markers (well-court gaps) */
+  var ghosts = [], orphanBlots = [], residues = [], pops = [], seals = [];
+  var sealsCollected = 0, score = 0, best = null, editions = 0;
+  var unblotted = true, lastEnd = "", alive = true;
+  var rand = null, pinnedSeed = null;
+  var tickCount = 0, runStartTick = 0, endTick = 0, editionStartTick = 0;
+  var lastRWall = -1e9;
+  var frozen = false, rafId = 0, acc = 0, lastT = 0, visible = true;
+  var hash = new Map();
+  var RM = false;
 
-  var reducedMotion = false;
-  var rmQuery = null;
-  try {
-    rmQuery = matchMedia("(prefers-reduced-motion: reduce)");
-    reducedMotion = rmQuery.matches;
-  } catch (e) {}
-
-  /* ---------------- small math ---------------- */
-  function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
-  function lerp(a, b, t) { return a + (b - a) * t; }
-  var I3 = [1, 0, 0, 0, 1, 0, 0, 0, 1];
-  function rotX(a) { var c = Math.cos(a), s = Math.sin(a); return [1, 0, 0, 0, c, -s, 0, s, c]; }
-  function rotY(a) { var c = Math.cos(a), s = Math.sin(a); return [c, 0, s, 0, 1, 0, -s, 0, c]; }
-  function rotZ(a) { var c = Math.cos(a), s = Math.sin(a); return [c, -s, 0, s, c, 0, 0, 0, 1]; }
-  function mul3(a, b) {
-    return [
-      a[0] * b[0] + a[1] * b[3] + a[2] * b[6], a[0] * b[1] + a[1] * b[4] + a[2] * b[7], a[0] * b[2] + a[1] * b[5] + a[2] * b[8],
-      a[3] * b[0] + a[4] * b[3] + a[5] * b[6], a[3] * b[1] + a[4] * b[4] + a[5] * b[7], a[3] * b[2] + a[4] * b[5] + a[5] * b[8],
-      a[6] * b[0] + a[7] * b[3] + a[8] * b[6], a[6] * b[1] + a[7] * b[4] + a[8] * b[7], a[6] * b[2] + a[7] * b[5] + a[8] * b[8]
-    ];
-  }
-  function axisAngle(x, y, z, a) {
-    var n = Math.hypot(x, y, z) || 1; x /= n; y /= n; z /= n;
-    var c = Math.cos(a), s = Math.sin(a), t = 1 - c;
-    return [
-      t * x * x + c, t * x * y - s * z, t * x * z + s * y,
-      t * x * y + s * z, t * y * y + c, t * y * z - s * x,
-      t * x * z - s * y, t * y * z + s * x, t * z * z + c
-    ];
-  }
-  /* Gram-Schmidt renormalisation — keeps drift out of long drags */
-  function ortho(m) {
-    var x = [m[0], m[3], m[6]], y = [m[1], m[4], m[7]];
-    var nx = Math.hypot(x[0], x[1], x[2]) || 1;
-    x[0] /= nx; x[1] /= nx; x[2] /= nx;
-    var d = x[0] * y[0] + x[1] * y[1] + x[2] * y[2];
-    y[0] -= d * x[0]; y[1] -= d * x[1]; y[2] -= d * x[2];
-    var ny = Math.hypot(y[0], y[1], y[2]) || 1;
-    y[0] /= ny; y[1] /= ny; y[2] /= ny;
-    var z = [x[1] * y[2] - x[2] * y[1], x[2] * y[0] - x[0] * y[2], x[0] * y[1] - x[1] * y[0]];
-    return [x[0], y[0], z[0], x[1], y[1], z[1], x[2], y[2], z[2]];
-  }
-  /* mulberry32 — small seeded RNG so a level regenerates coherently */
-  function rng(seed) {
+  /* mulberry32 — seeded RNG (copied from the host's register) */
+  function mulberry32(seed) {
     var t = seed >>> 0;
     return function () {
       t += 0x6D2B79F5;
@@ -2544,848 +2381,799 @@ footer {
       return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
     };
   }
-
-  /* ---------------- procedural liver mesh ----------------
-     A deformed ellipsoid: radius modulated by low-order angular
-     harmonics → an asymmetric bi-lobed, organic silhouette. */
-  var MESH = (function () {
-    var pts = [];
-    var i, j;
-    for (i = 0; i <= LAT; i++) {
-      var th = Math.PI * i / LAT;
-      var st = Math.sin(th), ct = Math.cos(th);
-      for (j = 0; j < LON; j++) {
-        var ph = 2 * Math.PI * j / LON;
-        var r = 1
-          + 0.31 * st * Math.cos(ph - 0.7)                    /* dominant right lobe */
-          + 0.13 * st * st * Math.cos(2 * ph + 1.15)          /* secondary lobulation */
-          + 0.06 * st * st * st * Math.cos(3 * ph - 0.4)      /* fine surface character */
-          - 0.07 * Math.cos(2 * th);                          /* flattened poles */
-        var x = r * st * Math.cos(ph) * 1.30;
-        var y = r * ct * 0.68;
-        var z = r * st * Math.sin(ph) * 0.98;
-        /* bake a gentle axial tilt so the organ never reads axis-aligned */
-        var ca = Math.cos(0.28), sa = Math.sin(0.28);
-        pts.push([x * ca - y * sa, x * sa + y * ca, z]);
-      }
-    }
-    /* centre + normalise the bounding radius to ~1.32 */
-    var cx = 0, cy = 0, cz = 0, n = pts.length;
-    for (i = 0; i < n; i++) { cx += pts[i][0]; cy += pts[i][1]; cz += pts[i][2]; }
-    cx /= n; cy /= n; cz /= n;
-    var maxR = 0;
-    for (i = 0; i < n; i++) {
-      pts[i][0] -= cx; pts[i][1] -= cy; pts[i][2] -= cz;
-      maxR = Math.max(maxR, Math.hypot(pts[i][0], pts[i][1], pts[i][2]));
-    }
-    var k = 1.32 / maxR;
-    for (i = 0; i < n; i++) { pts[i][0] *= k; pts[i][1] *= k; pts[i][2] *= k; }
-
-    function idx(i2, j2) { return i2 * LON + ((j2 % LON) + LON) % LON; }
-    var edges = [];
-    for (i = 1; i < LAT; i++) for (j = 0; j < LON; j++) edges.push([idx(i, j), idx(i, j + 1)]);
-    for (i = 0; i < LAT; i++) for (j = 0; j < LON; j++) edges.push([idx(i, j), idx(i + 1, j)]);
-
-    /* 7 anatomical landmark vertices, spread over distinct regions */
-    var landmarks = [idx(3, 2), idx(4, 13), idx(7, 7), idx(7, 18), idx(10, 4), idx(11, 11), idx(5, 9)];
-    /* contour rows/columns rendered inside the target silhouette */
-    var latRows = [3, 5, 7, 9, 11], lonCols = [3, 14];
-    return { pts: pts, edges: edges, landmarks: landmarks, latRows: latRows, lonCols: lonCols, idx: idx };
-  })();
-  var NPTS = MESH.pts.length;
-
-  /* ---------------- theme (host CSS custom properties) ---------------- */
-  var theme = {};
-  function readTheme() {
-    var cs = getComputedStyle(mount);
-    function v(name, fb) { var s = cs.getPropertyValue(name).trim(); return s || fb; }
-    theme = {
-      accent: v("--accent", "#6f2531"),
-      accentTint: v("--accent-tint", "#efe0dd"),
-      ink: v("--ink", "#221d15"),
-      inkFaint: v("--ink-faint", "#6f6454"),
-      paper2: v("--paper-2", "#efe7d8"),
-      card: v("--card", "#fdfaf3"),
-      rule: v("--rule", "#d8cdb9"),
-      newC: v("--new", "#1f6048")
-    };
+  function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
+  function roman(n) {
+    var t = [[1000,"M"],[900,"CM"],[500,"D"],[400,"CD"],[100,"C"],[90,"XC"],[50,"L"],[40,"XL"],[10,"X"],[9,"IX"],[5,"V"],[4,"IV"],[1,"I"]];
+    var s = ""; for (var i = 0; i < t.length; i++) { while (n >= t[i][0]) { s += t[i][1]; n -= t[i][0]; } } return s || "I";
   }
-  readTheme();
+
+  /* ---------------- persistence (one key, shape-validated) ---------------- */
+  try {
+    var raw = JSON.parse(localStorage.getItem("jf-game-best"));
+    if (raw && typeof raw === "object" && raw.v === 1 && raw.game === "palimpsest" &&
+        Number.isFinite(raw.best) && raw.best === Math.floor(raw.best) && raw.best >= 0 && raw.best <= 999) {
+      best = raw.best;
+      editions = (Number.isFinite(raw.editions) && raw.editions >= 0) ? Math.floor(raw.editions) : 0;
+    }
+  } catch (e) { /* absent / private mode — session-only best */ }
+  function persist() {
+    try {
+      localStorage.setItem("jf-game-best", JSON.stringify({ v: 1, game: "palimpsest", best: best === null ? 0 : best, editions: editions }));
+    } catch (e) {}
+  }
 
   /* ---------------- DOM ---------------- */
   mount.innerHTML =
-    '<div class="rg-wrap">' +
-      '<div class="rg-head">' +
-        '<span class="rg-numeral" aria-hidden="true">–</span>' +
-        '<span class="rg-name">Registration Console</span>' +
-        '<div class="rg-readouts">' +
-          '<span class="rg-ro"><span class="rg-ro-k">Error</span><span class="rg-ro-v rg-err">—</span></span>' +
-          '<span class="rg-ro"><span class="rg-ro-k">Time</span><span class="rg-ro-v rg-time">0:00</span></span>' +
-        '</div>' +
-        '<p class="rg-caption"></p>' +
+    '<div class="pl-stage" tabindex="0" role="group" aria-label="Palimpsest — an ink game in five runs">' +
+      '<div class="pl-hud">' +
+        '<span class="pl-hud-left">EDITION I · RUN — OF 5</span>' +
+        '<span class="pl-hud-right">' +
+          '<span>SEALS <b class="pl-seals">0/8</b></span>' +
+          '<span>SCORE <b class="pl-score">0</b></span>' +
+          '<span>BEST <b class="pl-best">—</b></span>' +
+          '<span class="pl-float" aria-hidden="true">+2</span>' +
+        '</span>' +
       '</div>' +
-      '<div class="rg-stage" tabindex="0" role="group" aria-label="Registration Console, interactive. Use arrow keys to rotate, Shift plus arrows to translate, plus and minus for depth, R to reset, Enter to begin or continue.">' +
-        '<canvas class="rg-canvas" role="img" aria-label="Registration Console. Press Begin to start."></canvas>' +
-        '<div class="rg-banner" aria-hidden="true">' +
-          '<span><span class="rg-reg-word">Registered ✓</span> <span class="rg-reg-meta"></span></span>' +
-          '<button type="button" class="rg-btn rg-next">Next →</button>' +
-        '</div>' +
-        '<div class="rg-overlay rg-onboard">' +
-          '<div class="rg-panel">' +
-            '<h3>Registration Console</h3>' +
-            '<ul class="rg-legend">' +
-              '<li><span class="rg-kbd">drag</span> rotate the preoperative model</li>' +
-              '<li><span class="rg-kbd">shift-drag</span> / <span class="rg-kbd">two fingers</span> translate in-plane</li>' +
-              '<li><span class="rg-kbd">scroll</span> / <span class="rg-kbd">pinch</span> adjust depth</li>' +
+      '<div class="pl-timerbar pl-off" aria-hidden="true"><div class="pl-timerfill"></div></div>' +
+      '<div class="pl-frame">' +
+        '<canvas class="pl-canvas" width="720" height="460" role="img" aria-label="Palimpsest — an empty laid page with an inkwell."></canvas>' +
+        '<div class="pl-plate pl-menu">' +
+          '<div class="pl-card">' +
+            '<span class="pl-kicker">A game in five impressions</span>' +
+            '<h3 class="pl-title">Palimpsest</h3>' +
+            '<p class="pl-stand">Every run is written into the page in ink. Every past run bleeds through — and bleed-through is fatal. Five runs to an edition; make the page yours.</p>' +
+            '<ul class="pl-rules">' +
+              '<li>Steer the nib. It follows your hand — or the arrow keys.</li>' +
+              '<li>Gather the wax seals before the ink dries.</li>' +
+              '<li>Never touch a past run &mdash; though at full tilt the nib skims safely over old ink. It settles after three runs and turns harmless.</li>' +
             '</ul>' +
-            '<button type="button" class="rg-btn rg-begin">Begin</button>' +
-            '<p class="rg-hintline">Align the oxblood wireframe to the intraoperative silhouette — register at 93 %.</p>' +
+            '<button type="button" class="pl-btn pl-begin">Begin</button>' +
+            '<span class="pl-small">First impression · silent by design · best kept on this device</span>' +
           '</div>' +
         '</div>' +
-        '<div class="rg-overlay rg-summary" hidden>' +
-          '<div class="rg-panel">' +
-            '<h3>Series complete</h3>' +
-            '<p class="rg-pb" hidden>Personal best</p>' +
-            '<div class="rg-sumgrid">' +
-              '<span class="rg-ro"><span class="rg-ro-k">Total time</span><span class="rg-ro-v rg-sum-time">—</span></span>' +
-              '<span class="rg-ro"><span class="rg-ro-k">Mean error</span><span class="rg-ro-v rg-sum-err">—</span></span>' +
-            '</div>' +
-            '<ul class="rg-sumlevels"></ul>' +
-            '<button type="button" class="rg-btn rg-again">Play again</button>' +
+        '<div class="pl-plate pl-pause" hidden>' +
+          '<div class="pl-card">' +
+            '<h3 class="pl-title">Paused</h3>' +
+            '<span class="pl-small">Press P or tap to resume</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="pl-plate pl-end" hidden>' +
+          '<div class="pl-card">' +
+            '<span class="pl-kicker pl-end-title">Edition I complete</span>' +
+            '<p class="pl-grade">—</p>' +
+            '<p class="pl-scoreline">—</p>' +
+            '<p class="pl-honor"></p>' +
+            '<button type="button" class="pl-btn pl-scrape">Scrape the page</button>' +
+            '<span class="pl-small">or press R</span>' +
           '</div>' +
         '</div>' +
       '</div>' +
-      '<div class="rg-meterrow" aria-hidden="true">' +
-        '<div class="rg-meter"><div class="rg-meter-fill"></div><div class="rg-meter-tick"></div></div>' +
+      '<div class="pl-foot">' +
+        '<span class="pl-hint">Steer: move, touch, or arrow keys<span class="pl-hint-keys"> · P pause · R new edition</span></span>' +
+        '<span class="pl-status" aria-live="polite"></span>' +
       '</div>' +
-      '<div class="rg-foot">' +
-        '<span class="rg-hint"><b>Drag</b> rotate · <b>Shift-drag</b> move · <b>Scroll</b> depth · <b>R</b> reset · <b>Enter</b> next</span>' +
-        '<span class="rg-align">—</span>' +
-      '</div>' +
-      '<div class="rg-live rg-sronly" aria-live="polite"></div>' +
     '</div>';
 
+  var stage = mount.querySelector(".pl-stage");
+  var canvas = mount.querySelector(".pl-canvas");
+  var ctx = canvas.getContext("2d");
   var el = {
-    wrap: mount.querySelector(".rg-wrap"),
-    stage: mount.querySelector(".rg-stage"),
-    canvas: mount.querySelector(".rg-canvas"),
-    numeral: mount.querySelector(".rg-numeral"),
-    name: mount.querySelector(".rg-name"),
-    caption: mount.querySelector(".rg-caption"),
-    err: mount.querySelector(".rg-err"),
-    time: mount.querySelector(".rg-time"),
-    fill: mount.querySelector(".rg-meter-fill"),
-    tick: mount.querySelector(".rg-meter-tick"),
-    align: mount.querySelector(".rg-align"),
-    banner: mount.querySelector(".rg-banner"),
-    regMeta: mount.querySelector(".rg-reg-meta"),
-    next: mount.querySelector(".rg-next"),
-    onboard: mount.querySelector(".rg-onboard"),
-    begin: mount.querySelector(".rg-begin"),
-    summary: mount.querySelector(".rg-summary"),
-    sumTime: mount.querySelector(".rg-sum-time"),
-    sumErr: mount.querySelector(".rg-sum-err"),
-    sumLevels: mount.querySelector(".rg-sumlevels"),
-    pb: mount.querySelector(".rg-pb"),
-    again: mount.querySelector(".rg-again"),
-    live: mount.querySelector(".rg-live")
-  };
-  var ctx = el.canvas.getContext("2d");
-  var off = document.createElement("canvas");          /* cached target render */
-  var offCtx = off.getContext("2d");
-
-  /* ---------------- sizing (DPR-aware, responsive) ---------------- */
-  var cssW = 0, cssH = 0, dpr = 1, drawScale = 1;
-  function resize() {
-    var w = Math.max(320, el.stage.clientWidth || 320);
-    var h = w * H / W;
-    dpr = Math.min(window.devicePixelRatio || 1, 2.5);
-    if (Math.abs(w - cssW) < 0.5 && el.canvas.width === Math.round(w * dpr)) return;
-    cssW = w; cssH = h;
-    el.canvas.width = Math.round(w * dpr);
-    el.canvas.height = Math.round(h * dpr);
-    off.width = el.canvas.width;
-    off.height = el.canvas.height;
-    drawScale = el.canvas.width / W;
-    targetDirty = true;
-    requestRender();
-  }
-
-  /* ---------------- projection ---------------- */
-  /* pose = { m: 3x3 rotation, s: scale, tx, ty (logical px) } */
-  function projectAll(pose, outX, outY, outZ) {
-    var m = pose.m, s = pose.s, tx = CX + pose.tx, ty = CY + pose.ty;
-    for (var i = 0; i < NPTS; i++) {
-      var p = MESH.pts[i];
-      var x = p[0], y = p[1], z = p[2];
-      var qx = (m[0] * x + m[1] * y + m[2] * z) * s;
-      var qy = (m[3] * x + m[4] * y + m[5] * z) * s;
-      var qz = (m[6] * x + m[7] * y + m[8] * z) * s;
-      var f = FL / (CAM + qz);
-      outX[i] = tx + qx * f;
-      outY[i] = ty + qy * f;
-      outZ[i] = qz;
-    }
-  }
-  var pX = new Float32Array(NPTS), pY = new Float32Array(NPTS), pZ = new Float32Array(NPTS); /* player */
-  var tX = new Float32Array(NPTS), tY = new Float32Array(NPTS), tZ = new Float32Array(NPTS); /* target */
-
-  /* Andrew monotone-chain convex hull → the target's soft silhouette */
-  function hull(xs, ys) {
-    var idxs = [];
-    for (var i = 0; i < NPTS; i++) idxs.push(i);
-    idxs.sort(function (a, b) { return xs[a] - xs[b] || ys[a] - ys[b]; });
-    function cross(o, a, b) {
-      return (xs[a] - xs[o]) * (ys[b] - ys[o]) - (ys[a] - ys[o]) * (xs[b] - xs[o]);
-    }
-    var lo = [], up = [], k;
-    for (k = 0; k < idxs.length; k++) {
-      var p = idxs[k];
-      while (lo.length >= 2 && cross(lo[lo.length - 2], lo[lo.length - 1], p) <= 0) lo.pop();
-      lo.push(p);
-    }
-    for (k = idxs.length - 1; k >= 0; k--) {
-      var q = idxs[k];
-      while (up.length >= 2 && cross(up[up.length - 2], up[up.length - 1], q) <= 0) up.pop();
-      up.push(q);
-    }
-    lo.pop(); up.pop();
-    return lo.concat(up);
-  }
-
-  /* ---------------- target rendering (cached offscreen) ---------------- */
-  var targetDirty = true;
-  function renderTarget(level) {
-    offCtx.setTransform(drawScale, 0, 0, drawScale, 0, 0);
-    offCtx.clearRect(0, 0, W, H);
-    projectAll(state.target, tX, tY, tZ);
-
-    /* soft filled silhouette */
-    var hu = hull(tX, tY);
-    offCtx.beginPath();
-    for (var i = 0; i < hu.length; i++) {
-      var v = hu[i];
-      if (i === 0) offCtx.moveTo(tX[v], tY[v]); else offCtx.lineTo(tX[v], tY[v]);
-    }
-    offCtx.closePath();
-    offCtx.globalAlpha = 0.10;
-    offCtx.fillStyle = theme.inkFaint;
-    offCtx.fill();
-    offCtx.globalAlpha = 0.4;
-    offCtx.lineWidth = 1;
-    offCtx.strokeStyle = theme.inkFaint;
-    offCtx.stroke();
-
-    /* faint interior contours: latitude rings + two meridians */
-    offCtx.globalAlpha = 0.16;
-    offCtx.lineWidth = 0.8;
-    offCtx.beginPath();
-    var r, j, id;
-    for (r = 0; r < MESH.latRows.length; r++) {
-      var row = MESH.latRows[r];
-      for (j = 0; j <= LON; j++) {
-        id = MESH.idx(row, j);
-        if (j === 0) offCtx.moveTo(tX[id], tY[id]); else offCtx.lineTo(tX[id], tY[id]);
-      }
-    }
-    for (r = 0; r < MESH.lonCols.length; r++) {
-      var col = MESH.lonCols[r];
-      for (j = 0; j <= LAT; j++) {
-        id = MESH.idx(j, col);
-        if (j === 0) offCtx.moveTo(tX[id], tY[id]); else offCtx.lineTo(tX[id], tY[id]);
-      }
-    }
-    offCtx.stroke();
-
-    /* landmark rings — accent-tint fill, hairline accent outline */
-    offCtx.globalAlpha = 1;
-    for (i = 0; i < MESH.landmarks.length; i++) {
-      var L = MESH.landmarks[i];
-      offCtx.beginPath();
-      offCtx.arc(tX[L], tY[L], 5, 0, 6.2832);
-      offCtx.fillStyle = theme.accentTint;
-      offCtx.fill();
-      offCtx.globalAlpha = 0.75;
-      offCtx.lineWidth = 1;
-      offCtx.strokeStyle = theme.accent;
-      offCtx.stroke();
-      offCtx.globalAlpha = 1;
-    }
-
-    /* level V — the surgical drape: an opaque curved band occluding ~45 % */
-    if (level.occlude) {
-      var xe = CX - 6;                     /* drape edge meanders about centre */
-      offCtx.beginPath();
-      offCtx.moveTo(-4, -4);
-      offCtx.lineTo(xe - 52, -4);
-      offCtx.bezierCurveTo(xe + 40, H * 0.22, xe - 78, H * 0.52, xe + 26, H * 0.78);
-      offCtx.quadraticCurveTo(xe + 62, H * 0.9, xe + 20, H + 4);
-      offCtx.lineTo(-4, H + 4);
-      offCtx.closePath();
-      offCtx.fillStyle = theme.paper2;
-      offCtx.fill();
-      offCtx.save();
-      offCtx.clip();
-      offCtx.globalAlpha = 0.55;
-      offCtx.strokeStyle = theme.rule;
-      offCtx.lineWidth = 1;
-      offCtx.beginPath();
-      for (var hx = -H; hx < W; hx += 11) {
-        offCtx.moveTo(hx, 0); offCtx.lineTo(hx + H, H);
-      }
-      offCtx.stroke();
-      offCtx.restore();
-      offCtx.globalAlpha = 0.9;
-      offCtx.strokeStyle = theme.rule;
-      offCtx.lineWidth = 1.2;
-      offCtx.beginPath();
-      offCtx.moveTo(xe - 52, 0);
-      offCtx.bezierCurveTo(xe + 40, H * 0.22, xe - 78, H * 0.52, xe + 26, H * 0.78);
-      offCtx.quadraticCurveTo(xe + 62, H * 0.9, xe + 20, H);
-      offCtx.stroke();
-      offCtx.globalAlpha = 1;
-    }
-    targetDirty = false;
-  }
-
-  /* ---------------- player rendering (depth-cued wireframe) ---------------- */
-  var BUCKETS = 6;
-  function renderPlayer() {
-    projectAll(state.player, pX, pY, pZ);
-    var edges = MESH.edges, nb = BUCKETS;
-    var paths = [];
-    for (var b = 0; b < nb; b++) paths.push([]);
-    var zLo = -1.5 * state.player.s, zHi = 1.5 * state.player.s;
-    for (var e = 0; e < edges.length; e++) {
-      var a = edges[e][0], b2 = edges[e][1];
-      var zm = (pZ[a] + pZ[b2]) * 0.5;
-      var t = clamp((zm - zLo) / (zHi - zLo), 0, 1);   /* 0 = near, 1 = far */
-      var bi = Math.min(nb - 1, Math.floor(t * nb));
-      paths[bi].push(a, b2);
-    }
-    ctx.strokeStyle = theme.accent;
-    for (b = nb - 1; b >= 0; b--) {                     /* far first, near on top */
-      var list = paths[b];
-      if (!list.length) continue;
-      var tt = b / (nb - 1);
-      ctx.globalAlpha = lerp(0.78, 0.14, tt);
-      ctx.lineWidth = lerp(1.35, 0.65, tt);
-      ctx.beginPath();
-      for (var k = 0; k < list.length; k += 2) {
-        ctx.moveTo(pX[list[k]], pY[list[k]]);
-        ctx.lineTo(pX[list[k + 1]], pY[list[k + 1]]);
-      }
-      ctx.stroke();
-    }
-    /* landmarks — filled dots, nearer ones brighter */
-    for (var i = 0; i < MESH.landmarks.length; i++) {
-      var L = MESH.landmarks[i];
-      var tz = clamp((pZ[L] - zLo) / (zHi - zLo), 0, 1);
-      ctx.globalAlpha = lerp(1, 0.45, tz);
-      ctx.beginPath();
-      ctx.arc(pX[L], pY[L], 3.4, 0, 6.2832);
-      ctx.fillStyle = theme.accent;
-      ctx.fill();
-    }
-    ctx.globalAlpha = 1;
-  }
-
-  /* restrained confirm pulse — hairline rings expand from target landmarks */
-  function renderPulse() {
-    if (state.pulse < 0) return;
-    var e = clamp(state.pulse / 600, 0, 1);
-    if (e >= 1) { state.pulse = -1; return; }
-    ctx.strokeStyle = theme.newC;
-    ctx.lineWidth = 1.2;
-    ctx.globalAlpha = (1 - e) * 0.55;
-    for (var i = 0; i < MESH.landmarks.length; i++) {
-      var L = MESH.landmarks[i];
-      ctx.beginPath();
-      ctx.arc(tX[L], tY[L], 6 + 26 * e, 0, 6.2832);
-      ctx.stroke();
-    }
-    ctx.globalAlpha = 1;
-  }
-
-  function render() {
-    ctx.setTransform(drawScale, 0, 0, drawScale, 0, 0);
-    ctx.clearRect(0, 0, W, H);
-    if (!state.begun) return;
-    /* target from cache (re-rendered per frame only while breathing) */
-    if (targetDirty) renderTarget(state.level);
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.drawImage(off, 0, 0);
-    ctx.setTransform(drawScale, 0, 0, drawScale, 0, 0);
-    renderPlayer();
-    renderPulse();
-  }
-
-  /* ---------------- scoring ---------------- */
-  function rmsError() {
-    var lms = MESH.landmarks, sum = 0;
-    for (var i = 0; i < lms.length; i++) {
-      var L = lms[i];
-      var dx = pX[L] - tX[L], dy = pY[L] - tY[L];
-      sum += dx * dx + dy * dy;
-    }
-    return Math.sqrt(sum / lms.length);
-  }
-  function alignmentPct(rms) { return clamp(100 * (1 - rms / RMS0), 0, 100); }
-
-  /* ---------------- levels ---------------- */
-  function levelList() {
-    var six = reducedMotion
-      ? { n: "VI", name: "Precision", cap: "A static field — register to 97 %.", dof: "rts", threshold: 97 }
-      : { n: "VI", name: "Dynamic scene", cap: "The field breathes — hold the registration for 1.5 s.", dof: "rts", dynamic: true, holdMs: HOLD_MS_DYNAMIC };
-    return [
-      { n: "I", name: "Calibration", cap: "A single rotational offset — feel out the trackball.", dof: "ry" },
-      { n: "II", name: "Orientation", cap: "A full three-axis rotation separates the two views.", dof: "r" },
-      { n: "III", name: "Localisation", cap: "Rotation, plus an in-plane displacement.", dof: "rt" },
-      { n: "IV", name: "Depth", cap: "Now the camera distance is wrong too.", dof: "rts" },
-      { n: "V", name: "Partial visibility", cap: "Aligning under severe partial visibility.", dof: "rts", occlude: true },
-      six
-    ];
-  }
-
-  function makeLevel(index, seed) {
-    var L = levelList()[index];
-    var rnd = rng(seed + index * 7919);
-    var sgn = function () { return rnd() < 0.5 ? -1 : 1; };
-    /* target: a pleasant, slightly randomised canonical orientation */
-    var baseR = mul3(rotX(-0.30 + 0.2 * (rnd() - 0.5)), rotY(0.45 + 0.3 * (rnd() - 0.5)));
-    var target = { m: baseR, s: 1, tx: 0, ty: 0 };
-    /* player start = target composed with the level's offset DOF */
-    var m = baseR, tx = 0, ty = 0, s = 1;
-    if (L.dof === "ry") {
-      m = mul3(rotY(sgn() * (0.9 + 0.5 * rnd())), baseR);
-    } else {
-      var ang = 0.9 + 0.6 * rnd();
-      m = mul3(axisAngle(rnd() - 0.5, rnd() - 0.5, rnd() - 0.5, sgn() * ang), baseR);
-    }
-    if (L.dof === "rt" || L.dof === "rts") {
-      tx = sgn() * (60 + 60 * rnd());
-      ty = sgn() * (40 + 45 * rnd());
-    }
-    if (L.dof === "rts") {
-      s = rnd() < 0.5 ? 0.74 + 0.06 * rnd() : 1.24 + 0.1 * rnd();
-    }
-    return {
-      def: L,
-      target: target,
-      targetBase: { m: baseR.slice(), s: 1, tx: 0, ty: 0 },
-      start: { m: m, s: s, tx: tx, ty: ty },
-      threshold: L.threshold || THRESH,
-      holdMs: L.holdMs || HOLD_MS
-    };
-  }
-
-  /* ---------------- state ---------------- */
-  function clonePose(p) { return { m: p.m.slice(), s: p.s, tx: p.tx, ty: p.ty }; }
-  var state = {
-    begun: false,
-    phase: "onboard",            /* onboard | play | registered | done */
-    seed: (Date.now() & 0xffff) | 1,
-    levelIndex: 0,
-    level: null,
-    target: { m: I3.slice(), s: 1, tx: 0, ty: 0 },
-    player: { m: I3.slice(), s: 1, tx: 0, ty: 0 },
-    levelMs: 0, totalMs: 0, hold: 0, breathT: 0,
-    minErr: Infinity, align: 0, errMm: 0, rms: 0,
-    pulse: -1,
-    results: []
+    hudLeft: mount.querySelector(".pl-hud-left"),
+    seals: mount.querySelector(".pl-seals"),
+    score: mount.querySelector(".pl-score"),
+    best: mount.querySelector(".pl-best"),
+    float: mount.querySelector(".pl-float"),
+    timerbar: mount.querySelector(".pl-timerbar"),
+    timerfill: mount.querySelector(".pl-timerfill"),
+    menu: mount.querySelector(".pl-menu"),
+    pause: mount.querySelector(".pl-pause"),
+    end: mount.querySelector(".pl-end"),
+    endTitle: mount.querySelector(".pl-end-title"),
+    grade: mount.querySelector(".pl-grade"),
+    scoreline: mount.querySelector(".pl-scoreline"),
+    honor: mount.querySelector(".pl-honor"),
+    status: mount.querySelector(".pl-status")
   };
 
-  function fmtTime(ms) {
-    var s = Math.max(0, Math.round(ms / 1000));
-    return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+  /* ---------------- palette (host custom properties; re-read on theme change) ---------------- */
+  var P = {};
+  function parseColor(s) {
+    s = (s || "").trim();
+    var m = /^#([0-9a-f]{3})$/i.exec(s);
+    if (m) return { r: parseInt(m[1][0] + m[1][0], 16), g: parseInt(m[1][1] + m[1][1], 16), b: parseInt(m[1][2] + m[1][2], 16) };
+    m = /^#([0-9a-f]{6})$/i.exec(s);
+    if (m) return { r: parseInt(m[1].slice(0, 2), 16), g: parseInt(m[1].slice(2, 4), 16), b: parseInt(m[1].slice(4, 6), 16) };
+    m = /^rgba?\(\s*([\d.]+)[ ,]+([\d.]+)[ ,]+([\d.]+)/i.exec(s);
+    if (m) return { r: +m[1], g: +m[2], b: +m[3] };
+    return null;
   }
+  function readPalette() {
+    var cs = getComputedStyle(document.documentElement);
+    function col(name, fb) { return parseColor(cs.getPropertyValue(name)) || parseColor(fb); }
+    P.console    = col("--console", "#fcf9f1");
+    P.paper      = col("--paper", "#faf6ec");
+    P.card       = col("--card", "#fffdf6");
+    P.ink        = col("--ink", "#1d1811");
+    P.inkSoft    = col("--ink-soft", "#4e463a");
+    P.inkFaint   = col("--ink-faint", "#6e6353");
+    P.accent     = col("--accent", "#6f2531");
+    P.accentDeep = col("--accent-deep", "#571a26");
+    P.rule       = col("--rule", "#d9cfba");
+    P.ruleSoft   = col("--rule-soft", "#e8dfcc");
+  }
+  function rgba(c, a) { return "rgba(" + c.r + "," + c.g + "," + c.b + "," + a + ")"; }
+  function css(c) { return "rgb(" + c.r + "," + c.g + "," + c.b + ")"; }
+  function lerpC(a, b, t) { return { r: a.r + (b.r - a.r) * t, g: a.g + (b.g - a.g) * t, b: a.b + (b.b - a.b) * t }; }
 
-  /* ---------------- a11y announcements (debounced) ---------------- */
-  var liveTimer = 0;
-  function announce(msg) {
-    clearTimeout(liveTimer);
-    liveTimer = setTimeout(function () { el.live.textContent = msg; }, 400);
-  }
-
-  /* ---------------- level flow ---------------- */
-  function loadLevel(i) {
-    var lvl = makeLevel(i, state.seed);
-    lvl.occlude = !!lvl.def.occlude;
-    lvl.dynamic = !!lvl.def.dynamic;
-    state.levelIndex = i;
-    state.level = lvl;
-    state.target = lvl.target;
-    state.player = clonePose(lvl.start);
-    state.levelMs = 0; state.hold = 0; state.breathT = 0;
-    state.minErr = Infinity; state.pulse = -1;
-    state.phase = "play";
-    targetDirty = true;
-    projectAll(state.target, tX, tY, tZ);
-    projectAll(state.player, pX, pY, pZ);
-    state.rms = rmsError();
-    state.errMm = state.rms / PX_PER_MM;
-    state.align = alignmentPct(state.rms);
-    el.wrap.classList.remove("rg-registered");
-    el.banner.classList.remove("rg-show");
-    el.banner.setAttribute("aria-hidden", "true");
-    el.numeral.textContent = lvl.def.n;
-    el.name.textContent = lvl.def.name;
-    el.caption.textContent = lvl.def.cap;
-    el.tick.style.left = lvl.threshold + "%";
-    ariaAcc = 999;                          /* refresh the canvas aria-label promptly */
-    announce("Level " + lvl.def.n + " — " + lvl.def.name + ". " + lvl.def.cap);
-    requestRender();
-  }
-
-  function resetPose() {
-    if (state.phase !== "play" || !state.level) return;
-    state.player = clonePose(state.level.start);
-    requestRender();
-  }
-
-  function doRegister() {
-    var lvl = state.level;
-    state.phase = "registered";
-    state.pulse = reducedMotion ? -1 : 0;
-    state.totalMs += state.levelMs;
-    state.results.push({ n: lvl.def.n, name: lvl.def.name, ms: state.levelMs, err: state.minErr });
-    el.wrap.classList.add("rg-registered");
-    el.regMeta.textContent = fmtTime(state.levelMs) + " · best " + state.minErr.toFixed(1) + " mm";
-    el.next.textContent = state.levelIndex >= 5 ? "Finish →" : "Next →";
-    el.banner.classList.add("rg-show");
-    el.banner.setAttribute("aria-hidden", "false");
-    announce("Level " + lvl.def.n + " registered. Time " + fmtTime(state.levelMs) +
-      ", best error " + state.minErr.toFixed(1) + " millimetres.");
-  }
-
-  function nextLevel() {
-    if (state.phase !== "registered") return;
-    if (state.levelIndex >= 5) finish();
-    else { loadLevel(state.levelIndex + 1); updateLoop(); }
-  }
-
-  function loadBest() {
-    try {
-      var b = JSON.parse(localStorage.getItem("jf-reg-best"));
-      // validate shape — a corrupt/legacy value must not block "Personal best" forever
-      return (b && typeof b.t === "number" && typeof b.e === "number") ? b : null;
-    } catch (e) { return null; }
-  }
-  function finish() {
-    state.phase = "done";
-    var mean = 0, i;
-    for (i = 0; i < state.results.length; i++) mean += state.results[i].err;
-    mean /= state.results.length || 1;
-    var prev = loadBest();
-    var isPB = !prev || state.totalMs < prev.t;
-    if (isPB) {
-      try { localStorage.setItem("jf-reg-best", JSON.stringify({ t: state.totalMs, e: +mean.toFixed(2) })); } catch (e) {}
-    }
-    el.pb.hidden = !isPB;
-    el.sumTime.textContent = fmtTime(state.totalMs);
-    el.sumErr.textContent = mean.toFixed(1) + " mm";
-    var html = "";
-    for (i = 0; i < state.results.length; i++) {
-      var r2 = state.results[i];
-      html += '<li><span class="rg-sl-n">' + r2.n + " · " + r2.name + "</span><span>" +
-        fmtTime(r2.ms) + " · " + r2.err.toFixed(1) + " mm</span></li>";
-    }
-    el.sumLevels.innerHTML = html;
-    el.summary.hidden = false;
-    el.canvas.setAttribute("aria-label", "Registration series complete. Total time " + fmtTime(state.totalMs) + ".");
-    announce("Series complete. Total time " + fmtTime(state.totalMs) + ", mean error " +
-      mean.toFixed(1) + " millimetres." + (isPB ? " Personal best." : ""));
-    updateLoop();
-    el.again.focus();
-  }
-
-  function begin() {
-    state.begun = true;
-    state.seed = ((Math.random() * 0xffff) | 0) | 1;
-    el.onboard.hidden = true;
-    loadLevel(0);
-    updateLoop();
-    el.stage.focus({ preventScroll: true });
-  }
-  function restart() {
-    state.results = [];
-    state.totalMs = 0;
-    state.seed = ((Math.random() * 0xffff) | 0) | 1;
-    el.summary.hidden = true;
-    loadLevel(0);
-    updateLoop();
-    el.stage.focus({ preventScroll: true });
-  }
-
-  /* ---------------- simulation step ---------------- */
-  function step(dt) {
-    if (state.phase === "play") {
-      state.levelMs += dt;
-      var lvl = state.level;
-      if (lvl.dynamic) {
-        /* the intraoperative scene breathes: ~0.2 Hz, small amplitude */
-        state.breathT += dt / 1000;
-        var w = 2 * Math.PI * 0.2 * state.breathT;
-        var A = 0.085;
-        var br = mul3(rotY(A * Math.sin(w)), rotX(0.5 * A * Math.sin(w + 1.1)));
-        state.target.m = mul3(br, lvl.targetBase.m);
-        state.target.s = 1 + 0.02 * Math.sin(w + 0.4);
-        targetDirty = true;
-      }
-      /* score: RMS reprojection error over the 7 landmarks */
-      projectAll(state.target, tX, tY, tZ);
-      projectAll(state.player, pX, pY, pZ);
-      state.rms = rmsError();
-      state.errMm = state.rms / PX_PER_MM;
-      state.align = alignmentPct(state.rms);
-      state.minErr = Math.min(state.minErr, state.errMm);
-      if (state.align >= state.level.threshold) {
-        state.hold += dt;
-        if (state.hold >= state.level.holdMs) doRegister();
-      } else {
-        state.hold = 0;
-      }
-    } else if (state.phase === "registered" && state.pulse >= 0) {
-      state.pulse += dt;
-    }
-  }
-
-  /* ---------------- HUD ---------------- */
-  var ariaAcc = 999;
-  function updateHUD(dt) {
-    ariaAcc += dt;
-    el.time.textContent = fmtTime(state.phase === "play" ? state.levelMs :
-      (state.results.length ? state.results[state.results.length - 1].ms : 0));
-    if (state.phase === "play" || state.phase === "registered") {
-      el.err.textContent = state.errMm.toFixed(1) + " mm";
-      el.err.classList.toggle("rg-err-good", state.align >= state.level.threshold);
-      el.align.textContent = Math.round(state.align) + " %";
-      el.fill.style.width = state.align + "%";
-      if (ariaAcc > 600) {
-        ariaAcc = 0;
-        el.canvas.setAttribute("aria-label", "Level " + state.level.def.n + " — " +
-          state.level.def.name + ". Alignment " + Math.round(state.align) + " percent." +
-          (state.phase === "registered" ? " Registered." : ""));
-      }
-    }
-  }
-
-  /* ---------------- render-on-demand (while the loop is suspended) ---------------- */
-  function requestRender() {
-    if (!running) {
-      if (state.begun) { projectAll(state.player, pX, pY, pZ); }
-      render();
-      updateHUD(0);
-    }
-  }
-
-  /* ---------------- main loop: runs ONLY while begun + on-screen + visible ------- */
-  var running = false, rafId = 0, lastT = 0;
-  var onScreen = true, docVisible = !document.hidden;
-  function loopShouldRun() {
-    if (!state.begun || state.phase === "done" || !onScreen || !docVisible) return false;
-    /* a registered level with its confirm pulse finished is fully static */
-    if (state.phase === "registered" && state.pulse < 0) return false;
-    return true;
-  }
-  function updateLoop() {
-    if (loopShouldRun() && !running) {
-      running = true;
-      lastT = performance.now();
-      rafId = requestAnimationFrame(frame);
-    } else if (!loopShouldRun() && running) {
-      running = false;
-      cancelAnimationFrame(rafId);
-    }
-  }
-  function frame(now) {
-    if (!running) return;
-    var dt = Math.min(50, now - lastT);
-    lastT = now;
-    step(dt);
+  /* ---------------- canvas sizing / rect cache (no per-event rect reads) ---------------- */
+  var sx = 1, sy = 1, rect = null, dprQuery = null;
+  function refreshRect() { rect = canvas.getBoundingClientRect(); }
+  function resizeCanvas() {
+    var cssW = mount.clientWidth || W;
+    var dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.max(1, Math.round(cssW * dpr));
+    canvas.height = Math.max(1, Math.round(cssW * (H / W) * dpr));
+    sx = canvas.width / W; sy = canvas.height / H;
+    stage.classList.toggle("pl-narrow", cssW < 400);
+    refreshRect();
     render();
-    updateHUD(dt);
-    if (!loopShouldRun()) { running = false; requestRender(); return; }
+  }
+  function armDprWatch() {
+    if (dprQuery) { try { dprQuery.removeEventListener("change", onDpr); } catch (e) {} }
+    try {
+      dprQuery = matchMedia("(resolution: " + (window.devicePixelRatio || 1) + "dppx)");
+      dprQuery.addEventListener("change", onDpr);
+    } catch (e) { dprQuery = null; }
+  }
+  function onDpr() { resizeCanvas(); armDprWatch(); }
+
+  /* ---------------- geometry helpers ---------------- */
+  function segDist2(px, py, ax, ay, bx, by) {
+    var dx = bx - ax, dy = by - ay;
+    var l2 = dx * dx + dy * dy;
+    var t = l2 ? clamp(((px - ax) * dx + (py - ay) * dy) / l2, 0, 1) : 0;
+    var cx = ax + t * dx, cy = ay + t * dy;
+    var ex = px - cx, ey = py - cy;
+    return ex * ex + ey * ey;
+  }
+  function segClosest(px, py, ax, ay, bx, by) {
+    var dx = bx - ax, dy = by - ay;
+    var l2 = dx * dx + dy * dy;
+    var t = l2 ? clamp(((px - ax) * dx + (py - ay) * dy) / l2, 0, 1) : 0;
+    return [ax + t * dx, ay + t * dy];
+  }
+
+  /* ---------------- spatial hash of lethal ghost segments (rebuilt at run start) ---------------- */
+  function hkey(cx, cy) { return cx * 64 + cy; }
+  function buildHash() {
+    hash.clear();
+    for (var g = 0; g < ghosts.length; g++) {
+      if (!ghosts[g].lethal) continue;
+      var pts = ghosts[g].pts;
+      for (var i = 1; i < pts.length; i++) {
+        if (!pts[i - 1] || !pts[i]) continue; /* stroke break — no ink across the gap */
+        var ax = pts[i - 1][0], ay = pts[i - 1][1], bx = pts[i][0], by = pts[i][1];
+        var x0 = Math.floor(Math.min(ax, bx) / CELL), x1 = Math.floor(Math.max(ax, bx) / CELL);
+        var y0 = Math.floor(Math.min(ay, by) / CELL), y1 = Math.floor(Math.max(ay, by) / CELL);
+        for (var cx = x0; cx <= x1; cx++) for (var cy = y0; cy <= y1; cy++) {
+          var k = hkey(cx, cy);
+          var list = hash.get(k);
+          if (!list) { list = []; hash.set(k, list); }
+          list.push([ax, ay, bx, by]);
+        }
+      }
+    }
+  }
+  function ghostHit(sp) {
+    var cx = Math.floor(nib.x / CELL), cy = Math.floor(nib.y / CELL);
+    var u = Math.min(sp, TUNING.VMAX) / TUNING.VMAX;
+    var r = HIT_R * Math.pow(1 - u, TUNING.SKIMPOW) + TUNING.SKIMFLOOR;
+    var bestD = r * r, hit = null;
+    for (var dx = -1; dx <= 1; dx++) for (var dy = -1; dy <= 1; dy++) {
+      var list = hash.get(hkey(cx + dx, cy + dy));
+      if (!list) continue;
+      for (var i = 0; i < list.length; i++) {
+        var s = list[i];
+        var d2 = segDist2(nib.x, nib.y, s[0], s[1], s[2], s[3]);
+        if (d2 < bestD) { bestD = d2; hit = s; }
+      }
+    }
+    return hit ? segClosest(nib.x, nib.y, hit[0], hit[1], hit[2], hit[3]) : null;
+  }
+
+  /* ---------------- seals (seeded placement with deterministic relaxation ladder) ---------------- */
+  function distToLethal(x, y) {
+    var m = Infinity;
+    for (var g = 0; g < ghosts.length; g++) {
+      if (!ghosts[g].lethal) continue;
+      var pts = ghosts[g].pts;
+      for (var i = 1; i < pts.length; i++) {
+        if (!pts[i - 1] || !pts[i]) continue;
+        var d2 = segDist2(x, y, pts[i - 1][0], pts[i - 1][1], pts[i][0], pts[i][1]);
+        if (d2 < m) m = d2;
+      }
+    }
+    return Math.sqrt(m);
+  }
+  function placeSeals() {
+    seals = [];
+    for (var n = 0; n < SEALS_N; n++) {
+      var placed = null, draws = 0, ghostMin = 18;
+      while (!placed) {
+        draws++;
+        if (draws === 401) ghostMin = 10;      /* relaxation ladder */
+        if (draws === 601) ghostMin = 0;
+        var x = INSET + 24 + rand() * (W - 2 * (INSET + 24));
+        var y = INSET + 24 + rand() * (H - 2 * (INSET + 24));
+        var ok = true;
+        for (var i = 0; i < seals.length && ok; i++) {
+          var ddx = seals[i][0] - x, ddy = seals[i][1] - y;
+          if (ddx * ddx + ddy * ddy < 3600) ok = false;
+        }
+        if (ok) { var sdx = x - SPAWN_X, sdy = y - SPAWN_Y; if (sdx * sdx + sdy * sdy < 4900) ok = false; }
+        if (ok && ghostMin > 0 && distToLethal(x, y) < ghostMin) ok = false;
+        if (ok) placed = [x, y];
+      }
+      seals.push(placed);
+    }
+    sealsCollected = 0;
+  }
+  function makeBlot(cx, cy) {
+    var lobes = [];
+    for (var i = 0; i < 12; i++) lobes.push(14 + rand() * 8);
+    return { x: cx, y: cy, lobes: lobes, birth: tickCount };
+  }
+
+  /* ---------------- rendering ---------------- */
+  function strokePoly(pts, style, width) { /* honours null break markers */
+    if (pts.length < 2) return;
+    ctx.strokeStyle = style; ctx.lineWidth = width;
+    ctx.beginPath();
+    var pen = false;
+    for (var i = 0; i < pts.length; i++) {
+      if (!pts[i]) { pen = false; continue; }
+      if (pen) ctx.lineTo(pts[i][0], pts[i][1]);
+      else { ctx.moveTo(pts[i][0], pts[i][1]); pen = true; }
+    }
+    ctx.stroke();
+  }
+  function strokeVar(pts, style, wAdj) { /* variable-width polyline, chunked by quantized width */
+    if (pts.length < 2) return;
+    ctx.strokeStyle = style;
+    var i = 1, n = pts.length;
+    while (i < n) {
+      if (!pts[i] || !pts[i - 1]) { i++; continue; }
+      var w = Math.round(wAdj(pts[i][2]) * 5) / 5;
+      ctx.lineWidth = w;
+      ctx.beginPath();
+      ctx.moveTo(pts[i - 1][0], pts[i - 1][1]);
+      while (i < n && pts[i] && Math.round(wAdj(pts[i][2]) * 5) / 5 === w) { ctx.lineTo(pts[i][0], pts[i][1]); i++; }
+      ctx.stroke();
+    }
+  }
+  function drawBlot(b) {
+    var age = tickCount - b.birth, s = 1, a = 0.30;
+    if (!RM) {
+      var u = clamp(age / BLOT_T, 0, 1);
+      s = 1 - Math.pow(1 - u, 3);
+      a = u < 1 ? 0.48 : 0.48 + (0.30 - 0.48) * clamp((age - BLOT_T) / 40, 0, 1);
+    }
+    ctx.fillStyle = rgba(P.accentDeep, a);
+    ctx.beginPath();
+    var pts = [];
+    for (var i = 0; i < 12; i++) {
+      var ang = i / 12 * Math.PI * 2;
+      pts.push([b.x + Math.cos(ang) * b.lobes[i] * s, b.y + Math.sin(ang) * b.lobes[i] * s]);
+    }
+    var mx = (pts[11][0] + pts[0][0]) / 2, my = (pts[11][1] + pts[0][1]) / 2;
+    ctx.moveTo(mx, my);
+    for (i = 0; i < 12; i++) {
+      var nx = pts[(i + 1) % 12];
+      ctx.quadraticCurveTo(pts[i][0], pts[i][1], (pts[i][0] + nx[0]) / 2, (pts[i][1] + nx[1]) / 2);
+    }
+    ctx.closePath();
+    ctx.fill();
+  }
+  function paintPage() {
+    ctx.fillStyle = css(P.console);
+    ctx.fillRect(0, 0, W, H);
+    /* deckle margin + 6px corner ticks */
+    ctx.strokeStyle = css(P.ruleSoft); ctx.lineWidth = 1;
+    ctx.strokeRect(INSET + 0.5, INSET + 0.5, W - 2 * INSET - 1, H - 2 * INSET - 1);
+    ctx.beginPath();
+    var cs = [[INSET, INSET, -1, -1], [W - INSET, INSET, 1, -1], [INSET, H - INSET, -1, 1], [W - INSET, H - INSET, 1, 1]];
+    for (var i = 0; i < 4; i++) {
+      var c = cs[i];
+      ctx.moveTo(c[0] + 0.5 * c[2], c[1] + 0.5); ctx.lineTo(c[0] + 6.5 * c[2], c[1] + 0.5);
+      ctx.moveTo(c[0] + 0.5, c[1] + 0.5 * c[3]); ctx.lineTo(c[0] + 0.5, c[1] + 6.5 * c[3]);
+    }
+    ctx.stroke();
+    /* the inkwell — engraved double circle at the spawn point */
+    ctx.strokeStyle = css(P.inkSoft); ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(SPAWN_X, SPAWN_Y, 11, 0, Math.PI * 2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(SPAWN_X, SPAWN_Y, 7, 0, Math.PI * 2); ctx.stroke();
+    ctx.fillStyle = css(P.accent);
+    ctx.beginPath(); ctx.arc(SPAWN_X, SPAWN_Y, 2, 0, Math.PI * 2); ctx.fill();
+  }
+  function render() {
+    ctx.setTransform(sx, 0, 0, sy, 0, 0);
+    ctx.lineCap = "round"; ctx.lineJoin = "round";
+    paintPage();
+    var i, j, g;
+    /* lifted-seal residues */
+    ctx.strokeStyle = rgba(P.accent, 0.08); ctx.lineWidth = 1;
+    for (i = 0; i < residues.length; i++) {
+      ctx.beginPath(); ctx.arc(residues[i][0], residues[i][1], 9, 0, Math.PI * 2); ctx.stroke();
+    }
+    /* ghosts, oldest first */
+    var L = ghosts.length;
+    for (i = 0; i < L; i++) {
+      g = ghosts[i];
+      var rank = 0;
+      if (g.lethal) for (j = i + 1; j < L; j++) { if (ghosts[j].lethal) rank++; }
+      var tA = g.lethal ? LETHAL_A[Math.min(rank, 2)] : 0.12;
+      var tW = g.lethal ? 2.4 : 1.8;
+      if (!g.lethal && g.settled >= 0 && !RM) {
+        var su = clamp((tickCount - g.settled) / SETTLE_T, 0, 1);
+        tA = 0.30 + (0.12 - 0.30) * su;
+      }
+      var ft = RM ? 1 : clamp((tickCount - g.fade) / FADE_T, 0, 1); /* bleed-through being born */
+      if (ft < 1) {
+        (function (fw, ftt) {
+          strokeVar(g.pts, rgba(lerpC(P.ink, P.accent, ftt), 1 + (tA - 1) * ftt), function (w) { return w + (fw - w) * ftt; });
+        })(tW, ft);
+      } else {
+        strokePoly(g.pts, rgba(P.accent, tA), tW);
+      }
+      if (g.blot) drawBlot(g.blot);
+    }
+    for (i = 0; i < orphanBlots.length; i++) drawBlot(orphanBlots[i]);
+    /* seals — wax, with a paper-tone highlight */
+    for (i = 0; i < seals.length; i++) {
+      var sX = seals[i][0], sY = seals[i][1];
+      ctx.fillStyle = css(P.accent);
+      ctx.beginPath(); ctx.arc(sX, sY, 9, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = css(P.accentDeep); ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(sX, sY, 9, 0, Math.PI * 2); ctx.stroke();
+      ctx.fillStyle = css(P.card);
+      ctx.beginPath(); ctx.arc(sX - 2, sY - 3, 1.8, 0, Math.PI * 2); ctx.fill();
+    }
+    /* pickup pops (160 ms ≈ 20 ticks) */
+    for (i = 0; i < pops.length; i++) {
+      var age = tickCount - pops[i][2];
+      if (age >= 20) continue;
+      var u = age / 20;
+      var sc = u < 0.4 ? 1 + 0.35 * (u / 0.4) : 1.35 * (1 - (u - 0.4) / 0.6);
+      if (sc <= 0) continue;
+      ctx.fillStyle = rgba(P.accent, 0.9);
+      ctx.beginPath(); ctx.arc(pops[i][0], pops[i][1], 9 * sc, 0, Math.PI * 2); ctx.fill();
+    }
+    /* live stroke + wet sheen + nib */
+    var live = mode === "playing" || (mode === "paused" && pausedFrom === "playing");
+    if (live) {
+      strokeVar(trail, css(P.ink), function (w) { return w; });
+      if (!RM) { /* wet sheen — segments recorded in the last 350 ms (42 ticks) */
+        for (i = trail.length - 1; i >= 1; i--) {
+          if (!trail[i] || !trail[i - 1]) continue;
+          var sAge = tickCount - trail[i][3];
+          if (sAge >= 42) break;
+          ctx.strokeStyle = rgba(P.accent, (1 - sAge / 42) * 0.35);
+          ctx.lineWidth = trail[i][2];
+          ctx.beginPath();
+          ctx.moveTo(trail[i - 1][0], trail[i - 1][1]);
+          ctx.lineTo(trail[i][0], trail[i][1]);
+          ctx.stroke();
+        }
+      }
+      var nr = 5;
+      if (grace && !RM) { /* ink-load pulse r 5→8→5 over 300 ms */
+        var ga = tickCount - runStartTick;
+        if (ga < 36) nr = 5 + 3 * Math.sin(Math.PI * ga / 36);
+      }
+      if (grace) {
+        ctx.strokeStyle = css(P.ink); ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(nib.x, nib.y, nr, 0, Math.PI * 2); ctx.stroke();
+      } else {
+        ctx.fillStyle = css(P.ink);
+        ctx.beginPath(); ctx.arc(nib.x, nib.y, 5, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = css(P.accent); ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.arc(nib.x, nib.y, 3.2, -Math.PI / 4 - 0.5, -Math.PI / 4 + 0.5); ctx.stroke();
+      }
+    }
+    /* run-timer rule (transform-only) */
+    if (mode === "playing") {
+      el.timerfill.style.transform = "scaleX(" + (runLeft / RUN_T) + ")";
+      el.timerfill.classList.toggle("pl-low", runLeft <= 1200);
+    }
+  }
+
+  /* ---------------- simulation (fixed 120 Hz tick — ordering is normative) ---------------- */
+  function wOf(sp) { return 1.3 + 2.1 * (1 - Math.min(sp, TUNING.VMAX) / TUNING.VMAX); }
+  function steer() {
+    var dx = 0, dy = 0;
+    if (held.L) dx -= 1; if (held.R) dx += 1;
+    if (held.U) dy -= 1; if (held.D) dy += 1;
+    if (dx || dy) {
+      var m = Math.sqrt(dx * dx + dy * dy); /* sqrt, not hypot — engine-stable determinism */
+      return [clamp(nib.x + dx / m * 90, INSET, W - INSET), clamp(nib.y + dy / m * 90, INSET, H - INSET)];
+    }
+    if (touch.active) { /* nib rides above the finger; offset ramps in over ~150 ms */
+      var ramp = clamp((tickCount - touch.startTick) / 18, 0, 1);
+      return [clamp(ptr.x, INSET, W - INSET), clamp(ptr.y - 56 * ramp, INSET, H - INSET)];
+    }
+    if (ptr.seen) return [clamp(ptr.x, INSET, W - INSET), clamp(ptr.y, INSET, H - INSET)];
+    return [nib.x, nib.y];
+  }
+  function tick() {
+    tickCount++;
+    if (mode === "interstitial") {
+      interLeft--;
+      if (interLeft <= 0) finishInter();
+      return;
+    }
+    if (mode !== "playing") return;
+    /* 1 — timers / transitions */
+    if (grace) { graceLeft--; if (graceLeft <= 0) grace = false; }
+    /* 2 — steering target; 3 — integrate the nib */
+    var t = steer();
+    var ax = (t[0] - nib.x) * TUNING.SPRING - nib.vx * TUNING.DAMP;
+    var ay = (t[1] - nib.y) * TUNING.SPRING - nib.vy * TUNING.DAMP;
+    nib.vx += ax * DT; nib.vy += ay * DT;
+    var sp = Math.sqrt(nib.vx * nib.vx + nib.vy * nib.vy); /* sqrt, not hypot — engine-stable determinism */
+    if (sp > TUNING.VMAX) { nib.vx *= TUNING.VMAX / sp; nib.vy *= TUNING.VMAX / sp; sp = TUNING.VMAX; }
+    nib.x = clamp(nib.x + nib.vx * DT, INSET + NIBR, W - INSET - NIBR);
+    nib.y = clamp(nib.y + nib.vy * DT, INSET + NIBR, H - INSET - NIBR);
+    /* 4 — record trail. Ink flows only outside the well's court and never marks
+       inside it (crossing back in lifts the pen — a break in the stroke). */
+    var wx = nib.x - SPAWN_X, wy = nib.y - SPAWN_Y;
+    var inCourt = wx * wx + wy * wy <= SANCT * SANCT;
+    if (inCourt) {
+      if (penDown) { penDown = false; if (trail.length) trail.push(null); }
+    } else if (!penDown) {
+      penDown = true;
+      trail.push([nib.x, nib.y, wOf(sp), tickCount]);
+    } else {
+      var lp = trail[trail.length - 1];
+      var ddx = nib.x - lp[0], ddy = nib.y - lp[1];
+      if (ddx * ddx + ddy * ddy >= trailMin * trailMin) {
+        if (trail.length >= 6000) trailMin = 5; /* deterministic decimation under the cap */
+        trail.push([nib.x, nib.y, wOf(sp), tickCount]);
+      }
+    }
+    /* 5 — seal pickups resolve BEFORE death, same tick */
+    for (var i = seals.length - 1; i >= 0; i--) {
+      var sdx = seals[i][0] - nib.x, sdy = seals[i][1] - nib.y;
+      if (sdx * sdx + sdy * sdy < PICK_R * PICK_R) collectSeal(i);
+    }
+    if (mode !== "playing") return; /* clean sweep ended the run */
+    if (!grace) {
+      /* 6 — ghost collision (lethal radius shrinks with speed — see SKIM) */
+      var cp = ghostHit(sp);
+      if (cp) { endRun("smudge", cp); return; }
+      /* 7 — run timer (checked after pickups) */
+      runLeft--;
+      if (runLeft <= 0) { endRun("dry"); return; }
+    }
+    /* 8 — 1 Hz bookkeeping */
+    if (tickCount % 120 === 0) refreshAria();
+  }
+  function collectSeal(i) {
+    score++; sealsCollected++;
+    residues.push([seals[i][0], seals[i][1]]);
+    if (!RM) pops.push([seals[i][0], seals[i][1], tickCount]);
+    seals.splice(i, 1);
+    flashScore();
+    updateHUD();
+    if (sealsCollected === SEALS_N) endRun("clear");
+  }
+
+  /* ---------------- run / edition state machine ---------------- */
+  function endRun(kind, cp) {
+    endTick = tickCount; lastEnd = kind;
+    if (kind === "clear") { score += 2; sweepFx(); }
+    var blot = null;
+    if (kind === "smudge") { unblotted = false; alive = false; blot = makeBlot(cp[0], cp[1]); }
+    if (trail.length >= 2) {
+      ghosts.push({ pts: trail, lethal: true, blot: blot, fade: endTick + (kind === "smudge" ? BLOT_T : 0), settled: -1 });
+    } else if (blot) { orphanBlots.push(blot); }
+    trail = []; penDown = false;
+    mode = "interstitial";
+    interLeft = INTER_T + (kind === "smudge" ? BLOT_T : 0);
+    if (run < 5) {
+      var nx = run + 1, k = sealsCollected;
+      announce(kind === "clear" ? "Run " + nx + " set — clean sweep, 8 of 8 seals."
+        : kind === "smudge" ? "Smudged. Run " + nx + " set — " + k + (k === 1 ? " seal." : " seals.")
+        : "The ink dried. Run " + nx + " set — " + k + (k === 1 ? " seal." : " seals."));
+    }
+    updateHUD();
+  }
+  function finishInter() { interLeft = 0; if (run >= 5) editionEnd(); else startRun(run + 1); }
+  function startRun(n) {
+    run = n; mode = "playing"; grace = true; graceLeft = GRACE_T; runLeft = RUN_T; alive = true;
+    runStartTick = tickCount;
+    var L = ghosts.length;
+    for (var i = 0; i < L; i++) { /* the settle rule: only the 3 most recent ghosts are lethal */
+      var was = ghosts[i].lethal;
+      var now = i >= L - 3 && ghosts[i].pts.length >= 2;
+      if (was && !now) { ghosts[i].settled = tickCount; }
+      ghosts[i].lethal = now;
+    }
+    buildHash();
+    placeSeals();
+    nib.x = SPAWN_X; nib.y = SPAWN_Y; nib.vx = 0; nib.vy = 0;
+    ptr.seen = false; touch.active = false; activePointer = null;
+    trail = []; penDown = false; trailMin = 2.5;
+    pops.length = 0;
+    announce("Run " + n + " of 5. 8 seals on the page." + (n === 5 ? " The first impression has settled." : ""));
+    updateHUD(); refreshAria();
+  }
+  function editionEnd() {
+    mode = "edition-end";
+    if (unblotted) score += 5;
+    var grade = score >= 50 ? "Fine press." : score >= 40 ? "Fair copy." : score >= 28 ? "Trade edition." : score >= 16 ? "Proof." : "Pulp.";
+    var record = best === null || score > best;
+    if (record) best = score;
+    editions++;
+    persist();
+    el.endTitle.textContent = "Edition " + roman(edition) + " complete";
+    el.grade.textContent = grade;
+    el.scoreline.textContent = record ? "New best — " + score + " points." : score + " points · best " + best;
+    el.honor.textContent = unblotted ? "Unblotted — not one smudge. +5" : "";
+    el.end.hidden = false;
+    announce("Edition " + roman(edition) + " complete. " + grade + " " + score + " points." + (record ? " New best." : ""));
+    updateHUD(); refreshAria(); render();
+  }
+  function startEdition() {
+    edition++;
+    var baseSeed = pinnedSeed !== null ? pinnedSeed : (Date.now() & 0x7fffffff);
+    rand = mulberry32(baseSeed);
+    ghosts = []; orphanBlots = []; residues = []; pops.length = 0;
+    score = 0; unblotted = true; lastEnd = "";
+    editionStartTick = tickCount;
+    el.menu.hidden = true; el.end.hidden = true; el.pause.hidden = true;
+    startRun(1);
+    startLoop();
+    render();
+  }
+  function begin() { if (mode !== "menu") return; startEdition(); }
+  function reset() {
+    if (mode === "menu") { startEdition(); return; }
+    if (mode === "playing" || mode === "interstitial" || mode === "paused") announce("Page scraped.");
+    startEdition();
+  }
+  function scrapeKey() {
+    var now = performance.now();
+    if (now - lastRWall < 400) return; /* accidental double-tap guard */
+    if (mode === "menu") return;
+    if (mode !== "edition-end" && tickCount - editionStartTick < 240) return; /* ignore R in the first 2 s */
+    lastRWall = now;
+    reset();
+  }
+  function setPause(on) {
+    if (on) {
+      if (mode !== "playing" && mode !== "interstitial") return;
+      pausedFrom = mode; mode = "paused";
+      el.pause.hidden = false;
+      announce("Paused.");
+      updateHUD(); render();
+    } else {
+      if (mode !== "paused") return;
+      mode = pausedFrom;
+      el.pause.hidden = true;
+      announce("Resumed.");
+      updateHUD();
+      startLoop();
+    }
+  }
+
+  /* ---------------- HUD / announcements ---------------- */
+  function setText(node, s) { if (node.textContent !== s) node.textContent = s; }
+  function updateHUD() {
+    setText(el.hudLeft, mode === "menu" ? "EDITION I · RUN — OF 5"
+      : "EDITION " + roman(edition) + " · RUN " + Math.max(run, 1) + " OF 5");
+    setText(el.seals, sealsCollected + "/8");
+    setText(el.score, "" + score);
+    setText(el.best, best === null ? "—" : "" + best);
+    var showTimer = mode === "playing" || (mode === "paused" && pausedFrom === "playing");
+    el.timerbar.classList.toggle("pl-off", !showTimer);
+  }
+  function flashScore() {
+    if (RM || frozen) return;
+    el.score.classList.remove("pl-flash"); void el.score.offsetWidth;
+    el.score.classList.add("pl-flash");
+  }
+  function sweepFx() {
+    if (RM || frozen) return;
+    el.seals.classList.remove("pl-flash"); void el.seals.offsetWidth;
+    el.seals.classList.add("pl-flash");
+    el.float.classList.remove("pl-go"); void el.float.offsetWidth;
+    el.float.classList.add("pl-go");
+  }
+  var lastAnn = 0, annTimer = 0, annPending = "";
+  function announce(msg) { /* aria-live, debounced ≥ 1 s, meaningful events only */
+    annPending = msg;
+    if (annTimer) return;
+    var wait = Math.max(0, lastAnn + 1000 - performance.now());
+    annTimer = setTimeout(function () {
+      annTimer = 0; lastAnn = performance.now();
+      el.status.textContent = annPending;
+    }, wait);
+  }
+  function refreshAria() { /* canvas aria-label at ≤ 1 Hz */
+    var label;
+    if (mode === "menu") label = "Palimpsest — an empty laid page with an inkwell.";
+    else if (mode === "edition-end") label = "Palimpsest — a finished edition page written in five runs of ink.";
+    else {
+      var lethal = 0;
+      for (var i = 0; i < ghosts.length; i++) { if (ghosts[i].lethal) lethal++; }
+      label = "Palimpsest playfield: run " + run + " of 5, " + seals.length + " seals remaining, " + lethal + " lethal past runs.";
+    }
+    if (canvas.getAttribute("aria-label") !== label) canvas.setAttribute("aria-label", label);
+  }
+
+  /* ---------------- self-suspending loop (no rAF exists before Begin) ---------------- */
+  function activeMode() { return mode === "playing" || mode === "interstitial"; }
+  function shouldLoop() { return !frozen && visible && !document.hidden && activeMode(); }
+  function frame() {
+    rafId = 0;
+    if (!shouldLoop()) { render(); return; }
+    var now = performance.now();
+    acc += Math.min(now - lastT, 83.3); lastT = now;
+    while (acc >= TICK_MS) {
+      tick(); acc -= TICK_MS;
+      if (!activeMode()) { acc = 0; break; }
+    }
+    render();
+    if (shouldLoop()) rafId = requestAnimationFrame(frame);
+  }
+  function startLoop() {
+    if (rafId || !shouldLoop()) return;
+    lastT = performance.now(); acc = 0;
     rafId = requestAnimationFrame(frame);
   }
 
-  /* ---------------- input: pointer (trackball / translate / pinch) -------------- */
-  var pointers = new Map();
-  var prevCent = null, prevDist = 0, lastTap = { t: 0, x: 0, y: 0 }, orthoCount = 0;
-  function toLogical(ev) {
-    var r = el.canvas.getBoundingClientRect();
-    return { x: (ev.clientX - r.left) * W / r.width, y: (ev.clientY - r.top) * H / r.height };
+  /* ---------------- input ---------------- */
+  function toLogical(e) {
+    if (!rect || !rect.width) refreshRect();
+    return [(e.clientX - rect.left) / rect.width * W, (e.clientY - rect.top) / rect.height * H];
   }
-  function applyRotation(dx, dy) {
-    var m = state.player.m;
-    state.player.m = mul3(rotX(dy * ROT_K), mul3(rotY(-dx * ROT_K), m));
-    if (++orthoCount > 24) { state.player.m = ortho(state.player.m); orthoCount = 0; }
-  }
-  function pinchState() {
-    var pts = Array.from(pointers.values());
-    var cx = (pts[0].x + pts[1].x) / 2, cy = (pts[0].y + pts[1].y) / 2;
-    return { cx: cx, cy: cy, d: Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y) || 1 };
-  }
-
-  el.canvas.addEventListener("pointerdown", function (ev) {
-    ev.preventDefault();
-    el.stage.focus({ preventScroll: true });
-    if (state.phase !== "play") return;
-    try { el.canvas.setPointerCapture(ev.pointerId); } catch (e) {}
-    var p = toLogical(ev);
-    /* double-tap (touch) = reset level pose */
-    if (ev.pointerType === "touch" && pointers.size === 0) {
-      var now = performance.now();
-      if (now - lastTap.t < 320 && Math.hypot(p.x - lastTap.x, p.y - lastTap.y) < 34) resetPose();
-      lastTap = { t: now, x: p.x, y: p.y };
+  canvas.addEventListener("pointerdown", function (e) {
+    if (activePointer !== null && e.pointerId !== activePointer) return; /* first captured pointer wins */
+    activePointer = e.pointerId;
+    try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+    if (e.pointerType === "touch") { touch.active = true; touch.startTick = tickCount; }
+    var p = toLogical(e);
+    ptr.x = clamp(p[0], INSET, W - INSET); ptr.y = clamp(p[1], INSET, H - INSET); ptr.seen = true;
+    if (activeMode()) e.preventDefault();
+  });
+  canvas.addEventListener("pointermove", function (e) {
+    if (e.pointerType === "touch" && e.pointerId !== activePointer) return; /* touch steering needs an active touch */
+    var p = toLogical(e);
+    ptr.x = clamp(p[0], INSET, W - INSET); ptr.y = clamp(p[1], INSET, H - INSET);
+    if (e.pointerType !== "touch" || touch.active) ptr.seen = true;
+  });
+  function releasePtr(e) {
+    if (e.pointerId === activePointer) {
+      activePointer = null; touch.active = false;
+      // snap the steering target to the nib so lifting a finger never
+      // drags the nib down to the raw (offset-free) touch point
+      ptr.x = nib.x; ptr.y = nib.y;
     }
-    pointers.set(ev.pointerId, p);
-    el.canvas.classList.add("rg-dragging");
-    if (pointers.size === 2) { var ps = pinchState(); prevCent = ps; prevDist = ps.d; }
-  }, { passive: false });
-
-  el.canvas.addEventListener("pointermove", function (ev) {
-    if (!pointers.has(ev.pointerId) || state.phase !== "play") return;
-    ev.preventDefault();
-    var p = toLogical(ev), last = pointers.get(ev.pointerId);
-    pointers.set(ev.pointerId, p);
-    if (pointers.size === 1) {
-      var dx = p.x - last.x, dy = p.y - last.y;
-      if (ev.shiftKey) { state.player.tx += dx; state.player.ty += dy; }
-      else applyRotation(dx, dy);
-    } else if (pointers.size === 2) {
-      var ps = pinchState();
-      state.player.tx += ps.cx - prevCent.cx;
-      state.player.ty += ps.cy - prevCent.cy;
-      state.player.s = clamp(state.player.s * ps.d / prevDist, S_MIN, S_MAX);
-      prevCent = ps; prevDist = ps.d;
-    }
-    requestRender();
-  }, { passive: false });
-
-  function endPointer(ev) {
-    if (!pointers.has(ev.pointerId)) return;
-    pointers.delete(ev.pointerId);
-    if (pointers.size < 2) prevCent = null;
-    if (pointers.size === 0) el.canvas.classList.remove("rg-dragging");
-    state.player.m = ortho(state.player.m);
   }
-  el.canvas.addEventListener("pointerup", endPointer, { passive: true });
-  el.canvas.addEventListener("pointercancel", endPointer, { passive: true });
+  canvas.addEventListener("pointerup", releasePtr);
+  canvas.addEventListener("pointercancel", releasePtr);
 
-  el.canvas.addEventListener("wheel", function (ev) {
-    /* only capture scroll while the console holds focus — never hijack page scroll */
-    if (state.phase !== "play" || !el.stage.matches(":focus-within")) return;
-    ev.preventDefault();
-    // normalise deltaMode: 1 = lines (Firefox, ~16px/line), 2 = pages
-    var dy = ev.deltaY * (ev.deltaMode === 1 ? 16 : ev.deltaMode === 2 ? 120 : 1);
-    state.player.s = clamp(state.player.s * Math.exp(-dy * 0.0012), S_MIN, S_MAX);
-    requestRender();
-  }, { passive: false });
-
-  el.canvas.addEventListener("dblclick", function (ev) {
-    ev.preventDefault();
-    resetPose();
-  }, { passive: false });
-
-  /* ---------------- input: keyboard (wrapper is focusable) ---------------- */
-  el.stage.addEventListener("keydown", function (ev) {
-    var k = ev.key;
-    if (k === "Enter") {
-      ev.preventDefault();
-      if (!state.begun) begin();
-      else if (state.phase === "registered") nextLevel();
-      else if (state.phase === "done") restart();
+  var KEYMAP = { ArrowLeft: "L", a: "L", A: "L", ArrowRight: "R", d: "R", D: "R", ArrowUp: "U", w: "U", W: "U", ArrowDown: "D", s: "D", S: "D" };
+  stage.addEventListener("keydown", function (e) {
+    var k = e.key;
+    var onBtn = e.target && e.target.closest && e.target.closest("button");
+    if (KEYMAP[k]) { held[KEYMAP[k]] = true; e.preventDefault(); return; }
+    if (k === " ") { if (!onBtn) e.preventDefault(); return; }
+    if (k === "p" || k === "P") {
+      if (!onBtn) e.preventDefault();
+      if (mode === "paused") setPause(false); else setPause(true);
       return;
     }
-    if (state.phase !== "play") return;
-    var TR = 8, handled = true;
-    if (k === "ArrowLeft") { ev.shiftKey ? (state.player.tx -= TR) : applyRotation(-14, 0); }
-    else if (k === "ArrowRight") { ev.shiftKey ? (state.player.tx += TR) : applyRotation(14, 0); }
-    else if (k === "ArrowUp") { ev.shiftKey ? (state.player.ty -= TR) : applyRotation(0, -14); }
-    else if (k === "ArrowDown") { ev.shiftKey ? (state.player.ty += TR) : applyRotation(0, 14); }
-    else if (k === "+" || k === "=") { state.player.s = clamp(state.player.s * 1.05, S_MIN, S_MAX); }
-    else if (k === "-" || k === "_") { state.player.s = clamp(state.player.s / 1.05, S_MIN, S_MAX); }
-    else if (k === "r" || k === "R") { resetPose(); }
-    else handled = false;
-    if (handled) { ev.preventDefault(); requestRender(); }
+    if (k === "r" || k === "R") { if (!onBtn) e.preventDefault(); scrapeKey(); return; }
+    if (k === "Enter" && !onBtn && mode === "edition-end") scrapeKey();
+  });
+  stage.addEventListener("keyup", function (e) { var d = KEYMAP[e.key]; if (d) delete held[d]; });
+
+  el.pause.addEventListener("click", function () { setPause(false); });
+  mount.querySelector(".pl-begin").addEventListener("click", function () {
+    begin(); stage.focus({ preventScroll: true });
+  });
+  mount.querySelector(".pl-scrape").addEventListener("click", function () {
+    var now = performance.now();
+    if (now - lastRWall < 400) return;
+    lastRWall = now;
+    reset(); stage.focus({ preventScroll: true });
   });
 
-  /* ---------------- buttons ---------------- */
-  el.begin.addEventListener("click", begin, { passive: true });
-  el.next.addEventListener("click", nextLevel, { passive: true });
-  el.again.addEventListener("click", restart, { passive: true });
-
-  /* ---------------- observers: visibility, size, theme ---------------- */
-  if ("IntersectionObserver" in window) {
-    onScreen = false;
-    new IntersectionObserver(function (entries) {
-      onScreen = entries[0].isIntersecting;
-      updateLoop();
-    }, { threshold: 0.04 }).observe(el.stage);
-  }
-  document.addEventListener("visibilitychange", function () {
-    docVisible = !document.hidden;
-    if (docVisible) lastT = performance.now();
-    updateLoop();
-  }, { passive: true });
-
-  if ("ResizeObserver" in window) new ResizeObserver(resize).observe(el.stage);
-  else window.addEventListener("resize", resize, { passive: true });
-
-  function onThemeChange() {
-    readTheme();
-    targetDirty = true;
-    requestRender();
-  }
-  new MutationObserver(onThemeChange)
-    .observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class", "style"] });
+  /* ---------------- lifecycle / suspension ---------------- */
+  document.addEventListener("visibilitychange", function () { if (document.hidden && !frozen) setPause(true); });
+  window.addEventListener("blur", function () { held = {}; if (!frozen) setPause(true); });
   try {
-    matchMedia("(prefers-color-scheme: dark)").addEventListener("change", onThemeChange, { passive: true });
-    if (rmQuery) rmQuery.addEventListener("change", function () {
-      reducedMotion = rmQuery.matches;      /* applies to the next run's level VI */
-    }, { passive: true });
+    new IntersectionObserver(function (entries) {
+      var en = entries[entries.length - 1];
+      visible = en.intersectionRatio >= 0.05;
+      refreshRect();
+      if (!visible && !frozen) setPause(true);
+    }, { threshold: [0, 0.05, 0.5, 1] }).observe(canvas);
+  } catch (e) {}
+  try { new ResizeObserver(function () { resizeCanvas(); }).observe(mount); } catch (e) {}
+  window.addEventListener("resize", resizeCanvas);
+  var scrollT = 0;
+  window.addEventListener("scroll", function () { clearTimeout(scrollT); scrollT = setTimeout(refreshRect, 150); }, { passive: true });
+  new MutationObserver(function () { readPalette(); if (!rafId) render(); })
+    .observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  try {
+    matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { readPalette(); if (!rafId) render(); });
+  } catch (e) {}
+  try {
+    var rmq = matchMedia("(prefers-reduced-motion: reduce)");
+    RM = rmq.matches;
+    rmq.addEventListener("change", function () { RM = rmq.matches; });
   } catch (e) {}
 
-  el.tick.style.left = THRESH + "%";
-  resize();
-  requestRender();
-
-  /* ============================================================
-     test hook — harmless in production. Lets QA drive the game
-     headlessly and deterministically: read state, set the player
-     pose exactly, and pump frames without the rAF loop.
-     ============================================================ */
-  window.__regGame = {
-    getState: function () {
-      return {
-        begun: state.begun, phase: state.phase, running: running,
-        levelIndex: state.levelIndex,
-        level: state.level ? state.level.def.name : null,
-        numeral: state.level ? state.level.def.n : null,
-        threshold: state.level ? state.level.threshold : THRESH,
-        holdMs: state.level ? state.level.holdMs : HOLD_MS,
-        align: state.align, errMm: state.errMm, rmsPx: state.rms,
-        levelMs: state.levelMs, totalMs: state.totalMs,
-        results: state.results.slice()
-      };
-    },
-    getPose: function () { return clonePose(state.player); },
-    getTargetPose: function () { return clonePose(state.target); },
-    /* setPose(tx, ty, s, rot) — rot: 9-element matrix, {rx,ry,rz} euler, or null to keep */
-    setPose: function (tx, ty, s, rot) {
-      if (typeof tx === "number") state.player.tx = tx;
-      if (typeof ty === "number") state.player.ty = ty;
-      if (typeof s === "number") state.player.s = clamp(s, S_MIN, S_MAX);
-      if (rot && rot.length === 9) state.player.m = Array.prototype.slice.call(rot);
-      else if (rot && typeof rot === "object") {
-        state.player.m = mul3(rotZ(rot.rz || 0), mul3(rotY(rot.ry || 0), rotX(rot.rx || 0)));
+  /* ---------------- test hook — harmless in production ----------------
+     Determinism contract: with freeze(true), identical (seed, ordered calls to
+     setTarget/press/release/step/next) ⇒ bit-identical getState() forever.
+     All sim time flows through the tick counter; no wall-clock reads inside the sim. */
+  window.__game2 = {
+    seed: function (n) { pinnedSeed = n >>> 0; return n; },
+    begin: function () { begin(); },
+    reset: function () { reset(); },
+    next: function () { if (mode === "interstitial") finishInter(); else if (mode === "edition-end") reset(); },
+    step: function (nFrames) {
+      var n = nFrames == null ? 1 : nFrames | 0;
+      if (mode === "menu" || mode === "paused") return;
+      for (var i = 0; i < n; i++) {
+        if (!activeMode()) break;
+        tick(); tick(); /* one frame = 1/60 s = 2 ticks */
       }
-      requestRender();
+      render();
     },
-    pumpFrame: function (dt) { step(dt || 16.7); render(); updateHUD(dt || 16.7); },
-    begin: begin, next: nextLevel, reset: restart, resetPose: resetPose
+    freeze: function (on) {
+      frozen = !!on;
+      if (frozen) { if (rafId) { cancelAnimationFrame(rafId); rafId = 0; } }
+      else startLoop();
+    },
+    setTarget: function (x, y) {
+      ptr.seen = true; touch.active = false;
+      ptr.x = clamp(x, INSET, W - INSET); ptr.y = clamp(y, INSET, H - INSET);
+    },
+    press: function (key) {
+      if (key === "p" || key === "P") { if (mode === "paused") setPause(false); else setPause(true); return; }
+      if (key === "r" || key === "R") { scrapeKey(); return; }
+      var d = KEYMAP[key]; if (d) held[d] = true;
+    },
+    release: function (key) { var d = KEYMAP[key]; if (d) delete held[d]; },
+    getState: function () {
+      var i, j, gs = [], ss = [];
+      for (i = 0; i < ghosts.length; i++) {
+        var pp = [], pts = ghosts[i].pts;
+        for (j = 0; j < pts.length; j++) { if (pts[j]) pp.push([pts[j][0], pts[j][1]]); }
+        gs.push({ lethal: ghosts[i].lethal, points: pp });
+      }
+      for (i = 0; i < seals.length; i++) ss.push([seals[i][0], seals[i][1]]);
+      return {
+        mode: mode, edition: edition, run: run, grace: grace,
+        timeLeft: Math.round(runLeft / 120 * 10) / 10,
+        nib: { x: nib.x, y: nib.y, vx: nib.vx, vy: nib.vy },
+        seals: ss, sealsCollected: sealsCollected, sealsTotal: SEALS_N,
+        ghosts: gs, score: score, best: best === null ? 0 : best,
+        alive: alive, unblotted: unblotted, lastEnd: lastEnd
+      };
+    }
   };
+
+  /* ---------------- init: single synchronous static paint, zero rAF ---------------- */
+  readPalette();
+  armDprWatch();
+  resizeCanvas();
+  updateHUD();
+  refreshAria();
 })();
 </script>
 </body>
