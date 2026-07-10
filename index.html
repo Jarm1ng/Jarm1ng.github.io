@@ -32,7 +32,7 @@
 <meta name="twitter:image" content="https://jarm1ng.github.io/og-image.png" />
 
 <!-- ============================ FAVICON (inline SVG monogram) ============================ -->
-<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='12'%20fill='%23f7f2e8'/%3E%3Cpath%20d='M22%2016h22v6H30v9h11v6H30v11h-8z'%20fill='%236f2531'/%3E%3Cpath%20d='M44%2042c0%204-2.5%206-7%206'%20fill='none'%20stroke='%236f2531'%20stroke-width='6'/%3E%3C/svg%3E" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Cstyle%3E@media(prefers-color-scheme:dark)%7Brect%7Bfill:%2314110d%7Dpath:first-of-type%7Bfill:%23db8d92%7Dpath%5Bstroke%5D%7Bstroke:%23db8d92%7D%7D%3C/style%3E%3Crect%20width='64'%20height='64'%20rx='12'%20fill='%23f7f2e8'/%3E%3Cpath%20d='M22%2016h22v6H30v9h11v6H30v11h-8z'%20fill='%236f2531'/%3E%3Cpath%20d='M44%2042c0%204-2.5%206-7%206'%20fill='none'%20stroke='%236f2531'%20stroke-width='6'/%3E%3C/svg%3E" />
 
 <!-- ============================ FOUC GUARD ============================
      Tiny render-blocking init: resolve the theme BEFORE the stylesheet
@@ -58,7 +58,7 @@
 <!-- ============================ FONTS ============================ -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 
 <!-- ============================ JSON-LD : Person schema ============================ -->
 <script type="application/ld+json">
@@ -195,8 +195,17 @@
    BASE / RESET
    ============================================================ */
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  /* slim warm-taupe thumb on Windows/Linux; inherits both themes via the token */
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--ink-faint) 55%, transparent) transparent;
+}
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* elements' own :active / :focus-visible states are the sole tap feedback */
+a, button { -webkit-tap-highlight-color: transparent; }
 
 body {
   margin: 0;
@@ -265,8 +274,11 @@ body::after {
   :root:not([data-theme="light"]) body::after { opacity: 0.4; }
 }
 
-::selection { background: var(--accent); color: #fff; }
+::selection { background: var(--accent); color: #fdf6ee; }
 :root[data-theme="dark"] ::selection { color: #14110d; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) ::selection { color: #14110d; }
+}
 
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
@@ -459,7 +471,12 @@ section[id],
   position: relative;
   transition: color 0.25s ease, background 0.25s ease;
 }
-.navlinks a:hover { color: var(--ink); background: var(--paper-2); text-decoration: none; }
+.navlinks a:hover { text-decoration: none; }
+@media (hover: hover) and (pointer: fine) {
+  .navlinks a:hover { color: var(--ink); background: var(--paper-2); }
+}
+/* touch feedback (tap-highlight is suppressed globally) */
+.navlinks a:active { color: var(--ink); background: var(--paper-2); }
 .navlinks a.active { color: var(--accent); }
 .navlinks a.active::after {
   content: "";
@@ -483,7 +500,9 @@ section[id],
   cursor: pointer;
   transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
 }
-.theme-toggle:hover, .menu-btn:hover { border-color: var(--accent); }
+@media (hover: hover) and (pointer: fine) {
+  .theme-toggle:hover, .menu-btn:hover { border-color: var(--accent); }
+}
 .theme-toggle:active, .menu-btn:active { transform: scale(0.94); }
 .theme-toggle svg, .menu-btn svg { width: 18px; height: 18px; }
 /* graceful icon cross-fade / rotate rather than a hard display swap */
@@ -715,7 +734,12 @@ section[id],
   color: var(--ink);
   transition: border-color 0.3s ease, transform 0.3s cubic-bezier(0.2,0.7,0.2,1), background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
-.btn:hover { text-decoration: none; border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow); }
+.btn:hover { text-decoration: none; }
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow); }
+}
+/* press: the button settles back to the paper under the finger */
+.btn:active { transform: translateY(0); box-shadow: none; }
 .btn svg { width: 16px; height: 16px; flex: none; }
 .btn--primary {
   background: var(--accent);
@@ -727,7 +751,9 @@ section[id],
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) .btn--primary { color: #1a1410; }
 }
-.btn--primary:hover { background: var(--accent-deep); border-color: var(--accent-deep); }
+@media (hover: hover) and (pointer: fine) {
+  .btn--primary:hover { background: var(--accent-deep); border-color: var(--accent-deep); }
+}
 
 /* Hero monogram / mesh motif — framed as a "registered scan" panel.
    Sizing/placement now lives on the wrapping .motif-frame; the motif fills it. */
@@ -860,7 +886,9 @@ section[id],
   padding: 0.44rem 1rem;
   transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease, transform 0.3s cubic-bezier(0.2,0.7,0.2,1);
 }
-.chip:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-tint); transform: translateY(-1px); }
+@media (hover: hover) and (pointer: fine) {
+  .chip:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-tint); transform: translateY(-1px); }
+}
 .chip .dot {
   display: inline-block;
   width: 5px; height: 5px;
@@ -871,7 +899,9 @@ section[id],
   opacity: 0.65;
   transition: transform 0.3s cubic-bezier(0.2,1.5,0.4,1), opacity 0.3s ease;
 }
-.chip:hover .dot { transform: scale(1.5); opacity: 1; }
+@media (hover: hover) and (pointer: fine) {
+  .chip:hover .dot { transform: scale(1.5); opacity: 1; }
+}
 
 /* ============================================================
    PUBLICATIONS
@@ -900,8 +930,10 @@ section[id],
   transform: translateY(-50%);
   transition: height 0.4s cubic-bezier(0.2,0.7,0.2,1);
 }
-.pub:hover { border-color: color-mix(in srgb, var(--accent) 55%, var(--rule)); transform: translateY(-3px); box-shadow: var(--shadow-lift); }
-.pub:hover::before { height: 100%; }
+@media (hover: hover) and (pointer: fine) {
+  .pub:hover { border-color: color-mix(in srgb, var(--accent) 55%, var(--rule)); transform: translateY(-3px); box-shadow: var(--shadow-lift); }
+  .pub:hover::before { height: 100%; }
+}
 .pub.is-new { border-color: color-mix(in srgb, var(--new) 45%, var(--rule)); }
 /* flagship paper gets a faint accent-tint corner wash + oxblood top hairline */
 .pub.is-new::after {
@@ -973,11 +1005,13 @@ section[id],
   letter-spacing: -0.008em;
 }
 .pub__title a { color: var(--ink); }
-.pub__title a:hover { color: var(--accent); }
+@media (hover: hover) and (pointer: fine) {
+  .pub__title a:hover { color: var(--accent); }
+}
 .pub__authors { font-size: 0.92rem; color: var(--ink-soft); margin: 0 0 0.35rem; }
 .pub__authors .me { color: var(--ink); font-weight: 600; }
-.pub__venue { font-size: 0.9rem; color: var(--ink-faint); font-style: italic; font-family: var(--font-serif); margin: 0 0 0.75rem; font-variant-numeric: tabular-nums; }
-.pub__summary { font-size: 0.94rem; color: var(--ink-soft); margin: 0 0 0.9rem; line-height: 1.62; }
+.pub__venue { font-size: 0.9rem; color: var(--ink-faint); font-style: italic; font-family: var(--font-serif); margin: 0 0 0.75rem; font-variant-numeric: oldstyle-nums proportional-nums; }
+.pub__summary { font-size: 0.94rem; color: var(--ink-soft); margin: 0 0 0.9rem; line-height: 1.62; text-wrap: pretty; }
 .pub__links { display: flex; flex-wrap: wrap; gap: 1.1rem; font-size: 0.85rem; }
 .pub__links a { display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 500; }
 .pub__links a svg { width: 13px; height: 13px; }
@@ -1001,7 +1035,7 @@ section[id],
 }
 .inprep__label::before { content: ""; width: 20px; height: 1px; background: var(--accent-soft); }
 .inprep__title { font-family: var(--font-serif); font-size: 1.12rem; font-weight: 500; margin: 0 0 0.4rem; color: var(--ink); font-variation-settings: "opsz" 20; }
-.inprep__meta { font-size: 0.9rem; color: var(--ink-soft); margin: 0; }
+.inprep__meta { font-size: 0.9rem; color: var(--ink-soft); margin: 0; text-wrap: pretty; }
 .inprep__meta .me { color: var(--ink); font-weight: 600; }
 .inprep__meta .status { display: block; margin-top: 0.4rem; font-style: italic; font-family: var(--font-serif); color: var(--ink-faint); }
 
@@ -1092,7 +1126,9 @@ section[id],
   box-shadow: var(--shadow);
   transition: border-color 0.35s ease, transform 0.35s cubic-bezier(0.2,0.7,0.2,1), box-shadow 0.35s ease;
 }
-.tl-card:hover { border-color: color-mix(in srgb, var(--accent) 55%, var(--rule)); transform: translateY(-2px); box-shadow: var(--shadow-lift); }
+@media (hover: hover) and (pointer: fine) {
+  .tl-card:hover { border-color: color-mix(in srgb, var(--accent) 55%, var(--rule)); transform: translateY(-2px); box-shadow: var(--shadow-lift); }
+}
 
 .tl-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.45rem 0.8rem; margin-bottom: 0.7rem; }
 .tl-date {
@@ -1126,6 +1162,7 @@ section[id],
   font-size: 0.92rem;
   color: var(--ink-soft);
   line-height: 1.56;
+  text-wrap: pretty;
 }
 .tl-points li::before {
   content: "";
@@ -1189,9 +1226,11 @@ section[id],
   transition: width 0.35s cubic-bezier(0.2,0.7,0.2,1);
 }
 .awards li:first-child { padding-top: 0.25rem; }
-.awards li:hover { padding-left: 0.85rem; }
-.awards li:hover::before { width: 0.7rem; }
-.awards li:hover .a-name { color: var(--accent); }
+@media (hover: hover) and (pointer: fine) {
+  .awards li:hover { padding-left: 0.85rem; }
+  .awards li:hover::before { width: 0.7rem; }
+  .awards li:hover .a-name { color: var(--accent); }
+}
 .awards .a-name { font-family: var(--font-serif); font-size: 1.06rem; font-weight: 500; color: var(--ink); line-height: 1.35; font-variation-settings: "opsz" 18; transition: color 0.35s cubic-bezier(0.2,0.7,0.2,1); }
 .awards .a-org { display: block; font-family: var(--font-sans); font-size: 0.84rem; font-weight: 400; color: var(--ink-faint); margin-top: 0.18rem; }
 .awards .a-year {
@@ -1240,7 +1279,9 @@ section[id],
   padding: 0.32rem 0.72rem;
   transition: border-color 0.3s ease, color 0.3s ease;
 }
-.skill-tags span:hover { border-color: var(--accent-line); color: var(--ink); }
+@media (hover: hover) and (pointer: fine) {
+  .skill-tags span:hover { border-color: var(--accent-line); color: var(--ink); }
+}
 
 /* ============================================================
    CONTACT
@@ -1290,7 +1331,12 @@ section[id],
   min-width: 232px;
   transition: border-color 0.3s ease, color 0.3s ease, transform 0.3s cubic-bezier(0.2,0.7,0.2,1), box-shadow 0.3s ease;
 }
-.contact__links a:hover { text-decoration: none; border-color: var(--accent); color: var(--accent); transform: translateX(3px); box-shadow: var(--shadow); }
+.contact__links a:hover { text-decoration: none; }
+@media (hover: hover) and (pointer: fine) {
+  .contact__links a:hover { border-color: var(--accent); color: var(--accent); transform: translateX(3px); box-shadow: var(--shadow); }
+}
+/* touch feedback (tap-highlight is suppressed globally) */
+.contact__links a:active { border-color: var(--accent); color: var(--accent); }
 .contact__links a svg { width: 17px; height: 17px; flex: none; color: var(--accent); }
 .contact__links a .ext { margin-left: auto; opacity: 0.5; }
 
@@ -1303,7 +1349,12 @@ footer {
   color: var(--ink-faint);
 }
 .footer__inner { display: flex; flex-wrap: wrap; gap: 1rem 2rem; align-items: center; justify-content: space-between; }
-.footer__brand { display: flex; align-items: center; gap: 0.6rem; font-family: var(--font-serif); color: var(--ink); font-size: 1rem; font-weight: 500; }
+.footer__brand { display: flex; align-items: center; gap: 0.6rem; font-family: var(--font-serif); color: var(--ink); font-size: 1rem; font-weight: 500; transition: color 0.25s ease; }
+/* the name warms to oxblood instead of underlining across the icon gap */
+.footer__brand:hover { text-decoration: none; }
+@media (hover: hover) and (pointer: fine) {
+  .footer__brand:hover { color: var(--accent); }
+}
 .footer__brand .mono { width: 26px; height: 26px; }
 .footer__meta { display: flex; flex-direction: column; gap: 0.18rem; text-align: right; }
 @media (max-width: 560px) { .footer__meta { text-align: left; } }
@@ -1464,6 +1515,8 @@ footer {
   gap: 0.5rem;
   min-height: 1.1em;
   font-weight: 500;
+  /* live "Aligning… 47%" counter reads like an instrument readout */
+  font-variant-numeric: tabular-nums;
 }
 .reg-caption .reg-check {
   width: 12px; height: 12px; flex: none;
@@ -1490,8 +1543,10 @@ footer {
   transition: opacity 0.3s ease, color 0.2s ease, transform 0.4s cubic-bezier(0.2,0.7,0.2,1);
 }
 .reg-rearm.is-shown { opacity: 0.7; pointer-events: auto; }
-.reg-rearm:hover { color: var(--accent); opacity: 1; }
-.reg-rearm:active { transform: rotate(-120deg); }
+@media (hover: hover) and (pointer: fine) {
+  .reg-rearm:hover { color: var(--accent); opacity: 1; }
+}
+.reg-rearm:active { color: var(--accent); opacity: 1; transform: rotate(-120deg); }
 .reg-foot {
   margin: 0.3rem 0 0;
   font-family: var(--font-sans);
@@ -1499,7 +1554,7 @@ footer {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink-faint);
-  opacity: 0.55;
+  opacity: 0.72;
 }
 @media (max-width: 880px) { .reg-foot { display: none; } }
 
@@ -1548,6 +1603,8 @@ footer {
 @media (prefers-reduced-motion: reduce) {
   /* ghost/handle are never created in JS under reduced motion; belt+braces */
   .mesh-ghost, .reg-handle { display: none; }
+  /* no drag control exists → hide its invite; .reg-foot remains the static label */
+  .reg-caption { display: none; }
   .reg-caption .reg-check { transition: none; }
   .reg-rearm { transition: none; }
   .mesh-ray.reg-confirm path { animation: none; }
@@ -1560,6 +1617,63 @@ footer {
   :root[data-theme="dark"] .tl-item--now .tl-dot { box-shadow: none; }
   /* keep the dark-mode current dot ring (non-animated) for legibility */
   :root[data-theme="dark"] .tl-item--now .tl-dot { box-shadow: 0 0 0 4px var(--accent-tint); }
+}
+
+/* ============================================================
+   PRINT — hand-finished output. Kept LAST in the stylesheet so
+   source order beats both dark-token blocks: light ink on white,
+   fixed layers and interactive chrome removed, reveals un-hidden,
+   cards kept whole across page breaks.
+   ============================================================ */
+@media print {
+  :root,
+  :root[data-theme="dark"],
+  :root:not([data-theme="light"]) {
+    --paper:        #ffffff;
+    --paper-warm:   #ffffff;
+    --paper-2:      #f6f3ec;
+    --paper-3:      #efe9dc;
+    --ink:          #1a1611;
+    --ink-soft:     #3f382e;
+    --ink-faint:    #5f564a;
+    --rule:         #d8d2c4;
+    --rule-soft:    #e7e2d6;
+    --accent:       #6f2531;
+    --accent-deep:  #561a25;
+    --accent-soft:  #8a3c47;
+    --accent-tint:  #f3e8e6;
+    --new:          #1f6048;
+    --new-tint:     #e2efe8;
+    --card:         #ffffff;
+    --card-hi:      #ffffff;
+    --shadow:       none;
+    --shadow-lift:  none;
+  }
+  html { scroll-behavior: auto; }
+  body { background: #ffffff; }
+  /* dark-theme override sets near-black text on the primary button; force the
+     ivory-on-oxblood pairing when backgrounds print */
+  .btn--primary { color: #fdf6ee !important; }
+  /* fixed layers (grain/grid/progress) smear across printed pages; UI chrome
+     and the interactive demo surface have no meaning on paper */
+  body::before,
+  body::after,
+  .scrollbar,
+  .topbar,
+  .skip-link,
+  .hero__mark,
+  .reg-overlay,
+  .reg-caption,
+  .reg-foot { display: none !important; }
+  /* un-hide every unscrolled reveal so no section prints blank */
+  .reveal, .tl-item { opacity: 1 !important; transform: none !important; }
+  .hero h1 .surname::after { transform: none !important; }
+  .tl-item::after { opacity: 1 !important; }
+  .timeline__progress { display: none; }
+  .pub, .tl-card, .inprep, .awards li, .skill-group { break-inside: avoid; }
+  .pub, .tl-card, .contact__links a, .hero__status, .btn { box-shadow: none !important; }
+  .section { padding-block: 2.5rem; }
+  a { text-decoration: none; }
 }
 </style>
 </head>
@@ -1721,7 +1835,7 @@ footer {
       <svg class="reg-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
       <button class="reg-rearm" id="regRearm" type="button" aria-label="Re-misalign the model and try again" title="Try again">&#8635;</button>
     </p>
-    <p class="reg-foot">Vis2Reg &middot; landmark-free 3D&rarr;2D registration</p>
+    <p class="reg-foot">Preoperative model &rarr; intraoperative view &middot; 3D&rarr;2D registration</p>
     <span class="sr-only" id="regStatus" role="status" aria-live="polite"></span>
     </div>
   </div>
@@ -2053,7 +2167,7 @@ footer {
 <section class="section contact" id="contact" aria-labelledby="contact-h">
   <div class="shell contact__grid">
     <div class="reveal">
-      <h2 id="contact-h">Let's <em>connect</em></h2>
+      <h2 id="contact-h">Let&rsquo;s <em>connect</em></h2>
       <p>Open to PhD positions and research collaboration on medical image analysis, surgical computer vision, and image-guided intervention. The best way to reach me is by email.</p>
     </div>
     <div class="contact__links reveal">
@@ -2695,6 +2809,7 @@ footer {
 
     /* ============ re-arm / re-misalign ============ */
     function reMisalign() {
+      window.clearTimeout(announceTimer);   // drop any pending stale announcement
       registered = false;
       touched = false;
       springTarget = null;
@@ -2713,9 +2828,12 @@ footer {
     }
 
     /* ============ (2) parallax pointermove — over the motif ONLY ============ */
+    var motifRect = null;   // cached; invalidated on resize / scroll-end
     function onMotifMove(e) {
-      if (!armedParallax || dragging) return;
-      var rect = motifEl.getBoundingClientRect();
+      if (!armedParallax || dragging || !motifEl) return;
+      if (!motifRect) motifRect = motifEl.getBoundingClientRect();
+      var rect = motifRect;
+      if (!rect.width || !rect.height) { motifRect = null; return; }
       var nx = (e.clientX - rect.left) / rect.width;   // 0..1
       var ny = (e.clientY - rect.top) / rect.height;
       nx = Math.max(0, Math.min(1, nx)); ny = Math.max(0, Math.min(1, ny));
@@ -2742,9 +2860,12 @@ footer {
     var scrollEndTimer = 0;
     window.addEventListener("scroll", function () {
       window.clearTimeout(scrollEndTimer);
-      scrollEndTimer = window.setTimeout(refreshCTM, 120);
+      scrollEndTimer = window.setTimeout(function () { motifRect = null; refreshCTM(); }, 120);
     }, { passive: true });
-    window.addEventListener("resize", function () { ctmInv = null; }, { passive: true });
+    window.addEventListener("resize", function () {
+      motifRect = null;
+      if (dragging) refreshCTM(); else ctmInv = null;   // keep drag coords accurate through a resize
+    }, { passive: true });
 
     /* ============ visibilitychange → pause loop, settle on return ============ */
     document.addEventListener("visibilitychange", function () {
