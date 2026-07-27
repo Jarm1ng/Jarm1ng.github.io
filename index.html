@@ -6,7 +6,7 @@
 
 <!-- ============================ SEO / METADATA ============================ -->
 <title>Jiaming Feng — Medical Image Analysis &amp; Surgical Computer Vision</title>
-<meta name="description" content="Jiaming Feng is a researcher in medical image analysis and surgical computer vision at the University of Leeds, working on geometry-aware 3D-2D registration, anatomical landmark segmentation, and AR-guided liver intervention." />
+<meta name="description" content="Jiaming Feng is a researcher in medical image analysis and surgical computer vision &#8212; an incoming fully funded PhD student at the University of Leeds, working on image-guided intervention supported with mixed reality." />
 <meta name="author" content="Jiaming Feng" />
 <link rel="canonical" href="https://jarm1ng.github.io/" />
 <meta name="color-scheme" content="light dark" />
@@ -17,7 +17,7 @@
 <!-- Open Graph -->
 <meta property="og:type" content="profile" />
 <meta property="og:title" content="Jiaming Feng — Medical Image Analysis &amp; Surgical Computer Vision" />
-<meta property="og:description" content="Researcher in medical image analysis and surgical computer vision at the University of Leeds — bridging preoperative 3D anatomy and the intraoperative surgical view." />
+<meta property="og:description" content="Researcher in medical image analysis and surgical computer vision — fully funded PhD at the University of Leeds from 2027, on image-guided intervention supported with mixed reality." />
 <meta property="og:url" content="https://jarm1ng.github.io/" />
 <meta property="og:site_name" content="Jiaming Feng" />
 <meta property="og:locale" content="en_GB" />
@@ -28,7 +28,7 @@
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Jiaming Feng — Medical Image Analysis &amp; Surgical Computer Vision" />
-<meta name="twitter:description" content="Researcher in medical image analysis and surgical computer vision at the University of Leeds — bridging preoperative 3D anatomy and the intraoperative surgical view." />
+<meta name="twitter:description" content="Researcher in medical image analysis and surgical computer vision — fully funded PhD at the University of Leeds from 2027, on image-guided intervention supported with mixed reality." />
 <meta name="twitter:image" content="https://jarm1ng.github.io/og-image.png" />
 
 <!-- ============================ FAVICON (inline SVG "JF" monogram, dark-aware) ============================ -->
@@ -77,7 +77,7 @@
   "name": "Jiaming Feng",
   "givenName": "Jiaming",
   "familyName": "Feng",
-  "jobTitle": "MSc Researcher in Medical Image Analysis & Surgical Computer Vision",
+  "jobTitle": "Incoming PhD Student in Medical Image Analysis & Surgical Computer Vision",
   "url": "https://jarm1ng.github.io/",
   "email": "mailto:vqkc0507@leeds.ac.uk",
   "affiliation": {
@@ -956,100 +956,6 @@ section[id], #main, #top { scroll-margin-top: clamp(4.25rem, 7vw, 5.75rem); }
 .inprep__meta .status { display: block; margin-top: 0.35rem; font-style: italic; font-family: var(--font-serif); color: var(--ink-faint); }
 
 /* ============================================================
-   THE REGISTRATION CONSOLE — wide cinematic band staging the
-   interactive piece. The game mounts flush into #gameMount.
-   ============================================================ */
-.console-band {
-  background: var(--band);
-  border-block: 1px solid var(--rule);
-  padding-block: clamp(5rem, 10vw, 8.5rem);
-}
-.console__caption {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.25rem);
-  color: var(--ink-soft);
-  margin: calc(-1 * clamp(1rem, 2.5vw, 2rem)) 0 clamp(1.75rem, 3.5vw, 2.5rem);
-  max-width: 58ch;
-}
-
-.console__frame {
-  position: relative;
-  display: grid;
-  border: 1px solid var(--rule);
-  background-color: var(--console);
-  /* faint registration grid inside the plate */
-  background-image:
-    linear-gradient(var(--rule-soft) 1px, transparent 1px),
-    linear-gradient(90deg, var(--rule-soft) 1px, transparent 1px);
-  background-size: 44px 44px;
-  background-position: -1px -1px;
-  box-shadow: var(--shadow);
-}
-/* crop-mark corners — the frame is "registered" on the page */
-.crop {
-  position: absolute;
-  width: 18px; height: 18px;
-  border: 1.5px solid var(--accent);
-  opacity: 0.85;
-  pointer-events: none;
-}
-.crop--tl { top: -9px;    left: -9px;  border-right: none; border-bottom: none; }
-.crop--tr { top: -9px;    right: -9px; border-left: none;  border-bottom: none; }
-.crop--bl { bottom: -9px; left: -9px;  border-right: none; border-top: none; }
-.crop--br { bottom: -9px; right: -9px; border-left: none;  border-top: none; }
-
-#gameMount {
-  grid-area: 1 / 1;
-  position: relative;
-  z-index: 1;
-  /* grid items default to min-width:auto — without this the canvas's
-     intrinsic width blows the track out past the frame on small screens */
-  min-width: 0;
-  max-width: 100%;
-}
-/* Height contract: the mounted console supplies its own height; the
-   min-height applies only while the mount is empty (no-JS / pre-mount),
-   so the frame never strands whitespace below a shorter game. */
-#gameMount:empty { min-height: clamp(440px, 60vh, 560px); }
-/* standby plate — rendered only when scripting is unavailable (<noscript>) */
-.console__empty {
-  grid-area: 1 / 1;
-  z-index: 0;
-  display: grid;
-  place-content: center;
-  justify-items: center;
-  gap: 1.15rem;
-  text-align: center;
-  padding: 2.5rem 1.5rem;
-}
-.console__reticle { width: clamp(96px, 14vw, 132px); height: auto; color: var(--ink-faint); opacity: 0.75; }
-.console__reticle .spin {
-  transform-origin: 60px 60px;
-  animation: reticle-spin 80s linear infinite;
-}
-@keyframes reticle-spin { to { transform: rotate(360deg); } }
-@media (prefers-reduced-motion: reduce) { .console__reticle .spin { animation: none; } }
-.console__standby { margin: 0; color: var(--ink-faint); }
-.console__note {
-  margin: 0;
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 0.98rem;
-  color: var(--ink-faint);
-  max-width: 34ch;
-}
-
-.console__plate {
-  display: flex;
-  justify-content: space-between;
-  gap: 1.5rem;
-  margin-top: 0.9rem;
-}
-.console__plate .folio { font-size: 0.62rem; }
-@media (max-width: 560px) { .console__plate .folio:last-child { display: none; } }
-
-/* ============================================================
    EXPERIENCE — a two-column register: dates left, record right,
    a spine between the columns with a scroll-driven oxblood fill.
    ============================================================ */
@@ -1411,12 +1317,11 @@ footer {
   html { scroll-behavior: auto; }
   body { background: #ffffff; }
   .btn--primary { color: #fdf6ee !important; }
-  /* fixed layers, chrome, and the interactive console have no meaning on paper */
+  /* fixed layers and chrome have no meaning on paper */
   body::before,
   .scrollbar,
   .topbar,
-  .skip-link,
-  #playground { display: none !important; }
+  .skip-link { display: none !important; }
   .reveal { opacity: 1 !important; transform: none !important; }
   .hero h1 .surname::after { transform: none !important; }
   .fx-grid, .fx-node, .fx-cam { opacity: 1 !important; transform: none !important; transition: none !important; }
@@ -1455,7 +1360,6 @@ footer {
         <a href="#about">About</a>
         <a href="#interests">Interests</a>
         <a href="#publications">Publications</a>
-        <a href="#playground">Play</a>
         <a href="#experience">Experience</a>
         <a href="#honours">Honours</a>
         <a href="#skills">Skills</a>
@@ -1495,14 +1399,15 @@ footer {
 
     <div class="deck__aside reveal">
       <p class="deck__role">
-        <strong>MSc Advanced Computer Science</strong>, University of Leeds<br/>
-        <strong>Research Collaborator</strong>, AI in Medicine &amp; Surgery Group,<br/>
-        under Dr Sharib Ali
+        <strong>Incoming PhD student</strong>, School of Computer Science,<br/>
+        University of Leeds &mdash; fully funded, from February 2027<br/>
+        <strong>MSc Advanced Computer Science</strong> &middot; Research Collaborator,<br/>
+        AI in Medicine &amp; Surgery Group, under Dr Sharib Ali
       </p>
       <div class="hero__statusloc">
         <p class="hero__status">
           <span class="dot" aria-hidden="true"></span>
-          Open to PhD positions &amp; research collaboration
+          Fully funded PhD &middot; starting February 2027
         </p>
         <span class="hero__loc">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -1544,13 +1449,15 @@ footer {
     <div class="lede reveal">
       <p class="dropcap">I am a researcher in medical image analysis and surgical computer vision, reading for an MSc in Advanced Computer Science at the University of Leeds and collaborating with the AI in Medicine and Surgery Group under Dr&nbsp;Sharib&nbsp;Ali.</p>
       <p>My research centres on computer vision for <em>image-guided liver intervention</em> — connecting preoperative 3D anatomy to the intraoperative view through geometry-aware 3D-2D registration, anatomical landmark segmentation, and augmented-reality guidance for surgery.</p>
+      <p>From February 2027 I will begin a fully funded PhD at Leeds &mdash; awarded the School of Computer Science Full Fee and Maintenance Scholarship (International) &mdash; on <em>image-guided intervention supported with mixed reality</em>.</p>
       <p>More broadly, I am drawn to clinically grounded systems that carry reliable 3D understanding into the operating room.</p>
     </div>
 
     <aside class="about__aside reveal">
       <h3 class="folio">At a glance</h3>
       <ul class="fact-list">
-        <li><span class="k">Role</span><span class="v">MSc student &amp; Research Collaborator</span></li>
+        <li><span class="k">Role</span><span class="v">Incoming PhD student &middot; Research Collaborator</span></li>
+        <li><span class="k">PhD</span><span class="v">Fully funded, from Feb 2027</span></li>
         <li><span class="k">Group</span><span class="v">AI in Medicine &amp; Surgery</span></li>
         <li><span class="k">Advisor</span><span class="v">Dr Sharib Ali</span></li>
         <li><span class="k">Field</span><span class="v">Medical imaging &amp; surgical CV</span></li>
@@ -1707,61 +1614,34 @@ footer {
 </section>
 
 <!-- ============================ 04 · THE REGISTRATION CONSOLE ============================ -->
-<section class="section console-band" id="playground" aria-labelledby="playground-h">
-  <div class="shell">
-    <div class="section-head reveal">
-      <span class="num" aria-hidden="true">04</span>
-      <h2 id="playground-h">The Composing Room</h2>
-      <span class="head-note folio">Interactive</span>
-    </div>
 
-    <p class="console__caption reveal">A game in five impressions — every run you play bleeds through into the next.</p>
 
-    <div class="reveal">
-      <div class="console__frame">
-        <span class="crop crop--tl" aria-hidden="true"></span>
-        <span class="crop crop--tr" aria-hidden="true"></span>
-        <span class="crop crop--bl" aria-hidden="true"></span>
-        <span class="crop crop--br" aria-hidden="true"></span>
-
-        <div id="gameMount"></div>
-
-        <!-- standby plate — rendered only when scripting is unavailable -->
-        <noscript>
-        <div class="console__empty">
-          <svg class="console__reticle" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true" focusable="false">
-            <circle cx="60" cy="60" r="44"/>
-            <g class="spin">
-              <circle cx="60" cy="60" r="33" stroke-dasharray="3 6" opacity="0.8"/>
-            </g>
-            <path d="M60 4v22M60 94v22M4 60h22M94 60h22"/>
-            <path d="M60 48v24M48 60h24" stroke="var(--accent)" stroke-width="1.4"/>
-            <circle cx="60" cy="60" r="2.4" fill="var(--accent)" stroke="none"/>
-          </svg>
-          <p class="console__standby folio">Console standing by</p>
-          <p class="console__note">Enable JavaScript to play Palimpsest.</p>
-        </div>
-        </noscript>
-      </div>
-
-      <div class="console__plate" aria-hidden="true">
-        <span class="folio">Palimpsest &mdash; an edition in five runs</span>
-        <span class="folio">Set silent &middot; best kept on this device</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================ 05 · EXPERIENCE — THE REGISTER ============================ -->
+<!-- ============================ 04 · EXPERIENCE — THE REGISTER ============================ -->
 <section class="section shell" id="experience" aria-labelledby="exp-h">
   <div class="section-head reveal">
-    <span class="num" aria-hidden="true">05</span>
+    <span class="num" aria-hidden="true">04</span>
     <h2 id="exp-h">Research &amp; Experience</h2>
-    <span class="head-note folio">2021 &rarr; present</span>
+    <span class="head-note folio">2021 &rarr; 2027</span>
   </div>
 
   <div class="register">
     <div class="register__spine" aria-hidden="true"><div class="register__progress" id="regProgress"></div></div>
+
+    <!-- 0 · Incoming PhD -->
+    <article class="reg-entry reg-entry--edu reveal">
+      <span class="reg-dot" aria-hidden="true"></span>
+      <div class="reg-when">
+        <span class="reg-date">From Feb 2027</span>
+        <span class="reg-kind">Incoming &middot; PhD</span>
+      </div>
+      <div class="reg-what">
+        <h3 class="reg-role">PhD, Computer Science &mdash; Image-Guided Intervention Supported with Mixed Reality</h3>
+        <p class="reg-org">University of Leeds <span class="place">&mdash; Leeds, UK &middot; 3.5 years, full-time</span></p>
+        <ul class="reg-points">
+          <li>Awarded the School of Computer Science Full Fee and Maintenance Scholarship (International) &mdash; full academic fees plus a UKRI-rate maintenance stipend.</li>
+        </ul>
+      </div>
+    </article>
 
     <!-- 1 · Current role -->
     <article class="reg-entry reg-entry--now reveal">
@@ -1852,13 +1732,17 @@ footer {
 <!-- ============================ 06 · HONOURS ============================ -->
 <section class="section shell" id="honours" aria-labelledby="hon-h">
   <div class="section-head reveal">
-    <span class="num" aria-hidden="true">06</span>
+    <span class="num" aria-hidden="true">05</span>
     <h2 id="hon-h">Honours &amp; Awards</h2>
     <span class="head-note folio">Recognition</span>
   </div>
 
   <div class="reveal">
     <ul class="awards">
+      <li>
+        <span class="award__name">Full Fee &amp; Maintenance Scholarship (International) &mdash; PhD<span class="award__org">School of Computer Science, University of Leeds</span></span>
+        <span class="award__year">2026</span>
+      </li>
       <li>
         <span class="award__name">International Excellence Scholarship<span class="award__org">University of Leeds</span></span>
         <span class="award__year">2025</span>
@@ -1890,7 +1774,7 @@ footer {
 <!-- ============================ 07 · SKILLS — THE COLOPHON ============================ -->
 <section class="section section--tight shell" id="skills" aria-labelledby="skills-h">
   <div class="section-head reveal">
-    <span class="num" aria-hidden="true">07</span>
+    <span class="num" aria-hidden="true">06</span>
     <h2 id="skills-h">Technical Skills</h2>
     <span class="head-note folio">Toolkit</span>
   </div>
@@ -1923,7 +1807,7 @@ footer {
   <div class="shell contact__grid">
     <div class="reveal">
       <h2 id="contact-h">Let&rsquo;s <em>correspond</em></h2>
-      <p>Open to PhD positions and research collaboration on medical image analysis, surgical computer vision, and image-guided intervention. The best way to reach me is by email.</p>
+      <p>From February 2027 I will be a fully funded PhD student at the University of Leeds, working on image-guided intervention supported with mixed reality. I remain open to research collaboration &mdash; the best way to reach me is by email.</p>
     </div>
     <nav class="contact-list reveal" aria-label="Contact links">
       <a href="mailto:vqkc0507@leeds.ac.uk">
@@ -2234,947 +2118,6 @@ footer {
 <!-- ============================ REGISTRATION CONSOLE — GAME MODULE ============================ -->
 
 
-<!-- ============ PALIMPSEST — game module (style + script) ============ -->
-<style id="g2-style">
-/* PALIMPSEST — module styles (prefix pl-) */
-:where(:root) { /* fallbacks — host overrides (zero specificity: the page's tokens always win) */
-  --paper: #faf6ec; --paper-2: #f3edde; --card: #fffdf6; --console: #fcf9f1;
-  --ink: #1d1811; --ink-soft: #4e463a; --ink-faint: #6e6353;
-  --accent: #6f2531; --accent-deep: #571a26; --accent-tint: #f0e1de;
-  --rule: #d9cfba; --rule-soft: #e8dfcc; --new: #1f6048;
-}
-#gameMount { min-width: 0; max-width: 100%; }
-.pl-stage { position: relative; color: var(--ink); font-family: var(--font-sans, "Archivo", sans-serif); outline: none; background: var(--console); }
-.pl-stage:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-.pl-hud {
-  display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
-  padding: 0.72rem 1rem 0.55rem;
-  font-size: 0.65rem; font-weight: 550; letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--ink-faint); font-variant-numeric: tabular-nums;
-  white-space: nowrap; overflow: hidden;
-}
-.pl-hud b { font-weight: 600; color: var(--ink-soft); display: inline-block; }
-.pl-hud-right { display: inline-flex; gap: 1.1em; position: relative; }
-.pl-narrow .pl-hud { letter-spacing: 0.1em; font-size: 0.6rem; gap: 0.6rem; }
-.pl-timerbar { height: 2px; background: transparent; }
-.pl-timerfill { height: 100%; background: var(--rule); transform-origin: left center; transform: scaleX(1); }
-.pl-timerfill.pl-low { background: var(--accent); }
-.pl-timerbar.pl-off { visibility: hidden; }
-.pl-frame { position: relative; border-top: 1px solid var(--rule-soft); }
-.pl-canvas { display: block; width: 100%; max-width: 100%; height: auto; touch-action: none; -webkit-tap-highlight-color: transparent; cursor: crosshair; }
-.pl-plate {
-  position: absolute; inset: 0; z-index: 2;
-  display: flex; text-align: center;
-  padding: clamp(0.8rem, 3vw, 1.6rem);
-  background: color-mix(in srgb, var(--paper) 65%, transparent);
-  overflow: auto;
-}
-.pl-plate[hidden] { display: none; }
-.pl-card {
-  max-width: 32rem; margin: auto; display: grid; gap: 0.75rem; justify-items: center;
-  background: color-mix(in srgb, var(--paper) 82%, transparent);
-  border: 1px solid var(--rule-soft); border-radius: 3px;
-  padding: clamp(0.9rem, 3vw, 1.5rem) clamp(1rem, 4vw, 2rem);
-  animation: pl-rise 250ms ease-out;
-}
-.pl-narrow .pl-card { gap: 0.45rem; }
-.pl-narrow .pl-kicker, .pl-narrow .pl-stand, .pl-narrow .pl-menu .pl-small { display: none; }
-.pl-narrow .pl-title { font-size: 1.45rem; }
-.pl-narrow .pl-rules { font-size: 0.68rem; }
-.pl-narrow .pl-rules li { padding: 0.28rem 0; }
-.pl-narrow .pl-btn { min-height: 44px; padding: 0.55rem 1.1rem; }
-.pl-kicker { font-size: 0.6rem; font-weight: 550; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ink-faint); }
-.pl-title { font-family: var(--font-serif, Georgia, serif); font-style: italic; font-weight: 480; font-size: clamp(1.9rem, 7vw, 2.8rem); line-height: 1.05; letter-spacing: -0.015em; margin: 0; }
-.pl-stand { font-family: var(--font-serif, Georgia, serif); font-size: clamp(0.9rem, 2.6vw, 1.02rem); line-height: 1.55; color: var(--ink-soft); margin: 0; max-width: 46ch; text-wrap: pretty; }
-.pl-rules { list-style: none; margin: 0.1rem 0; padding: 0; font-size: clamp(0.74rem, 2.2vw, 0.82rem); color: var(--ink-soft); max-width: 42ch; }
-.pl-rules li { padding: 0.42rem 0; border-top: 1px solid var(--rule-soft); }
-.pl-rules li:last-child { border-bottom: 1px solid var(--rule-soft); }
-.pl-btn {
-  display: inline-flex; align-items: center; justify-content: center;
-  min-height: 44px; min-width: 44px; padding: 0.72rem 1.5rem; margin-top: 0.2rem;
-  font: 550 0.74rem/1 var(--font-sans, sans-serif); letter-spacing: 0.12em; text-transform: uppercase;
-  border-radius: 3px; border: 1px solid var(--accent); background: var(--accent); color: #fdf6ee; cursor: pointer;
-}
-:root[data-theme="dark"] .pl-btn { color: #1a1410; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .pl-btn { color: #1a1410; } }
-.pl-btn:hover, .pl-btn:focus-visible { background: var(--accent-deep); border-color: var(--accent-deep); }
-.pl-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-.pl-small { font-size: 0.6rem; font-weight: 550; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-faint); }
-.pl-grade { font-family: var(--font-serif, Georgia, serif); font-style: italic; font-size: clamp(1.5rem, 5vw, 2.1rem); margin: 0; }
-.pl-scoreline { font-size: 0.86rem; color: var(--ink-soft); margin: 0; font-variant-numeric: tabular-nums; }
-.pl-honor { font-size: 0.78rem; color: var(--accent); margin: 0; }
-.pl-honor:empty { display: none; }
-.pl-foot {
-  display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
-  padding: 0.6rem 1rem 0.8rem; border-top: 1px solid var(--rule-soft);
-  font-size: 0.7rem; color: var(--ink-faint); min-height: 2.1em;
-}
-.pl-status { font-family: var(--font-serif, Georgia, serif); font-style: italic; text-align: right; flex: 1 1 auto; min-width: 0; }
-.pl-hint { flex: 0 1 auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.pl-narrow .pl-hint-keys { display: none; }
-.pl-flash { animation: pl-tick 200ms ease-out; }
-.pl-float {
-  position: absolute; top: -0.2em; right: 0; pointer-events: none;
-  font-weight: 600; color: var(--accent); opacity: 0;
-}
-.pl-float.pl-go { animation: pl-floatup 400ms ease-out; }
-@keyframes pl-tick { 50% { transform: translateY(-2px) scale(1.2); color: var(--accent); } }
-@keyframes pl-floatup { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-10px); } }
-@keyframes pl-rise { from { transform: translateY(8px); } } /* transform-only: safe if throttled mid-animation */
-@media (prefers-reduced-motion: reduce) {
-  .pl-flash { animation: none; }
-  .pl-float.pl-go { animation: none; opacity: 0; }
-  .pl-card { animation: none; }
-}
-</style>
-<script id="g2-script">
-/* PALIMPSEST — an ink game in five runs. Vanilla JS, Canvas 2D, one IIFE, zero globals except window.__game2.
-   Silent by design. No wheel input anywhere (wheel unused, deltaMode moot).
-   Motion policy: nothing animates before Begin under any circumstance (no rAF exists pre-Begin; the menu is
-   static DOM over a single synchronous canvas paint). After an explicit Begin gesture, gameplay motion is
-   acceptable under prefers-reduced-motion; decorative flourishes (wet sheen, seal pop, blot bloom, stroke
-   crossfade, plate slide/fade, settle fade) are skipped or made instant. */
-(function () {
-  "use strict";
-  var mount = document.getElementById("gameMount");
-  if (!mount || mount.dataset.plInit) return;
-  mount.dataset.plInit = "1";
 
-  /* ---------------- constants ---------------- */
-  var W = 720, H = 460, INSET = 24, NIBR = 5;
-  var SPAWN_X = 52, SPAWN_Y = 408, SANCT = 64;    /* the well's court — ink never marks inside this radius */
-  var TUNING = { SPRING: 60, DAMP: 10.5, VMAX: 640, SKIMPOW: 6, SKIMFLOOR: 0.2 }; /* feel constants — tune here only */
-  /* Skim rule: the pressing pen catches, a flying nib skims. The lethal radius shrinks with
-     speed — r = HIT_R·(1−v/VMAX)^SKIMPOW + SKIMFLOOR — so a bold dash usually rides over a
-     thin dried line, while dawdling on old ink (drawn fat, like pooling) is always fatal. */
-  var DT = 1 / 120, TICK_MS = 1000 / 120;
-  var GRACE_T = 96, RUN_T = 7200, INTER_T = 132, BLOT_T = 34, FADE_T = 72, SETTLE_T = 60;
-  var SEALS_N = 8, PICK_R = 14, HIT_R = 6, CELL = 40;
-  var LETHAL_A = [0.55, 0.42, 0.30];
-
-  /* ---------------- state ---------------- */
-  var mode = "menu", edition = 0, run = 0;
-  var grace = false, graceLeft = 0, runLeft = RUN_T, interLeft = 0, pausedFrom = "playing";
-  var nib = { x: SPAWN_X, y: SPAWN_Y, vx: 0, vy: 0 };
-  var ptr = { x: SPAWN_X, y: SPAWN_Y, seen: false };
-  var touch = { active: false, startTick: 0 };
-  var activePointer = null;
-  var held = {};
-  var trail = [], trailMin = 2.5, penDown = false; /* trail may contain null break markers (well-court gaps) */
-  var ghosts = [], orphanBlots = [], residues = [], pops = [], seals = [];
-  var sealsCollected = 0, score = 0, best = null, editions = 0;
-  var unblotted = true, lastEnd = "", alive = true;
-  var rand = null, pinnedSeed = null;
-  var tickCount = 0, runStartTick = 0, endTick = 0, editionStartTick = 0;
-  var lastRWall = -1e9;
-  var frozen = false, rafId = 0, acc = 0, lastT = 0, visible = true;
-  var hash = new Map();
-  var RM = false;
-
-  /* mulberry32 — seeded RNG (copied from the host's register) */
-  function mulberry32(seed) {
-    var t = seed >>> 0;
-    return function () {
-      t += 0x6D2B79F5;
-      var r = Math.imul(t ^ (t >>> 15), 1 | t);
-      r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
-      return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
-    };
-  }
-  function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
-  function roman(n) {
-    var t = [[1000,"M"],[900,"CM"],[500,"D"],[400,"CD"],[100,"C"],[90,"XC"],[50,"L"],[40,"XL"],[10,"X"],[9,"IX"],[5,"V"],[4,"IV"],[1,"I"]];
-    var s = ""; for (var i = 0; i < t.length; i++) { while (n >= t[i][0]) { s += t[i][1]; n -= t[i][0]; } } return s || "I";
-  }
-
-  /* ---------------- persistence (one key, shape-validated) ---------------- */
-  try {
-    var raw = JSON.parse(localStorage.getItem("jf-game-best"));
-    if (raw && typeof raw === "object" && raw.v === 1 && raw.game === "palimpsest" &&
-        Number.isFinite(raw.best) && raw.best === Math.floor(raw.best) && raw.best >= 0 && raw.best <= 999) {
-      best = raw.best;
-      editions = (Number.isFinite(raw.editions) && raw.editions >= 0) ? Math.floor(raw.editions) : 0;
-    }
-  } catch (e) { /* absent / private mode — session-only best */ }
-  function persist() {
-    try {
-      localStorage.setItem("jf-game-best", JSON.stringify({ v: 1, game: "palimpsest", best: best === null ? 0 : best, editions: editions }));
-    } catch (e) {}
-  }
-
-  /* ---------------- DOM ---------------- */
-  mount.innerHTML =
-    '<div class="pl-stage" tabindex="0" role="group" aria-label="Palimpsest — an ink game in five runs">' +
-      '<div class="pl-hud">' +
-        '<span class="pl-hud-left">EDITION I · RUN — OF 5</span>' +
-        '<span class="pl-hud-right">' +
-          '<span>SEALS <b class="pl-seals">0/8</b></span>' +
-          '<span>SCORE <b class="pl-score">0</b></span>' +
-          '<span>BEST <b class="pl-best">—</b></span>' +
-          '<span class="pl-float" aria-hidden="true">+2</span>' +
-        '</span>' +
-      '</div>' +
-      '<div class="pl-timerbar pl-off" aria-hidden="true"><div class="pl-timerfill"></div></div>' +
-      '<div class="pl-frame">' +
-        '<canvas class="pl-canvas" width="720" height="460" role="img" aria-label="Palimpsest — an empty laid page with an inkwell."></canvas>' +
-        '<div class="pl-plate pl-menu">' +
-          '<div class="pl-card">' +
-            '<span class="pl-kicker">A game in five impressions</span>' +
-            '<h3 class="pl-title">Palimpsest</h3>' +
-            '<p class="pl-stand">Every run is written into the page in ink. Every past run bleeds through — and bleed-through is fatal. Five runs to an edition; make the page yours.</p>' +
-            '<ul class="pl-rules">' +
-              '<li>Steer the nib. It follows your hand — or the arrow keys.</li>' +
-              '<li>Gather the wax seals before the ink dries.</li>' +
-              '<li>Never touch a past run &mdash; though at full tilt the nib skims safely over old ink. It settles after three runs and turns harmless.</li>' +
-            '</ul>' +
-            '<button type="button" class="pl-btn pl-begin">Begin</button>' +
-            '<span class="pl-small">First impression · silent by design · best kept on this device</span>' +
-          '</div>' +
-        '</div>' +
-        '<div class="pl-plate pl-pause" hidden>' +
-          '<div class="pl-card">' +
-            '<h3 class="pl-title">Paused</h3>' +
-            '<span class="pl-small">Press P or tap to resume</span>' +
-          '</div>' +
-        '</div>' +
-        '<div class="pl-plate pl-end" hidden>' +
-          '<div class="pl-card">' +
-            '<span class="pl-kicker pl-end-title">Edition I complete</span>' +
-            '<p class="pl-grade">—</p>' +
-            '<p class="pl-scoreline">—</p>' +
-            '<p class="pl-honor"></p>' +
-            '<button type="button" class="pl-btn pl-scrape">Scrape the page</button>' +
-            '<span class="pl-small">or press R</span>' +
-          '</div>' +
-        '</div>' +
-      '</div>' +
-      '<div class="pl-foot">' +
-        '<span class="pl-hint">Steer: move, touch, or arrow keys<span class="pl-hint-keys"> · P pause · R new edition</span></span>' +
-        '<span class="pl-status" aria-live="polite"></span>' +
-      '</div>' +
-    '</div>';
-
-  var stage = mount.querySelector(".pl-stage");
-  var canvas = mount.querySelector(".pl-canvas");
-  var ctx = canvas.getContext("2d");
-  var el = {
-    hudLeft: mount.querySelector(".pl-hud-left"),
-    seals: mount.querySelector(".pl-seals"),
-    score: mount.querySelector(".pl-score"),
-    best: mount.querySelector(".pl-best"),
-    float: mount.querySelector(".pl-float"),
-    timerbar: mount.querySelector(".pl-timerbar"),
-    timerfill: mount.querySelector(".pl-timerfill"),
-    menu: mount.querySelector(".pl-menu"),
-    pause: mount.querySelector(".pl-pause"),
-    end: mount.querySelector(".pl-end"),
-    endTitle: mount.querySelector(".pl-end-title"),
-    grade: mount.querySelector(".pl-grade"),
-    scoreline: mount.querySelector(".pl-scoreline"),
-    honor: mount.querySelector(".pl-honor"),
-    status: mount.querySelector(".pl-status")
-  };
-
-  /* ---------------- palette (host custom properties; re-read on theme change) ---------------- */
-  var P = {};
-  function parseColor(s) {
-    s = (s || "").trim();
-    var m = /^#([0-9a-f]{3})$/i.exec(s);
-    if (m) return { r: parseInt(m[1][0] + m[1][0], 16), g: parseInt(m[1][1] + m[1][1], 16), b: parseInt(m[1][2] + m[1][2], 16) };
-    m = /^#([0-9a-f]{6})$/i.exec(s);
-    if (m) return { r: parseInt(m[1].slice(0, 2), 16), g: parseInt(m[1].slice(2, 4), 16), b: parseInt(m[1].slice(4, 6), 16) };
-    m = /^rgba?\(\s*([\d.]+)[ ,]+([\d.]+)[ ,]+([\d.]+)/i.exec(s);
-    if (m) return { r: +m[1], g: +m[2], b: +m[3] };
-    return null;
-  }
-  function readPalette() {
-    var cs = getComputedStyle(document.documentElement);
-    function col(name, fb) { return parseColor(cs.getPropertyValue(name)) || parseColor(fb); }
-    P.console    = col("--console", "#fcf9f1");
-    P.paper      = col("--paper", "#faf6ec");
-    P.card       = col("--card", "#fffdf6");
-    P.ink        = col("--ink", "#1d1811");
-    P.inkSoft    = col("--ink-soft", "#4e463a");
-    P.inkFaint   = col("--ink-faint", "#6e6353");
-    P.accent     = col("--accent", "#6f2531");
-    P.accentDeep = col("--accent-deep", "#571a26");
-    P.rule       = col("--rule", "#d9cfba");
-    P.ruleSoft   = col("--rule-soft", "#e8dfcc");
-  }
-  function rgba(c, a) { return "rgba(" + c.r + "," + c.g + "," + c.b + "," + a + ")"; }
-  function css(c) { return "rgb(" + c.r + "," + c.g + "," + c.b + ")"; }
-  function lerpC(a, b, t) { return { r: a.r + (b.r - a.r) * t, g: a.g + (b.g - a.g) * t, b: a.b + (b.b - a.b) * t }; }
-
-  /* ---------------- canvas sizing / rect cache (no per-event rect reads) ---------------- */
-  var sx = 1, sy = 1, rect = null, dprQuery = null;
-  function refreshRect() { rect = canvas.getBoundingClientRect(); }
-  function resizeCanvas() {
-    var cssW = mount.clientWidth || W;
-    var dpr = window.devicePixelRatio || 1;
-    canvas.width = Math.max(1, Math.round(cssW * dpr));
-    canvas.height = Math.max(1, Math.round(cssW * (H / W) * dpr));
-    sx = canvas.width / W; sy = canvas.height / H;
-    stage.classList.toggle("pl-narrow", cssW < 400);
-    refreshRect();
-    render();
-  }
-  function armDprWatch() {
-    if (dprQuery) { try { dprQuery.removeEventListener("change", onDpr); } catch (e) {} }
-    try {
-      dprQuery = matchMedia("(resolution: " + (window.devicePixelRatio || 1) + "dppx)");
-      dprQuery.addEventListener("change", onDpr);
-    } catch (e) { dprQuery = null; }
-  }
-  function onDpr() { resizeCanvas(); armDprWatch(); }
-
-  /* ---------------- geometry helpers ---------------- */
-  function segDist2(px, py, ax, ay, bx, by) {
-    var dx = bx - ax, dy = by - ay;
-    var l2 = dx * dx + dy * dy;
-    var t = l2 ? clamp(((px - ax) * dx + (py - ay) * dy) / l2, 0, 1) : 0;
-    var cx = ax + t * dx, cy = ay + t * dy;
-    var ex = px - cx, ey = py - cy;
-    return ex * ex + ey * ey;
-  }
-  function segClosest(px, py, ax, ay, bx, by) {
-    var dx = bx - ax, dy = by - ay;
-    var l2 = dx * dx + dy * dy;
-    var t = l2 ? clamp(((px - ax) * dx + (py - ay) * dy) / l2, 0, 1) : 0;
-    return [ax + t * dx, ay + t * dy];
-  }
-
-  /* ---------------- spatial hash of lethal ghost segments (rebuilt at run start) ---------------- */
-  function hkey(cx, cy) { return cx * 64 + cy; }
-  function buildHash() {
-    hash.clear();
-    for (var g = 0; g < ghosts.length; g++) {
-      if (!ghosts[g].lethal) continue;
-      var pts = ghosts[g].pts;
-      for (var i = 1; i < pts.length; i++) {
-        if (!pts[i - 1] || !pts[i]) continue; /* stroke break — no ink across the gap */
-        var ax = pts[i - 1][0], ay = pts[i - 1][1], bx = pts[i][0], by = pts[i][1];
-        var x0 = Math.floor(Math.min(ax, bx) / CELL), x1 = Math.floor(Math.max(ax, bx) / CELL);
-        var y0 = Math.floor(Math.min(ay, by) / CELL), y1 = Math.floor(Math.max(ay, by) / CELL);
-        for (var cx = x0; cx <= x1; cx++) for (var cy = y0; cy <= y1; cy++) {
-          var k = hkey(cx, cy);
-          var list = hash.get(k);
-          if (!list) { list = []; hash.set(k, list); }
-          list.push([ax, ay, bx, by]);
-        }
-      }
-    }
-  }
-  function ghostHit(sp) {
-    var cx = Math.floor(nib.x / CELL), cy = Math.floor(nib.y / CELL);
-    var u = Math.min(sp, TUNING.VMAX) / TUNING.VMAX;
-    var r = HIT_R * Math.pow(1 - u, TUNING.SKIMPOW) + TUNING.SKIMFLOOR;
-    var bestD = r * r, hit = null;
-    for (var dx = -1; dx <= 1; dx++) for (var dy = -1; dy <= 1; dy++) {
-      var list = hash.get(hkey(cx + dx, cy + dy));
-      if (!list) continue;
-      for (var i = 0; i < list.length; i++) {
-        var s = list[i];
-        var d2 = segDist2(nib.x, nib.y, s[0], s[1], s[2], s[3]);
-        if (d2 < bestD) { bestD = d2; hit = s; }
-      }
-    }
-    return hit ? segClosest(nib.x, nib.y, hit[0], hit[1], hit[2], hit[3]) : null;
-  }
-
-  /* ---------------- seals (seeded placement with deterministic relaxation ladder) ---------------- */
-  function distToLethal(x, y) {
-    var m = Infinity;
-    for (var g = 0; g < ghosts.length; g++) {
-      if (!ghosts[g].lethal) continue;
-      var pts = ghosts[g].pts;
-      for (var i = 1; i < pts.length; i++) {
-        if (!pts[i - 1] || !pts[i]) continue;
-        var d2 = segDist2(x, y, pts[i - 1][0], pts[i - 1][1], pts[i][0], pts[i][1]);
-        if (d2 < m) m = d2;
-      }
-    }
-    return Math.sqrt(m);
-  }
-  function placeSeals() {
-    seals = [];
-    for (var n = 0; n < SEALS_N; n++) {
-      var placed = null, draws = 0, ghostMin = 18;
-      while (!placed) {
-        draws++;
-        if (draws === 401) ghostMin = 10;      /* relaxation ladder */
-        if (draws === 601) ghostMin = 0;
-        var x = INSET + 24 + rand() * (W - 2 * (INSET + 24));
-        var y = INSET + 24 + rand() * (H - 2 * (INSET + 24));
-        var ok = true;
-        for (var i = 0; i < seals.length && ok; i++) {
-          var ddx = seals[i][0] - x, ddy = seals[i][1] - y;
-          if (ddx * ddx + ddy * ddy < 3600) ok = false;
-        }
-        if (ok) { var sdx = x - SPAWN_X, sdy = y - SPAWN_Y; if (sdx * sdx + sdy * sdy < 4900) ok = false; }
-        if (ok && ghostMin > 0 && distToLethal(x, y) < ghostMin) ok = false;
-        if (ok) placed = [x, y];
-      }
-      seals.push(placed);
-    }
-    sealsCollected = 0;
-  }
-  function makeBlot(cx, cy) {
-    var lobes = [];
-    for (var i = 0; i < 12; i++) lobes.push(14 + rand() * 8);
-    return { x: cx, y: cy, lobes: lobes, birth: tickCount };
-  }
-
-  /* ---------------- rendering ---------------- */
-  function strokePoly(pts, style, width) { /* honours null break markers */
-    if (pts.length < 2) return;
-    ctx.strokeStyle = style; ctx.lineWidth = width;
-    ctx.beginPath();
-    var pen = false;
-    for (var i = 0; i < pts.length; i++) {
-      if (!pts[i]) { pen = false; continue; }
-      if (pen) ctx.lineTo(pts[i][0], pts[i][1]);
-      else { ctx.moveTo(pts[i][0], pts[i][1]); pen = true; }
-    }
-    ctx.stroke();
-  }
-  function strokeVar(pts, style, wAdj) { /* variable-width polyline, chunked by quantized width */
-    if (pts.length < 2) return;
-    ctx.strokeStyle = style;
-    var i = 1, n = pts.length;
-    while (i < n) {
-      if (!pts[i] || !pts[i - 1]) { i++; continue; }
-      var w = Math.round(wAdj(pts[i][2]) * 5) / 5;
-      ctx.lineWidth = w;
-      ctx.beginPath();
-      ctx.moveTo(pts[i - 1][0], pts[i - 1][1]);
-      while (i < n && pts[i] && Math.round(wAdj(pts[i][2]) * 5) / 5 === w) { ctx.lineTo(pts[i][0], pts[i][1]); i++; }
-      ctx.stroke();
-    }
-  }
-  function drawBlot(b) {
-    var age = tickCount - b.birth, s = 1, a = 0.30;
-    if (!RM) {
-      var u = clamp(age / BLOT_T, 0, 1);
-      s = 1 - Math.pow(1 - u, 3);
-      a = u < 1 ? 0.48 : 0.48 + (0.30 - 0.48) * clamp((age - BLOT_T) / 40, 0, 1);
-    }
-    ctx.fillStyle = rgba(P.accentDeep, a);
-    ctx.beginPath();
-    var pts = [];
-    for (var i = 0; i < 12; i++) {
-      var ang = i / 12 * Math.PI * 2;
-      pts.push([b.x + Math.cos(ang) * b.lobes[i] * s, b.y + Math.sin(ang) * b.lobes[i] * s]);
-    }
-    var mx = (pts[11][0] + pts[0][0]) / 2, my = (pts[11][1] + pts[0][1]) / 2;
-    ctx.moveTo(mx, my);
-    for (i = 0; i < 12; i++) {
-      var nx = pts[(i + 1) % 12];
-      ctx.quadraticCurveTo(pts[i][0], pts[i][1], (pts[i][0] + nx[0]) / 2, (pts[i][1] + nx[1]) / 2);
-    }
-    ctx.closePath();
-    ctx.fill();
-  }
-  function paintPage() {
-    ctx.fillStyle = css(P.console);
-    ctx.fillRect(0, 0, W, H);
-    /* deckle margin + 6px corner ticks */
-    ctx.strokeStyle = css(P.ruleSoft); ctx.lineWidth = 1;
-    ctx.strokeRect(INSET + 0.5, INSET + 0.5, W - 2 * INSET - 1, H - 2 * INSET - 1);
-    ctx.beginPath();
-    var cs = [[INSET, INSET, -1, -1], [W - INSET, INSET, 1, -1], [INSET, H - INSET, -1, 1], [W - INSET, H - INSET, 1, 1]];
-    for (var i = 0; i < 4; i++) {
-      var c = cs[i];
-      ctx.moveTo(c[0] + 0.5 * c[2], c[1] + 0.5); ctx.lineTo(c[0] + 6.5 * c[2], c[1] + 0.5);
-      ctx.moveTo(c[0] + 0.5, c[1] + 0.5 * c[3]); ctx.lineTo(c[0] + 0.5, c[1] + 6.5 * c[3]);
-    }
-    ctx.stroke();
-    /* the inkwell — engraved double circle at the spawn point */
-    ctx.strokeStyle = css(P.inkSoft); ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.arc(SPAWN_X, SPAWN_Y, 11, 0, Math.PI * 2); ctx.stroke();
-    ctx.beginPath(); ctx.arc(SPAWN_X, SPAWN_Y, 7, 0, Math.PI * 2); ctx.stroke();
-    ctx.fillStyle = css(P.accent);
-    ctx.beginPath(); ctx.arc(SPAWN_X, SPAWN_Y, 2, 0, Math.PI * 2); ctx.fill();
-  }
-  function render() {
-    ctx.setTransform(sx, 0, 0, sy, 0, 0);
-    ctx.lineCap = "round"; ctx.lineJoin = "round";
-    paintPage();
-    var i, j, g;
-    /* lifted-seal residues */
-    ctx.strokeStyle = rgba(P.accent, 0.08); ctx.lineWidth = 1;
-    for (i = 0; i < residues.length; i++) {
-      ctx.beginPath(); ctx.arc(residues[i][0], residues[i][1], 9, 0, Math.PI * 2); ctx.stroke();
-    }
-    /* ghosts, oldest first */
-    var L = ghosts.length;
-    for (i = 0; i < L; i++) {
-      g = ghosts[i];
-      var rank = 0;
-      if (g.lethal) for (j = i + 1; j < L; j++) { if (ghosts[j].lethal) rank++; }
-      var tA = g.lethal ? LETHAL_A[Math.min(rank, 2)] : 0.12;
-      var tW = g.lethal ? 2.4 : 1.8;
-      if (!g.lethal && g.settled >= 0 && !RM) {
-        var su = clamp((tickCount - g.settled) / SETTLE_T, 0, 1);
-        tA = 0.30 + (0.12 - 0.30) * su;
-      }
-      var ft = RM ? 1 : clamp((tickCount - g.fade) / FADE_T, 0, 1); /* bleed-through being born */
-      if (ft < 1) {
-        (function (fw, ftt) {
-          strokeVar(g.pts, rgba(lerpC(P.ink, P.accent, ftt), 1 + (tA - 1) * ftt), function (w) { return w + (fw - w) * ftt; });
-        })(tW, ft);
-      } else {
-        strokePoly(g.pts, rgba(P.accent, tA), tW);
-      }
-      if (g.blot) drawBlot(g.blot);
-    }
-    for (i = 0; i < orphanBlots.length; i++) drawBlot(orphanBlots[i]);
-    /* seals — wax, with a paper-tone highlight */
-    for (i = 0; i < seals.length; i++) {
-      var sX = seals[i][0], sY = seals[i][1];
-      ctx.fillStyle = css(P.accent);
-      ctx.beginPath(); ctx.arc(sX, sY, 9, 0, Math.PI * 2); ctx.fill();
-      ctx.strokeStyle = css(P.accentDeep); ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.arc(sX, sY, 9, 0, Math.PI * 2); ctx.stroke();
-      ctx.fillStyle = css(P.card);
-      ctx.beginPath(); ctx.arc(sX - 2, sY - 3, 1.8, 0, Math.PI * 2); ctx.fill();
-    }
-    /* pickup pops (160 ms ≈ 20 ticks) */
-    for (i = 0; i < pops.length; i++) {
-      var age = tickCount - pops[i][2];
-      if (age >= 20) continue;
-      var u = age / 20;
-      var sc = u < 0.4 ? 1 + 0.35 * (u / 0.4) : 1.35 * (1 - (u - 0.4) / 0.6);
-      if (sc <= 0) continue;
-      ctx.fillStyle = rgba(P.accent, 0.9);
-      ctx.beginPath(); ctx.arc(pops[i][0], pops[i][1], 9 * sc, 0, Math.PI * 2); ctx.fill();
-    }
-    /* live stroke + wet sheen + nib */
-    var live = mode === "playing" || (mode === "paused" && pausedFrom === "playing");
-    if (live) {
-      strokeVar(trail, css(P.ink), function (w) { return w; });
-      if (!RM) { /* wet sheen — segments recorded in the last 350 ms (42 ticks) */
-        for (i = trail.length - 1; i >= 1; i--) {
-          if (!trail[i] || !trail[i - 1]) continue;
-          var sAge = tickCount - trail[i][3];
-          if (sAge >= 42) break;
-          ctx.strokeStyle = rgba(P.accent, (1 - sAge / 42) * 0.35);
-          ctx.lineWidth = trail[i][2];
-          ctx.beginPath();
-          ctx.moveTo(trail[i - 1][0], trail[i - 1][1]);
-          ctx.lineTo(trail[i][0], trail[i][1]);
-          ctx.stroke();
-        }
-      }
-      var nr = 5;
-      if (grace && !RM) { /* ink-load pulse r 5→8→5 over 300 ms */
-        var ga = tickCount - runStartTick;
-        if (ga < 36) nr = 5 + 3 * Math.sin(Math.PI * ga / 36);
-      }
-      if (grace) {
-        ctx.strokeStyle = css(P.ink); ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.arc(nib.x, nib.y, nr, 0, Math.PI * 2); ctx.stroke();
-      } else {
-        ctx.fillStyle = css(P.ink);
-        ctx.beginPath(); ctx.arc(nib.x, nib.y, 5, 0, Math.PI * 2); ctx.fill();
-        ctx.strokeStyle = css(P.accent); ctx.lineWidth = 1.5;
-        ctx.beginPath(); ctx.arc(nib.x, nib.y, 3.2, -Math.PI / 4 - 0.5, -Math.PI / 4 + 0.5); ctx.stroke();
-      }
-    }
-    /* run-timer rule (transform-only) */
-    if (mode === "playing") {
-      el.timerfill.style.transform = "scaleX(" + (runLeft / RUN_T) + ")";
-      el.timerfill.classList.toggle("pl-low", runLeft <= 1200);
-    }
-  }
-
-  /* ---------------- simulation (fixed 120 Hz tick — ordering is normative) ---------------- */
-  function wOf(sp) { return 1.3 + 2.1 * (1 - Math.min(sp, TUNING.VMAX) / TUNING.VMAX); }
-  function steer() {
-    var dx = 0, dy = 0;
-    if (held.L) dx -= 1; if (held.R) dx += 1;
-    if (held.U) dy -= 1; if (held.D) dy += 1;
-    if (dx || dy) {
-      var m = Math.sqrt(dx * dx + dy * dy); /* sqrt, not hypot — engine-stable determinism */
-      return [clamp(nib.x + dx / m * 90, INSET, W - INSET), clamp(nib.y + dy / m * 90, INSET, H - INSET)];
-    }
-    if (touch.active) { /* nib rides above the finger; offset ramps in over ~150 ms */
-      var ramp = clamp((tickCount - touch.startTick) / 18, 0, 1);
-      return [clamp(ptr.x, INSET, W - INSET), clamp(ptr.y - 56 * ramp, INSET, H - INSET)];
-    }
-    if (ptr.seen) return [clamp(ptr.x, INSET, W - INSET), clamp(ptr.y, INSET, H - INSET)];
-    return [nib.x, nib.y];
-  }
-  function tick() {
-    tickCount++;
-    if (mode === "interstitial") {
-      interLeft--;
-      if (interLeft <= 0) finishInter();
-      return;
-    }
-    if (mode !== "playing") return;
-    /* 1 — timers / transitions */
-    if (grace) { graceLeft--; if (graceLeft <= 0) grace = false; }
-    /* 2 — steering target; 3 — integrate the nib */
-    var t = steer();
-    var ax = (t[0] - nib.x) * TUNING.SPRING - nib.vx * TUNING.DAMP;
-    var ay = (t[1] - nib.y) * TUNING.SPRING - nib.vy * TUNING.DAMP;
-    nib.vx += ax * DT; nib.vy += ay * DT;
-    var sp = Math.sqrt(nib.vx * nib.vx + nib.vy * nib.vy); /* sqrt, not hypot — engine-stable determinism */
-    if (sp > TUNING.VMAX) { nib.vx *= TUNING.VMAX / sp; nib.vy *= TUNING.VMAX / sp; sp = TUNING.VMAX; }
-    nib.x = clamp(nib.x + nib.vx * DT, INSET + NIBR, W - INSET - NIBR);
-    nib.y = clamp(nib.y + nib.vy * DT, INSET + NIBR, H - INSET - NIBR);
-    /* 4 — record trail. Ink flows only outside the well's court and never marks
-       inside it (crossing back in lifts the pen — a break in the stroke). */
-    var wx = nib.x - SPAWN_X, wy = nib.y - SPAWN_Y;
-    var inCourt = wx * wx + wy * wy <= SANCT * SANCT;
-    if (inCourt) {
-      if (penDown) { penDown = false; if (trail.length) trail.push(null); }
-    } else if (!penDown) {
-      penDown = true;
-      trail.push([nib.x, nib.y, wOf(sp), tickCount]);
-    } else {
-      var lp = trail[trail.length - 1];
-      var ddx = nib.x - lp[0], ddy = nib.y - lp[1];
-      if (ddx * ddx + ddy * ddy >= trailMin * trailMin) {
-        if (trail.length >= 6000) trailMin = 5; /* deterministic decimation under the cap */
-        trail.push([nib.x, nib.y, wOf(sp), tickCount]);
-      }
-    }
-    /* 5 — seal pickups resolve BEFORE death, same tick */
-    for (var i = seals.length - 1; i >= 0; i--) {
-      var sdx = seals[i][0] - nib.x, sdy = seals[i][1] - nib.y;
-      if (sdx * sdx + sdy * sdy < PICK_R * PICK_R) collectSeal(i);
-    }
-    if (mode !== "playing") return; /* clean sweep ended the run */
-    if (!grace) {
-      /* 6 — ghost collision (lethal radius shrinks with speed — see SKIM) */
-      var cp = ghostHit(sp);
-      if (cp) { endRun("smudge", cp); return; }
-      /* 7 — run timer (checked after pickups) */
-      runLeft--;
-      if (runLeft <= 0) { endRun("dry"); return; }
-    }
-    /* 8 — 1 Hz bookkeeping */
-    if (tickCount % 120 === 0) refreshAria();
-  }
-  function collectSeal(i) {
-    score++; sealsCollected++;
-    residues.push([seals[i][0], seals[i][1]]);
-    if (!RM) pops.push([seals[i][0], seals[i][1], tickCount]);
-    seals.splice(i, 1);
-    flashScore();
-    updateHUD();
-    if (sealsCollected === SEALS_N) endRun("clear");
-  }
-
-  /* ---------------- run / edition state machine ---------------- */
-  function endRun(kind, cp) {
-    endTick = tickCount; lastEnd = kind;
-    if (kind === "clear") { score += 2; sweepFx(); }
-    var blot = null;
-    if (kind === "smudge") { unblotted = false; alive = false; blot = makeBlot(cp[0], cp[1]); }
-    if (trail.length >= 2) {
-      ghosts.push({ pts: trail, lethal: true, blot: blot, fade: endTick + (kind === "smudge" ? BLOT_T : 0), settled: -1 });
-    } else if (blot) { orphanBlots.push(blot); }
-    trail = []; penDown = false;
-    mode = "interstitial";
-    interLeft = INTER_T + (kind === "smudge" ? BLOT_T : 0);
-    if (run < 5) {
-      var nx = run + 1, k = sealsCollected;
-      announce(kind === "clear" ? "Run " + nx + " set — clean sweep, 8 of 8 seals."
-        : kind === "smudge" ? "Smudged. Run " + nx + " set — " + k + (k === 1 ? " seal." : " seals.")
-        : "The ink dried. Run " + nx + " set — " + k + (k === 1 ? " seal." : " seals."));
-    }
-    updateHUD();
-  }
-  function finishInter() { interLeft = 0; if (run >= 5) editionEnd(); else startRun(run + 1); }
-  function startRun(n) {
-    run = n; mode = "playing"; grace = true; graceLeft = GRACE_T; runLeft = RUN_T; alive = true;
-    runStartTick = tickCount;
-    var L = ghosts.length;
-    for (var i = 0; i < L; i++) { /* the settle rule: only the 3 most recent ghosts are lethal */
-      var was = ghosts[i].lethal;
-      var now = i >= L - 3 && ghosts[i].pts.length >= 2;
-      if (was && !now) { ghosts[i].settled = tickCount; }
-      ghosts[i].lethal = now;
-    }
-    buildHash();
-    placeSeals();
-    nib.x = SPAWN_X; nib.y = SPAWN_Y; nib.vx = 0; nib.vy = 0;
-    ptr.seen = false; touch.active = false; activePointer = null;
-    trail = []; penDown = false; trailMin = 2.5;
-    pops.length = 0;
-    announce("Run " + n + " of 5. 8 seals on the page." + (n === 5 ? " The first impression has settled." : ""));
-    updateHUD(); refreshAria();
-  }
-  function editionEnd() {
-    mode = "edition-end";
-    if (unblotted) score += 5;
-    var grade = score >= 50 ? "Fine press." : score >= 40 ? "Fair copy." : score >= 28 ? "Trade edition." : score >= 16 ? "Proof." : "Pulp.";
-    var record = best === null || score > best;
-    if (record) best = score;
-    editions++;
-    persist();
-    el.endTitle.textContent = "Edition " + roman(edition) + " complete";
-    el.grade.textContent = grade;
-    el.scoreline.textContent = record ? "New best — " + score + " points." : score + " points · best " + best;
-    el.honor.textContent = unblotted ? "Unblotted — not one smudge. +5" : "";
-    el.end.hidden = false;
-    announce("Edition " + roman(edition) + " complete. " + grade + " " + score + " points." + (record ? " New best." : ""));
-    updateHUD(); refreshAria(); render();
-  }
-  function startEdition() {
-    edition++;
-    var baseSeed = pinnedSeed !== null ? pinnedSeed : (Date.now() & 0x7fffffff);
-    rand = mulberry32(baseSeed);
-    ghosts = []; orphanBlots = []; residues = []; pops.length = 0;
-    score = 0; unblotted = true; lastEnd = "";
-    editionStartTick = tickCount;
-    el.menu.hidden = true; el.end.hidden = true; el.pause.hidden = true;
-    startRun(1);
-    startLoop();
-    render();
-  }
-  function begin() { if (mode !== "menu") return; startEdition(); }
-  function reset() {
-    if (mode === "menu") { startEdition(); return; }
-    if (mode === "playing" || mode === "interstitial" || mode === "paused") announce("Page scraped.");
-    startEdition();
-  }
-  function scrapeKey() {
-    var now = performance.now();
-    if (now - lastRWall < 400) return; /* accidental double-tap guard */
-    if (mode === "menu") return;
-    if (mode !== "edition-end" && tickCount - editionStartTick < 240) return; /* ignore R in the first 2 s */
-    lastRWall = now;
-    reset();
-  }
-  function setPause(on) {
-    if (on) {
-      if (mode !== "playing" && mode !== "interstitial") return;
-      pausedFrom = mode; mode = "paused";
-      el.pause.hidden = false;
-      announce("Paused.");
-      updateHUD(); render();
-    } else {
-      if (mode !== "paused") return;
-      mode = pausedFrom;
-      el.pause.hidden = true;
-      announce("Resumed.");
-      updateHUD();
-      startLoop();
-    }
-  }
-
-  /* ---------------- HUD / announcements ---------------- */
-  function setText(node, s) { if (node.textContent !== s) node.textContent = s; }
-  function updateHUD() {
-    setText(el.hudLeft, mode === "menu" ? "EDITION I · RUN — OF 5"
-      : "EDITION " + roman(edition) + " · RUN " + Math.max(run, 1) + " OF 5");
-    setText(el.seals, sealsCollected + "/8");
-    setText(el.score, "" + score);
-    setText(el.best, best === null ? "—" : "" + best);
-    var showTimer = mode === "playing" || (mode === "paused" && pausedFrom === "playing");
-    el.timerbar.classList.toggle("pl-off", !showTimer);
-  }
-  function flashScore() {
-    if (RM || frozen) return;
-    el.score.classList.remove("pl-flash"); void el.score.offsetWidth;
-    el.score.classList.add("pl-flash");
-  }
-  function sweepFx() {
-    if (RM || frozen) return;
-    el.seals.classList.remove("pl-flash"); void el.seals.offsetWidth;
-    el.seals.classList.add("pl-flash");
-    el.float.classList.remove("pl-go"); void el.float.offsetWidth;
-    el.float.classList.add("pl-go");
-  }
-  var lastAnn = 0, annTimer = 0, annPending = "";
-  function announce(msg) { /* aria-live, debounced ≥ 1 s, meaningful events only */
-    annPending = msg;
-    if (annTimer) return;
-    var wait = Math.max(0, lastAnn + 1000 - performance.now());
-    annTimer = setTimeout(function () {
-      annTimer = 0; lastAnn = performance.now();
-      el.status.textContent = annPending;
-    }, wait);
-  }
-  function refreshAria() { /* canvas aria-label at ≤ 1 Hz */
-    var label;
-    if (mode === "menu") label = "Palimpsest — an empty laid page with an inkwell.";
-    else if (mode === "edition-end") label = "Palimpsest — a finished edition page written in five runs of ink.";
-    else {
-      var lethal = 0;
-      for (var i = 0; i < ghosts.length; i++) { if (ghosts[i].lethal) lethal++; }
-      label = "Palimpsest playfield: run " + run + " of 5, " + seals.length + " seals remaining, " + lethal + " lethal past runs.";
-    }
-    if (canvas.getAttribute("aria-label") !== label) canvas.setAttribute("aria-label", label);
-  }
-
-  /* ---------------- self-suspending loop (no rAF exists before Begin) ---------------- */
-  function activeMode() { return mode === "playing" || mode === "interstitial"; }
-  function shouldLoop() { return !frozen && visible && !document.hidden && activeMode(); }
-  function frame() {
-    rafId = 0;
-    if (!shouldLoop()) { render(); return; }
-    var now = performance.now();
-    acc += Math.min(now - lastT, 83.3); lastT = now;
-    while (acc >= TICK_MS) {
-      tick(); acc -= TICK_MS;
-      if (!activeMode()) { acc = 0; break; }
-    }
-    render();
-    if (shouldLoop()) rafId = requestAnimationFrame(frame);
-  }
-  function startLoop() {
-    if (rafId || !shouldLoop()) return;
-    lastT = performance.now(); acc = 0;
-    rafId = requestAnimationFrame(frame);
-  }
-
-  /* ---------------- input ---------------- */
-  function toLogical(e) {
-    if (!rect || !rect.width) refreshRect();
-    return [(e.clientX - rect.left) / rect.width * W, (e.clientY - rect.top) / rect.height * H];
-  }
-  canvas.addEventListener("pointerdown", function (e) {
-    if (activePointer !== null && e.pointerId !== activePointer) return; /* first captured pointer wins */
-    activePointer = e.pointerId;
-    try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
-    if (e.pointerType === "touch") { touch.active = true; touch.startTick = tickCount; }
-    var p = toLogical(e);
-    ptr.x = clamp(p[0], INSET, W - INSET); ptr.y = clamp(p[1], INSET, H - INSET); ptr.seen = true;
-    if (activeMode()) e.preventDefault();
-  });
-  canvas.addEventListener("pointermove", function (e) {
-    if (e.pointerType === "touch" && e.pointerId !== activePointer) return; /* touch steering needs an active touch */
-    var p = toLogical(e);
-    ptr.x = clamp(p[0], INSET, W - INSET); ptr.y = clamp(p[1], INSET, H - INSET);
-    if (e.pointerType !== "touch" || touch.active) ptr.seen = true;
-  });
-  function releasePtr(e) {
-    if (e.pointerId === activePointer) {
-      activePointer = null; touch.active = false;
-      // snap the steering target to the nib so lifting a finger never
-      // drags the nib down to the raw (offset-free) touch point
-      ptr.x = nib.x; ptr.y = nib.y;
-    }
-  }
-  canvas.addEventListener("pointerup", releasePtr);
-  canvas.addEventListener("pointercancel", releasePtr);
-
-  var KEYMAP = { ArrowLeft: "L", a: "L", A: "L", ArrowRight: "R", d: "R", D: "R", ArrowUp: "U", w: "U", W: "U", ArrowDown: "D", s: "D", S: "D" };
-  stage.addEventListener("keydown", function (e) {
-    var k = e.key;
-    var onBtn = e.target && e.target.closest && e.target.closest("button");
-    if (KEYMAP[k]) { held[KEYMAP[k]] = true; e.preventDefault(); return; }
-    if (k === " ") { if (!onBtn) e.preventDefault(); return; }
-    if (k === "p" || k === "P") {
-      if (!onBtn) e.preventDefault();
-      if (mode === "paused") setPause(false); else setPause(true);
-      return;
-    }
-    if (k === "r" || k === "R") { if (!onBtn) e.preventDefault(); scrapeKey(); return; }
-    if (k === "Enter" && !onBtn && mode === "edition-end") scrapeKey();
-  });
-  stage.addEventListener("keyup", function (e) { var d = KEYMAP[e.key]; if (d) delete held[d]; });
-
-  el.pause.addEventListener("click", function () { setPause(false); });
-  mount.querySelector(".pl-begin").addEventListener("click", function () {
-    begin(); stage.focus({ preventScroll: true });
-  });
-  mount.querySelector(".pl-scrape").addEventListener("click", function () {
-    var now = performance.now();
-    if (now - lastRWall < 400) return;
-    lastRWall = now;
-    reset(); stage.focus({ preventScroll: true });
-  });
-
-  /* ---------------- lifecycle / suspension ---------------- */
-  document.addEventListener("visibilitychange", function () { if (document.hidden && !frozen) setPause(true); });
-  window.addEventListener("blur", function () { held = {}; if (!frozen) setPause(true); });
-  try {
-    new IntersectionObserver(function (entries) {
-      var en = entries[entries.length - 1];
-      visible = en.intersectionRatio >= 0.05;
-      refreshRect();
-      if (!visible && !frozen) setPause(true);
-    }, { threshold: [0, 0.05, 0.5, 1] }).observe(canvas);
-  } catch (e) {}
-  try { new ResizeObserver(function () { resizeCanvas(); }).observe(mount); } catch (e) {}
-  window.addEventListener("resize", resizeCanvas);
-  var scrollT = 0;
-  window.addEventListener("scroll", function () { clearTimeout(scrollT); scrollT = setTimeout(refreshRect, 150); }, { passive: true });
-  new MutationObserver(function () { readPalette(); if (!rafId) render(); })
-    .observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-  try {
-    matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { readPalette(); if (!rafId) render(); });
-  } catch (e) {}
-  try {
-    var rmq = matchMedia("(prefers-reduced-motion: reduce)");
-    RM = rmq.matches;
-    rmq.addEventListener("change", function () { RM = rmq.matches; });
-  } catch (e) {}
-
-  /* ---------------- test hook — harmless in production ----------------
-     Determinism contract: with freeze(true), identical (seed, ordered calls to
-     setTarget/press/release/step/next) ⇒ bit-identical getState() forever.
-     All sim time flows through the tick counter; no wall-clock reads inside the sim. */
-  window.__game2 = {
-    seed: function (n) { pinnedSeed = n >>> 0; return n; },
-    begin: function () { begin(); },
-    reset: function () { reset(); },
-    next: function () { if (mode === "interstitial") finishInter(); else if (mode === "edition-end") reset(); },
-    step: function (nFrames) {
-      var n = nFrames == null ? 1 : nFrames | 0;
-      if (mode === "menu" || mode === "paused") return;
-      for (var i = 0; i < n; i++) {
-        if (!activeMode()) break;
-        tick(); tick(); /* one frame = 1/60 s = 2 ticks */
-      }
-      render();
-    },
-    freeze: function (on) {
-      frozen = !!on;
-      if (frozen) { if (rafId) { cancelAnimationFrame(rafId); rafId = 0; } }
-      else startLoop();
-    },
-    setTarget: function (x, y) {
-      ptr.seen = true; touch.active = false;
-      ptr.x = clamp(x, INSET, W - INSET); ptr.y = clamp(y, INSET, H - INSET);
-    },
-    press: function (key) {
-      if (key === "p" || key === "P") { if (mode === "paused") setPause(false); else setPause(true); return; }
-      if (key === "r" || key === "R") { scrapeKey(); return; }
-      var d = KEYMAP[key]; if (d) held[d] = true;
-    },
-    release: function (key) { var d = KEYMAP[key]; if (d) delete held[d]; },
-    getState: function () {
-      var i, j, gs = [], ss = [];
-      for (i = 0; i < ghosts.length; i++) {
-        var pp = [], pts = ghosts[i].pts;
-        for (j = 0; j < pts.length; j++) { if (pts[j]) pp.push([pts[j][0], pts[j][1]]); }
-        gs.push({ lethal: ghosts[i].lethal, points: pp });
-      }
-      for (i = 0; i < seals.length; i++) ss.push([seals[i][0], seals[i][1]]);
-      return {
-        mode: mode, edition: edition, run: run, grace: grace,
-        timeLeft: Math.round(runLeft / 120 * 10) / 10,
-        nib: { x: nib.x, y: nib.y, vx: nib.vx, vy: nib.vy },
-        seals: ss, sealsCollected: sealsCollected, sealsTotal: SEALS_N,
-        ghosts: gs, score: score, best: best === null ? 0 : best,
-        alive: alive, unblotted: unblotted, lastEnd: lastEnd
-      };
-    }
-  };
-
-  /* ---------------- init: single synchronous static paint, zero rAF ---------------- */
-  readPalette();
-  armDprWatch();
-  resizeCanvas();
-  updateHUD();
-  refreshAria();
-})();
-</script>
 </body>
 </html>
